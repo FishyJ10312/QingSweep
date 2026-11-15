@@ -29,7 +29,7 @@ QingSweep is a local macOS storage browser and manual cleanup tool, licensed und
 
 ![English step-by-step demonstration of selecting two demo files, reviewing cleanup, moving to Trash and restoring the batch](docs/media/cleanup-restore-en.gif)
 
-[Watch / download MP4](docs/media/cleanup-restore-en.mp4) · [中文演示](README.zh-CN.md#清理与恢复演示) · [Screenshots, demo notes and file checks](docs/DEMO.md)
+[Download MP4](https://github.com/FishyJ10312/QingSweep/raw/refs/heads/main/docs/media/cleanup-restore-en.mp4) · [中文演示](README.zh-CN.md#清理与恢复演示) · [Screenshots, demo notes and file checks](docs/DEMO.md)
 
 These are step-by-step captures of actual operations in an isolated demo environment, with edited display timing. All filenames are generated examples. Two demo files were moved and restored, and their contents verified. No personal files or user paths appear. Moving to Trash does not immediately free disk space.
 
