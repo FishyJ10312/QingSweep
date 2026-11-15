@@ -29,7 +29,7 @@
 
 ![轻扫中文分步演示：选择两项临时文件、复核、移到废纸篓，再按批次恢复](docs/media/cleanup-restore-zh-CN.gif)
 
-[下载 MP4](https://github.com/FishyJ10312/QingSweep/raw/refs/heads/main/docs/media/cleanup-restore-zh-CN.mp4) · [English demo](README.md#screenshots-and-cleanup-demo) · [全部截图、演示说明与内容核验](docs/DEMO.md)
+[下载 MP4](https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.2-beta/cleanup-restore-zh-CN.mp4) · [English demo](README.md#screenshots-and-cleanup-demo) · [全部截图、演示说明与内容核验](docs/DEMO.md)
 
 画面来自隔离演示环境中的实际操作，按步骤截图整理，展示时长经过调整。所有文件名都是生成的示例；两项演示文件实际清理并恢复，内容核验一致。不含个人文件名或用户路径。移到废纸篓不等于立即释放空间。
 

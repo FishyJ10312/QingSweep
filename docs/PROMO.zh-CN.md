@@ -1,43 +1,38 @@
-# 轻扫 1.8.2 Beta 宣传文案
+# 轻扫 QingSweep 1.8.2 Beta 宣传文案
 
-发布地址：https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.2-beta
+[English](PROMO.en.md) · [Release / 发布页](https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.2-beta) · [Media kit / 宣传素材包](https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.2-beta/QingSweep-1.8.2-beta-media-kit.zip)
 
-[English](PROMO.en.md)
+## 社群短版（可直接复制）
 
-## 简短版
+轻扫 QingSweep 1.8.2 Beta：看清 Mac 空间占用，确认以后再清理。
 
-最近做了一个 Mac 磁盘清理工具「轻扫」，现在发布 1.8.2 Beta，加入了 English / 简体中文切换，也用 MIT 协议开源，想找一些愿意试用和反馈的朋友。
+English / 简体中文，MIT 开源，本地运行。素材和项目默认不勾选；清理只移到废纸篓，支持批次恢复。
 
-可以按应用看空间占用，分类查看安装包、缓存和大文件。素材和项目默认不勾选，也支持自己手动选择，二次确认后移到废纸篓；清理记录里可以按批次恢复。
+发布页附中英文截图和 26 秒清理、恢复演示。Apple Silicon 测试版，暂未 Apple 公证，建议先用临时文件夹试用。
 
-扫描和记录都保存在本机。这版补了逐项日志和强制退出后的恢复核对。
+下载与演示：https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.2-beta
 
-目前是 Apple Silicon 测试版，暂未 Apple 公证，首次启动可能需要在系统设置里单独允许。建议先用临时文件夹试一下，欢迎反馈安装、权限、分类和恢复的问题。
+## 详细介绍
 
-下载与说明：https://github.com/FishyJ10312/QingSweep
+Mac 空间越来越满，先看清是哪些应用和文件夹在占用，再决定处理什么。轻扫把空间分析、分类、选择清理和恢复放在一条流程里。
 
-## 详细版
+1.8.2 Beta 支持 English / 简体中文，采用 MIT 协议开源，扫描和清理记录留在本机。
 
-Mac 的空间越来越满，却很难看清到底是哪个应用、哪个文件夹在占用。所以我做了「轻扫」，把空间分析、文件分类、选择清理和恢复放在一条流程里。
+- 按应用或文件夹浏览占用，支持搜索、分页和返回上级。
+- 把推荐清理、可自行选择、需自行确认的内容分开，查看用途和清理影响后再选择。
+- 素材和项目默认不勾选；支持手动单选、按组或全选，纳入清理时需要复核及二次确认。
+- 清理只移到废纸篓；清理记录支持批次恢复，不覆盖原位置已有文件。
 
-1.8.2 Beta 现在可以下载试用：
+发布页现在有 6 张中英文界面截图，以及两段各约 26 秒的分步演示。每种语言都用生成的临时文件实际走通选择、复核、移到废纸篓和批次恢复，恢复后内容核验一致。画面没有个人文件名或用户路径，MP4 和统一宣传文案可以从素材包下载。
 
-- 按应用或文件夹浏览占用，支持返回上级、搜索和分页。
-- 把推荐清理、可自行选择、需自行确认的内容分开。
-- 素材、照片、项目和源代码默认不勾选；主动选择后再复核、二次确认。
-- 清理只移到废纸篓，清理记录支持批次恢复；移入废纸篓不等于已经释放空间。
-- 本机扫描和保存记录，支持增量扫描、权限引导、达芬奇代理与缓存查看等工具。
+这是 Apple Silicon 测试版，暂未使用 Developer ID 签名或 Apple 公证。最低编译版本 macOS 14，实机验收环境为 macOS 27.2；其他 Mac 的首次启动和更多外置盘场景仍待验证。建议先用临时文件夹试用，欢迎反馈安装、权限、分类和恢复的问题。
 
-这一版补上英文界面、双语说明和 MIT License，保留逐项操作日志和重启核对。我们用临时文件实际测试过清理中途强制退出、重启找回记录，再从应用内恢复，并核对恢复内容一致。本机分阶段通过 650 项检查。
+移到废纸篓不等于立即释放空间；恢复依赖文件仍在废纸篓且通过核验，不能替代备份。
 
-也把当前限制写清楚：这是 Beta，暂未使用 Developer ID 签名，也暂未 Apple 公证。当前安装包面向 Apple Silicon；编译最低版本 macOS 14，实际测试环境为 macOS 27.2，其他 Mac、旧系统和真实外置盘场景仍需要更多反馈。
+下载、安装说明与演示：https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.2-beta
+源码：https://github.com/FishyJ10312/QingSweep
+宣传素材包：https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.2-beta/QingSweep-1.8.2-beta-media-kit.zip
 
-如果你愿意试用，可以先用一个临时目录走完扫描、手动选择、清理和恢复。安装与授权说明、验证记录和源码都放在仓库里。欢迎反馈哪里不好理解、哪些分类不准、权限有没有生效，以及恢复是否顺利。
+## Repository description / 仓库简介
 
-仓库：https://github.com/FishyJ10312/QingSweep
-
-Beta 下载：https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.2-beta
-
-## 仓库简介
-
-轻扫 · 本地运行的 macOS 空间分析与手动清理工具。素材和项目默认不选，复核后移到废纸篓，支持批次恢复。1.8.2 Beta，暂未 Apple 公证。
+轻扫 QingSweep · 本地运行的 macOS 空间分析与手动清理工具。English / 简体中文，MIT 开源；素材和项目默认不勾选，支持批次恢复。Beta，暂未 Apple 公证。

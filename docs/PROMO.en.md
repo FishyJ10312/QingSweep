@@ -1,35 +1,38 @@
 # QingSweep 1.8.2 Beta launch copy
 
-## Short post
+[简体中文](PROMO.zh-CN.md) · [Release / 发布页](https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.2-beta) · [Media kit / 宣传素材包](https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.2-beta/QingSweep-1.8.2-beta-media-kit.zip)
 
-I built QingSweep, a local Mac storage browser and cleanup tool, and have released 1.8.2 Beta with English and Simplified Chinese.
+## Short post (ready to copy)
 
-See storage by application or folder, review installers and cache separately from personal files, and decide what moves to Trash. Media and projects start unselected. You can select them manually, review again and restore eligible files by batch from History.
+QingSweep 1.8.2 Beta — see what uses your Mac's storage. Review before you clean.
 
-The code is MIT licensed. Scans and cleanup records stay on your Mac. This Beta is for Apple Silicon and has not been notarized by Apple, so read the installation guide and start with a disposable folder.
+English / 简体中文 · MIT · Local processing. Media and projects start unselected. Cleanup moves files to Trash, with batch restore in History.
 
-Download and source: https://github.com/FishyJ10312/QingSweep
+The release includes bilingual screenshots and a 26-second cleanup-and-restore demo in each language. Apple Silicon Beta, not Apple-notarized. Try a disposable folder first.
 
-## Longer post
+Download and demos: https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.2-beta
 
-When my Mac's storage filled up, I wanted to see which applications and folders were using the space before deciding what to remove. That became QingSweep.
+## Longer introduction
 
-1.8.2 Beta now includes English and Simplified Chinese in one app:
+When storage fills up, first see which applications and folders are using it, then decide what to remove. QingSweep connects storage browsing, classification, selection, cleanup review and restore.
 
-- Browse by application or folder, search the scanned index and return to parent folders.
-- Review Recommended, Choose manually and Manual review groups separately.
-- Keep media and projects unselected by default, with individual, group and Select All controls when you decide to include them.
-- Confirm the list before moving anything to Trash. Restore eligible files by batch without overwriting existing files.
-- Keep scans, history and per-file operation journals locally, with restart reconciliation for interrupted operations.
+1.8.2 Beta includes English and Simplified Chinese in one app. The project is MIT licensed; scans and cleanup records stay on your Mac.
 
-This release adds the MIT license and bilingual documentation. 650 checks passed locally. We also walked through the English interface with generated files, moved one to Trash and restored it, then verified the original bytes.
+- Browse by application or folder, with search, pagination and parent navigation.
+- Review Recommended, Choose manually and Manual review groups separately, including purpose and cleanup impact.
+- Media and projects start unselected. Select individually, by group or with Select All; including them requires review and a second confirmation.
+- Move files to Trash and restore eligible items by batch from History, without overwriting existing destinations.
 
-It's still a Beta: Apple Silicon only, built for macOS 14 or later and actually tested on macOS 27.2. It is not Developer ID signed or notarized. First launch on another Mac with default Gatekeeper and more external-drive scenarios still need testing.
+The release now includes six bilingual interface screenshots and a 26-second step-by-step demo in each language. Both were operated with generated disposable files: select, review, move to Trash and restore the batch. Restored contents matched the originals. No personal filenames or user paths appear. MP4s and consistent launch copy are available in the media kit.
 
-Try a disposable folder first. Feedback on installation, permissions, classification, translation and restore is welcome. Please redact private filenames and paths in reports.
+This is an Apple Silicon Beta, without Developer ID signing or Apple notarization. It is built for macOS 14 or later and was validated on macOS 27.2. First launch on another Mac and more external-drive scenarios still need verification. Try a disposable folder first; feedback on installation, access, classification and restore is welcome.
 
-https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.2-beta
+Moving files to Trash does not immediately free disk space. Restore requires the corresponding files to remain in Trash and pass verification; it is not a backup.
 
-## Repository description
+Download, installation and demos: https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.2-beta
+Source: https://github.com/FishyJ10312/QingSweep
+Media kit: https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.2-beta/QingSweep-1.8.2-beta-media-kit.zip
 
-Local macOS storage analysis and review-first cleanup. English / 简体中文. MIT. Media and projects unselected by default; batch restore. Beta, not notarized.
+## Repository description / 仓库简介
+
+QingSweep · Local macOS storage analysis and review-first cleanup. English / 简体中文. MIT. Media and projects start unselected; batch restore. Beta, not Apple-notarized.
