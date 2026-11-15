@@ -1,0 +1,21 @@
+{
+  "version": "1.8.1",
+  "build": "16",
+  "binary_sha256": "a524c736ada0c8279c0797c962c18dc87a60091eefc7d9075ee8b0694bff13cd",
+  "local_acceptance_passed": true,
+  "checks_passed": 624,
+  "existing_regression_checks": 498,
+  "crash_recovery_checks": 126,
+  "automated_sigkill_windows": 9,
+  "native_sigkill_runs": 2,
+  "native_restore_verified": true,
+  "full_disk_access_retained_after_install": true,
+  "creative_files_default_unselected": true,
+  "old_release_retained": true,
+  "developer_id_signed": false,
+  "notarized": false,
+  "public_release_accepted": false,
+  "architecture": "arm64",
+  "minimum_os_build_target": "14.0",
+  "actual_os": "27.2"
+}

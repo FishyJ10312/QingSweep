@@ -1,0 +1,130 @@
+import SwiftUI
+
+struct OverviewView: View {
+    @EnvironmentObject var model: AppModel
+    private var usedBytes: Int64 { max(0, model.snapshot.diskTotal - model.snapshot.diskFree) }
+    private var usedRatio: Double { model.snapshot.diskTotal > 0 ? Double(usedBytes) / Double(model.snapshot.diskTotal) : 0 }
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 24) {
+                HStack(alignment: .top) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("空间账本").font(.system(size: 32, weight: .medium))
+                        Text("启动磁盘 / 本机存储").font(.system(size: 13)).foregroundStyle(SweepStyle.secondary)
+                    }
+                    Spacer()
+                    if model.scanning || model.analyzing {
+                        Button("停止扫描", action: model.stopSmartScan).buttonStyle(SweepOutlineButton())
+                    } else {
+                        Button(model.scannedAt == nil ? "开始扫描" : "重新扫描") {
+                            if model.scannedAt == nil { model.quickScan() } else { model.rescan() }
+                            model.section = .results
+                        }.buttonStyle(SweepPrimaryButton()).disabled(model.busy)
+                        Menu {
+                            Button("扫描常用位置") { model.quickScan(); model.section = .results }
+                            Button("扫描空间与清理项", action: model.smartScan)
+                            Divider()
+                            Button("查找大文件") { model.personalScan(); model.section = .results }
+                            Button("选择文件夹", action: model.chooseFolder)
+                        } label: { Text("范围") }.disabled(model.busy)
+                    }
+                }
+                HStack(alignment: .top, spacing: 20) {
+                    diskLedger.frame(maxWidth: .infinity, alignment: .topLeading).padding(24).sweepCard()
+                    storageLedger.frame(width: 240, alignment: .topLeading).padding(20).sweepCard()
+                }
+                cleanupLedger
+                HStack(spacing: 24) {
+                    Button { model.section = .memory } label: {
+                        HStack(spacing: 12) {
+                            Image(systemName: "memorychip")
+                            Text("内存"); Text(formatBytes(model.snapshot.memoryUsed)).monospacedDigit()
+                            Text(model.snapshot.pressureLabel).foregroundStyle(SweepStyle.secondary)
+                            Image(systemName: "arrow.up.right").font(.system(size: 10))
+                        }
+                    }.buttonStyle(.plain)
+                    Spacer()
+                    Button { model.section = .history } label: {
+                        Label("清理记录 · \(model.recoverable.count) 项可恢复", systemImage: "clock.arrow.circlepath")
+                    }.buttonStyle(.plain)
+                }.font(.system(size: 12)).foregroundStyle(SweepStyle.secondary)
+            }.padding(32)
+        }.foregroundStyle(SweepStyle.ink)
+    }
+    private var diskLedger: some View {
+        VStack(alignment: .leading, spacing: 24) {
+            HStack(alignment: .bottom, spacing: 24) {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("可用空间").font(.system(size: 13)).foregroundStyle(SweepStyle.secondary)
+                    Text(formatBytes(model.snapshot.diskFree)).font(.system(size: 48, weight: .regular, design: .monospaced)).minimumScaleFactor(0.7).lineLimit(1)
+                }
+                Spacer()
+                VStack(alignment: .trailing, spacing: 8) {
+                    Text("总容量").font(.system(size: 12)).foregroundStyle(SweepStyle.secondary)
+                    Text(formatBytes(model.snapshot.diskTotal)).font(.system(size: 16, design: .monospaced))
+                }.padding(.bottom, 8)
+            }
+            CapacityRuler(used: usedRatio)
+            HStack(spacing: 8) {
+                Rectangle().fill(SweepStyle.ink).frame(width: 8, height: 8)
+                Text("已使用 " + formatBytes(usedBytes))
+                Spacer()
+                Text("\(Int(usedRatio * 100))% 已使用").monospacedDigit()
+            }.font(.system(size: 12)).foregroundStyle(SweepStyle.secondary)
+        }.frame(minHeight: 260, alignment: .topLeading)
+    }
+    private var cleanupLedger: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack {
+                Text("清理清单").font(.system(size: 17, weight: .semibold))
+                Spacer()
+                if model.scanning || model.loadingReport { ProgressView().controlSize(.small) }
+                else if let date = model.scannedAt { Text(date.formatted(date: .omitted, time: .shortened) + " 扫描").font(.system(size: 12)).foregroundStyle(SweepStyle.secondary) }
+            }
+            if model.scanning || model.analyzing {
+                Text(model.scanning ? "正在检查 \(model.progress.visited) 项" : "正在分析应用占用")
+                    .font(.system(size: 13)).foregroundStyle(SweepStyle.secondary)
+            }
+            HStack(spacing: 12) {
+                ForEach(CleanupScope.allCases) { scope in
+                    CleanupScopeCard(scope: scope,
+                        capacity: model.loadingReport ? "读取中" : model.scannedAt == nil ? "待扫描" : formatBytes(model.allScopeItems(scope).reduce(0) { $0 + $1.bytes }),
+                        count: model.scannedAt == nil ? nil : model.allScopeItems(scope).count) { model.openCleanup(scope) }
+                        .disabled(model.scanning || model.loadingReport)
+                }
+            }
+            HStack(spacing: 12) {
+                Image(systemName: "folder").foregroundStyle(SweepStyle.secondary)
+                Text(model.scannedAt == nil ? "选择范围后开始扫描" : model.scanLabel + " · " + (model.cleanupIsPartial ? "部分结果" : "扫描完成"))
+                Spacer()
+                Button("详情") { model.showingIssues = true }.buttonStyle(.plain).disabled(model.result == nil)
+            }.font(.system(size: 12)).foregroundStyle(SweepStyle.secondary)
+        }
+    }
+    private var storageLedger: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("占用排行").font(.system(size: 17, weight: .semibold))
+            if model.appSummaries.isEmpty {
+                Text(model.analyzing ? "正在读取应用数据" : "按应用查看空间去向").font(.system(size: 13)).foregroundStyle(SweepStyle.secondary)
+            } else {
+                ForEach(Array(model.appSummaries.filter { $0.hasReadData }.sorted { $0.bytes > $1.bytes }.prefix(4).enumerated()), id: \.element.id) { rank, app in
+                    Button { model.section = .storage; model.browseStorage(nil, owner: app) } label: {
+                        HStack(alignment: .top, spacing: 12) {
+                            Text(String(format: "%02d", rank + 1)).font(.system(size: 12, design: .monospaced)).foregroundStyle(SweepStyle.secondary)
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text(app.title).font(.system(size: 13, weight: .medium)).lineLimit(2)
+                                Text(formatBytes(app.bytes) + (app.partial ? " · 部分" : "")).font(.system(size: 12, design: .monospaced)).foregroundStyle(SweepStyle.secondary)
+                            }
+                            Spacer(minLength: 0)
+                        }.contentShape(Rectangle())
+                    }.buttonStyle(.plain)
+                }
+            }
+            Button {
+                model.section = .storage
+                if model.storageInfo == nil && !model.analyzing { model.startStorageAnalysis() }
+            } label: { Label("浏览全部占用", systemImage: "arrow.right") }.buttonStyle(SweepOutlineButton())
+            
+        }
+    }
+}

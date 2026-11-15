@@ -1,0 +1,180 @@
+import Foundation
+import Darwin
+
+@main struct StorageIndexTests {
+    @MainActor static func main() async throws {
+        let fm = FileManager.default
+        let base = URL(fileURLWithPath: "/Users/Shared").appendingPathComponent("qingsweep-index-" + UUID().uuidString)
+        try fm.createDirectory(at: base, withIntermediateDirectories: true)
+        defer { try? fm.removeItem(at: base) }
+        var checks = 0
+        func check(_ value: @autoclosure () throws -> Bool, _ name: String) {
+            guard (try? value()) == true else { try? fm.removeItem(at: base); fputs("FAIL: \(name)\n", stderr); exit(1) }
+            checks += 1; print("PASS: \(name)")
+        }
+        @discardableResult func file(_ path: String, bytes: Int = 1000) throws -> URL {
+            let url = base.appendingPathComponent(path)
+            try fm.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
+            try Data(repeating: 0x59, count: bytes).write(to: url)
+            return url
+        }
+        let support = base.appendingPathComponent("Library/Application Support")
+        let editor = support.appendingPathComponent("Editor")
+        for n in 0..<240 { _ = try file("Library/Application Support/Editor/file-\(String(format: "%03d",n)).bin", bytes: n + 20) }
+        let needle = try file("Library/Application Support/Editor/one/two/three/four/five/six/tiny-NEEDLE.txt", bytes: 29)
+        let literal = try file("Library/Application Support/Editor/100%_done.bin")
+        let cache = try file("Library/Caches/com.fixture.Editor/http/blob", bytes: 9000)
+        let program = try file("Applications/Editor.app/Contents/MacOS/editor", bytes: 12000)
+        _ = try file("Library/Application Support/Editor Backup/keep.bin")
+        _ = try file("Library/Application Support/Adobe/shared.bin")
+        let duplicate = editor.appendingPathComponent("hardlink.bin")
+        try fm.linkItem(at: literal, to: duplicate)
+        let outside = try file("Outside/secret.bin", bytes: 100000)
+        try fm.createSymbolicLink(at: editor.appendingPathComponent("link"), withDestinationURL: outside)
+        let app = InstalledApplication(path: program.path.components(separatedBy: "/Contents/")[0], id: "com.fixture.Editor", name: "Editor", version: "1", build: "1")
+        let resolver = StorageOwnerResolver(applications: [app])
+        let roots = [StorageRoot(url: support, title: "应用数据", kind: .appData), StorageRoot(url: base.appendingPathComponent("Library/Caches"), title: "缓存", kind: .cache), StorageRoot(url: URL(fileURLWithPath: app.path), title: "Editor", kind: .appData)]
+        let db = base.appendingPathComponent("index.sqlite")
+        let outcome = try StorageIndex.build(at: db, roots: roots, auditor: StorageAuditor(home: base), applications: [app], cancellation: ScanCancellation())
+        let index = try StorageIndex(url: db)
+        try index.validateIntegrity()
+        let page1 = try index.page(parent: editor)
+        let page2 = try index.page(parent: editor, offset: 100)
+        let page3 = try index.page(parent: editor, offset: 200)
+        check(page1.items.count == 100 && page2.items.count == 100, "directory results paginate at 100 items")
+        check(Set(page1.items.map(\.id)).isDisjoint(with: Set(page2.items.map(\.id))), "pages do not repeat files")
+        check(page1.total > 240 && page1.hasMore && !page3.hasMore, "last page ends pagination accurately")
+        let deep = try index.page(parent: needle.deletingLastPathComponent())
+        check(deep.items.contains { $0.url == needle }, "folders beyond three levels remain browsable")
+        let found = try index.page(search: "needle")
+        check(found.items.count == 1 && found.items[0].url == needle, "global search finds a small deeply nested file")
+        let foundLiteral = try index.page(search: "100%_done")
+        check(foundLiteral.items.count == 1 && foundLiteral.items[0].url == literal, "search treats percent and underscore literally")
+        let ownerSearch = try index.page(search: "Editor")
+        check(ownerSearch.total > 240, "application search covers all indexed records")
+        let summaries = try index.summaries(applications: [app])
+        let summary = summaries.first { $0.id == app.id }!
+        check(summary.programBytes >= FileStamp.read(program)!.allocated, "application program bytes are separate")
+        check(summary.cacheBytes >= FileStamp.read(cache)!.allocated && summary.dataBytes > 0, "application cache and data are separate")
+        check(summaries.reduce(Int64(0)) { $0 + $1.bytes } == outcome.totalBytes, "owner totals neither lose nor duplicate measured blocks")
+        check(resolver.resolve(support.appendingPathComponent("Editor Backup/keep.bin"), root: roots[0]).id == "unassigned", "similar folder names do not guess an application owner")
+        check(resolver.resolve(support.appendingPathComponent("Adobe/shared.bin"), root: roots[0]).id == "shared:Adobe", "vendor resources remain shared")
+        check(try index.page(ownerID: app.id).items.count >= 3, "application file view exposes program, cache and data locations")
+        check(try index.page(search: "secret.bin").items.isEmpty, "symlink destination is never indexed")
+        let before = try index.item(at: editor)!.bytes
+        let victim = editor.appendingPathComponent("file-000.bin")
+        let victimBlocks = FileStamp.read(victim)!.allocated
+        try fm.removeItem(at: victim)
+        try index.refresh(urls: [victim], applications: [app])
+        check(try index.item(at: victim) == nil, "local cleanup update removes a missing file")
+        check(try index.item(at: editor)!.bytes == before - victimBlocks, "local cleanup updates directory totals")
+        _ = try file("Library/Application Support/Editor/file-000.bin", bytes: 17000)
+        try index.refresh(urls: [victim], applications: [app])
+        check(try index.item(at: victim)!.bytes == FileStamp.read(victim)!.allocated, "local restore update reindexes current file metadata")
+        let freshURL = base.appendingPathComponent("subtree.sqlite")
+        _ = try file("Library/Application Support/Editor/new.bin", bytes: 25000)
+        let subtreeRoot = StorageRoot(url: editor, title: "Editor", kind: .appData)
+        _ = try StorageIndex.build(at: freshURL, roots: [subtreeRoot], auditor: StorageAuditor(home: base), applications: [app], cancellation: ScanCancellation())
+        try index.merge(subtree: editor, from: StorageIndex(url: freshURL))
+        check(try index.item(at: editor.appendingPathComponent("new.bin")) != nil, "subtree rescan merges new files")
+        check(try index.item(at: cache) != nil && index.item(at: program) != nil, "subtree rescan preserves unrelated locations")
+        check(try index.page(parent: support).items.contains { $0.url.path == editor.path }, "rescanned folder retains its breadcrumb parent")
+        let reopened = try StorageIndex(url: db)
+        check(try reopened.info().scannedAt > .distantPast && reopened.page(search: "needle").total == 1, "index survives reopening without rescanning")
+        let missingRoot = StorageRoot(url: base.appendingPathComponent("gone"), title: "不存在", kind: .appData)
+        let missingDB = base.appendingPathComponent("missing.sqlite")
+        _ = try StorageIndex.build(at: missingDB, roots: [missingRoot], auditor: StorageAuditor(home: base), applications: [], cancellation: ScanCancellation())
+        let missing = try StorageIndex(url: missingDB)
+        check(try missing.page().items.first?.state == 0, "unread root is represented as unread rather than empty success")
+        check(try missing.issues().first?.kind == .missing, "missing directory has a structured reason")
+        let denied = StorageAccessIssue.make(url: editor, root: support, error: NSError(domain: NSCocoaErrorDomain, code: NSFileReadNoPermissionError))
+        check(denied.kind == .permission, "permission denial is distinguished from absence")
+        let unplugged = StorageAccessIssue.make(url: URL(fileURLWithPath: "/Volumes/QingSweepMissing-" + UUID().uuidString + "/folder"), root: base)
+        check(unplugged.kind == .disconnected, "disconnected external disk has its own reason")
+        let cancel = ScanCancellation(); cancel.cancel()
+        let cancelDB = base.appendingPathComponent("cancel.sqlite")
+        _ = try StorageIndex.build(at: cancelDB, roots: roots, auditor: StorageAuditor(home: base), applications: [app], cancellation: cancel)
+        let cancelledIndex = try StorageIndex(url: cancelDB)
+        check(try cancelledIndex.info().cancelled && cancelledIndex.page().items.allSatisfy { $0.state == 0 }, "cancelled scan keeps unvisited scopes explicitly unread")
+        let cappedDB = base.appendingPathComponent("capped.sqlite")
+        _ = try StorageIndex.build(at: cappedDB, roots: roots, auditor: StorageAuditor(home: base, entryLimit: 2), applications: [app], cancellation: ScanCancellation())
+        check(try StorageIndex(url: cappedDB).info().limited, "scan cap is retained in persistent snapshot")
+        let broken = try file("broken.sqlite")
+        do { _ = try StorageIndex(url: broken); check(false, "corrupt index rejected") } catch { check(true, "corrupt index rejected") }
+
+        let downloads = base.appendingPathComponent("Downloads")
+        let download = try file("Downloads/keep.zip")
+        let stamp = FileStamp.read(download)!
+        let assessment = FileClassifier(policy: SafetyPolicy(home: base), context: InspectionContext()).assess(download, stamp: stamp)
+        let item = ScanItem(url: download, root: downloads, stamp: stamp, assessment: assessment)
+        let config = ScanConfiguration(roots: [downloads], label: "指定目录", minimumBytes: 2_000_000)
+        let archive = ScanArchive(scannedAt: Date(), label: config.label, result: ScanResult(items: [item]), configuration: config)
+        let encoded = try JSONEncoder().encode(archive), decoded = try JSONDecoder().decode(ScanArchive.self, from: encoded)
+        check(decoded.schemaVersion == 3 && decoded.configuration == config, "v3 report preserves exact scan configuration")
+        var v2 = archive; v2.schemaVersion = 2; v2.configuration = nil
+        let decodedV2 = try JSONDecoder().decode(ScanArchive.self, from: JSONEncoder().encode(v2))
+        check(decodedV2.configuration == nil && ScanReportLoader.validate(report: decodedV2, policy: SafetyPolicy(home: base), context: InspectionContext()).count == 1, "v2 results remain compatible without inventing a scope")
+        check(!ScanConfiguration(roots: [URL(fileURLWithPath: "/System")], label: "bad", minimumBytes: 1).isValid(policy: SafetyPolicy(home: base)), "saved cleanup scope cannot widen protected boundaries")
+        let saved = base.appendingPathComponent("Library/Application Support/QingSweep/last-scan.json")
+        try fm.createDirectory(at: saved.deletingLastPathComponent(), withIntermediateDirectories: true)
+        try encoded.write(to: saved)
+        let model = AppModel(home: base, loadSavedScan: true, startTimer: false)
+        for _ in 0..<300 { if !model.loadingReport { break }; try await Task.sleep(nanoseconds: 20_000_000) }
+        check(model.currentScanConfiguration == config && model.selected.isEmpty, "restart reloads v3 scope without selecting files")
+        model.rescan()
+        for _ in 0..<300 { if !model.scanning { break }; try await Task.sleep(nanoseconds: 20_000_000) }
+        check(model.currentScanConfiguration == config && model.scanLabel == config.label, "rescan uses the saved folder and threshold")
+        try JSONEncoder().encode(v2).write(to: saved)
+        let oldModel = AppModel(home: base, loadSavedScan: true, startTimer: false)
+        for _ in 0..<300 { if !oldModel.loadingReport { break }; try await Task.sleep(nanoseconds: 20_000_000) }
+        oldModel.rescan()
+        check(oldModel.showingScanChooser && !oldModel.scanning, "legacy scope requires an explicit new range selection")
+        let afterMerge = try index.summaries(applications: [app]).first { $0.id == app.id }
+        check(afterMerge?.dataBytes ?? 0 > 0, "subtree replacement retains application ownership")
+        let locked = try file("Locked/data.bin").deletingLastPathComponent()
+        let lockedScope = StorageRoot(url: locked, title: "受限目录", kind: .appData)
+        let lockedDB = base.appendingPathComponent("locked.sqlite")
+        try fm.setAttributes([.posixPermissions: 0], ofItemAtPath: locked.path)
+        defer { try? fm.setAttributes([.posixPermissions: 0o700], ofItemAtPath: locked.path) }
+        _ = try StorageIndex.build(at: lockedDB, roots: [lockedScope], auditor: StorageAuditor(home: base), applications: [], cancellation: ScanCancellation())
+        let lockedIndex = try StorageIndex(url: lockedDB)
+        check(try lockedIndex.issues().contains { $0.kind == .permission }, "actual fixture permission denial is recorded")
+        check(StorageAccessProbe.problem(at: locked, root: locked) != nil, "access probe confirms the denied state")
+        try fm.setAttributes([.posixPermissions: 0o700], ofItemAtPath: locked.path)
+        check(StorageAccessProbe.problem(at: locked, root: locked) == nil, "access probe confirms a restored permission by reading directory metadata")
+        try lockedIndex.recordAccessCheck(remaining: [], readable: [locked])
+        check(try lockedIndex.issues().allSatisfy { $0.kind == .incomplete } && lockedIndex.info().partial, "successful access check does not claim old capacity is complete")
+        let accessibleDB = base.appendingPathComponent("accessible.sqlite")
+        _ = try StorageIndex.build(at: accessibleDB, roots: [lockedScope], auditor: StorageAuditor(home: base), applications: [], cancellation: ScanCancellation())
+        try lockedIndex.merge(subtree: locked, from: StorageIndex(url: accessibleDB))
+        check(try !lockedIndex.info().partial && lockedIndex.page().items.first?.state == 1, "rescanning the now-readable scope clears its stale partial state")
+        let linkProbe = base.appendingPathComponent("probe-link")
+        try fm.createSymbolicLink(at: linkProbe, withDestinationURL: locked)
+        check(StorageAccessProbe.problem(at: linkProbe, root: base) != nil, "permission probe never follows a symlink")
+
+        let flowModel = AppModel(home: base, loadSavedScan: false, startTimer: false)
+        let alpha = ScanItem(url: cache, root: base, stamp: FileStamp.read(cache)!, assessment: FileAssessment(category: .cache, disposition: .priority, owner: "Google Chrome", group: "Chrome cache", reason: "Fixture", evidence: "Fixture", ruleID: "cache-chrome"))
+        let beta = ScanItem(url: download, root: downloads, stamp: FileStamp.read(download)!, assessment: FileAssessment(category: .installer, disposition: .manual, owner: "Claude", group: "Claude installer", reason: "Fixture", evidence: "Fixture", ruleID: "installed-media"))
+        let protectedChrome = ScanItem(url: needle, root: support, stamp: FileStamp.read(needle)!, assessment: FileAssessment(category: .video, disposition: .protected, owner: "Google Chrome", group: "Personal", reason: "Fixture", evidence: "Fixture", ruleID: "protect"))
+        flowModel.items = [alpha,beta,protectedChrome]; flowModel.scannedAt = Date()
+        flowModel.currentScanConfiguration = ScanConfiguration(roots: ["Downloads","Library/Caches","Library/Logs"].map { base.appendingPathComponent($0) }, label: "常用位置", minimumBytes: 1_000_000)
+        flowModel.selected = [beta.id]
+        flowModel.showAppCleanup(AppStorageSummary(id: "com.google.Chrome", title: "Chrome"))
+        check(flowModel.filtered.map(\.id) == [alpha.id], "application cleanup only shows eligible candidates from that application")
+        flowModel.selectPriority()
+        check(flowModel.selected == Set([alpha.id,beta.id]), "application recommendations preserve selections from other applications")
+        flowModel.prepareReview()
+        check(flowModel.reviewGroups.count == 2, "final confirmation groups selected files by application")
+        let chromeGroup = flowModel.reviewGroups.first { $0.id == "com.google.Chrome" }!
+        flowModel.removeReviewGroup(chromeGroup)
+        check(flowModel.review.map(\.id) == [beta.id] && flowModel.selected == [beta.id], "cancelling one application group preserves the other application")
+        flowModel.showingReview = false
+        flowModel.clearCleanupOwner()
+        check(flowModel.cleanupOwnerFilter == nil && flowModel.items.count == 3, "leaving application cleanup restores the full view without changing results")
+        let invalidIndexURL = base.appendingPathComponent("blocked-cache.sqlite")
+        try fm.createSymbolicLink(at: invalidIndexURL, withDestinationURL: db)
+        do { _ = try StorageIndex(url: invalidIndexURL); check(false, "index cache refuses symbolic links") } catch { check(true, "index cache refuses symbolic links") }
+        check(fm.fileExists(atPath: outside.path) && fm.fileExists(atPath: needle.path), "all inspection fixtures stay untouched")
+        print("\n\(checks) storage-index checks passed; all operations used temporary fixtures.")
+    }
+}
