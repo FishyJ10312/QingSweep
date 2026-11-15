@@ -12,6 +12,40 @@ QingSweep is a local macOS storage browser and manual cleanup tool, licensed und
 
 [Download for Apple Silicon](https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.2-beta/QingSweep-1.8.2-beta-arm64.zip) · [Beta release](https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.2-beta) · [Report an issue](https://github.com/FishyJ10312/QingSweep/issues/new?template=bug_report_en.md)
 
+## Screenshots and cleanup demo
+
+**English interface** — review older installers and rebuildable cache in a separate list.
+
+![QingSweep English cleanup interface with temporary demo data](docs/media/cleanup-en.png)
+
+<details>
+<summary>简体中文界面 / Chinese interface</summary>
+
+![轻扫简体中文清理界面，仅使用临时演示数据](docs/media/cleanup-zh-CN.png)
+
+</details>
+
+**Select → review → move to Trash → restore a batch.** The demo also shows that adding recommendations leaves media and projects unselected.
+
+![English step-by-step demonstration of selecting two demo files, reviewing cleanup, moving to Trash and restoring the batch](docs/media/cleanup-restore-en.gif)
+
+[Watch / download MP4](docs/media/cleanup-restore-en.mp4) · [中文演示](README.zh-CN.md#清理与恢复演示) · [Screenshots, demo notes and file checks](docs/DEMO.md)
+
+These are step-by-step captures of actual operations in an isolated demo environment, with edited display timing. All filenames are generated examples. Two demo files were moved and restored, and their contents verified. No personal files or user paths appear. Moving to Trash does not immediately free disk space.
+
+<details>
+<summary>Media/project defaults and batch restore</summary>
+
+Media and projects stay unselected after adding recommendations. They remain manually selectable and require a second confirmation if included.
+
+![English manual-review groups with video and project checkboxes unselected](docs/media/manual-review-en.png)
+
+History groups the completed cleanup so eligible files can be restored together without overwriting existing destinations.
+
+![English history showing a temporary cleanup batch with two restorable files](docs/media/history-en.png)
+
+</details>
+
 ## Review-first cleanup
 
 1. Choose a scan scope and explore storage by application or folder.

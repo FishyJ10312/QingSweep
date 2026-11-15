@@ -12,6 +12,40 @@
 
 [下载安装包](https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.2-beta/QingSweep-1.8.2-beta-arm64.zip) · [Beta 发布页](https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.2-beta) · [反馈问题](https://github.com/FishyJ10312/QingSweep/issues/new?template=bug_report.md)
 
+## 清理与恢复演示
+
+**简体中文界面**：把旧安装包、可重建缓存与个人文件分开查看。
+
+![轻扫简体中文清理界面，仅使用临时演示数据](docs/media/cleanup-zh-CN.png)
+
+<details>
+<summary>English interface / 英文界面</summary>
+
+![QingSweep English cleanup interface with temporary demo data](docs/media/cleanup-en.png)
+
+</details>
+
+**选择推荐项 → 复核 → 移到废纸篓 → 按批次恢复。** 演示也会展示：添加推荐项后，素材和项目仍不勾选。
+
+![轻扫中文分步演示：选择两项临时文件、复核、移到废纸篓，再按批次恢复](docs/media/cleanup-restore-zh-CN.gif)
+
+[观看或下载 MP4](docs/media/cleanup-restore-zh-CN.mp4) · [English demo](README.md#screenshots-and-cleanup-demo) · [全部截图、演示说明与内容核验](docs/DEMO.md)
+
+画面来自隔离演示环境中的实际操作，按步骤截图整理，展示时长经过调整。所有文件名都是生成的示例；两项演示文件实际清理并恢复，内容核验一致。不含个人文件名或用户路径。移到废纸篓不等于立即释放空间。
+
+<details>
+<summary>素材与项目默认选择、批次恢复界面</summary>
+
+添加推荐项后，素材和项目仍未勾选。它们也支持手动选择，纳入清理时需要二次确认。
+
+![需自行确认页面：视频与项目均未勾选，仅使用演示数据](docs/media/manual-review-zh-CN.png)
+
+清理记录按批次汇总，可一起恢复仍在废纸篓且通过核验的文件，不覆盖原位置已有内容。
+
+![清理记录页面：两项临时演示文件可按批次恢复](docs/media/history-zh-CN.png)
+
+</details>
+
 ## 怎么用
 
 1. 选择扫描范围，按应用或文件夹查看空间去向。
