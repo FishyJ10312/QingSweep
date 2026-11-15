@@ -82,4 +82,4 @@ zsh check.sh
 
 [1.8.1 Beta 更新说明](docs/RELEASE_1.8.1_BETA.md) · [宣传文案](docs/PROMO.zh-CN.md) · [致谢与许可状态](NOTICE.md)
 
-源码已公开，本次未指定统一的开源许可证。
+本项目原创代码与文档采用 [MIT License](LICENSE)，第三方参考署名见 [NOTICE.md](NOTICE.md)。
