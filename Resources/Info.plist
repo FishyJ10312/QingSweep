@@ -1,21 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0"><dict>
-<key>CFBundleExecutable</key><string>QingSweep</string>
-<key>CFBundleIdentifier</key><string>local.fishyj.qingsweep</string>
-<key>CFBundleName</key><string>轻扫</string>
-<key>CFBundleDisplayName</key><string>轻扫</string>
-<key>CFBundleShortVersionString</key><string>1.8.1</string>
-<key>CFBundleVersion</key><string>16</string>
-<key>CFBundlePackageType</key><string>APPL</string>
-<key>CFBundleIconFile</key><string>AppIcon</string>
-<key>LSMinimumSystemVersion</key><string>14.0</string>
-<key>LSApplicationCategoryType</key><string>public.app-category.utilities</string>
-<key>NSHighResolutionCapable</key><true/>
-<key>NSPrincipalClass</key><string>NSApplication</string>
-<key>NSHumanReadableCopyright</key><string>轻扫 · 本机个人使用版</string>
-<key>NSDownloadsFolderUsageDescription</key><string>扫描下载文件的大小和日期，供你手动选择移到废纸篓。</string>
-<key>NSDocumentsFolderUsageDescription</key><string>查看文稿中的大文件，供你自行决定是否清理。</string>
-<key>NSDesktopFolderUsageDescription</key><string>查看桌面中的大文件，供你自行决定是否清理。</string>
-<key>NSRemovableVolumesUsageDescription</key><string>扫描你选择的外置磁盘文件夹。</string>
-</dict></plist>
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>zh-Hans</string>
+	<key>CFBundleDisplayName</key>
+	<string>轻扫</string>
+	<key>CFBundleExecutable</key>
+	<string>QingSweep</string>
+	<key>CFBundleIconFile</key>
+	<string>AppIcon</string>
+	<key>CFBundleIdentifier</key>
+	<string>local.fishyj.qingsweep</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>zh-Hans</string>
+	</array>
+	<key>CFBundleName</key>
+	<string>轻扫</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.8.2</string>
+	<key>CFBundleVersion</key>
+	<string>17</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.utilities</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>14.0</string>
+	<key>NSDesktopFolderUsageDescription</key>
+	<string>查看桌面中的大文件，供你自行决定是否清理。</string>
+	<key>NSDocumentsFolderUsageDescription</key>
+	<string>查看文稿中的大文件，供你自行决定是否清理。</string>
+	<key>NSDownloadsFolderUsageDescription</key>
+	<string>扫描下载文件的大小和日期，供你手动选择移到废纸篓。</string>
+	<key>NSHighResolutionCapable</key>
+	<true/>
+	<key>NSHumanReadableCopyright</key>
+	<string>Copyright © 2026 FishyJ10312. MIT License.</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+	<key>NSRemovableVolumesUsageDescription</key>
+	<string>扫描你选择的外置磁盘文件夹。</string>
+</dict>
+</plist>

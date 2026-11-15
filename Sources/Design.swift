@@ -41,8 +41,8 @@ struct LedgerHeading: View {
     let title: String
     var body: some View {
         HStack(spacing: 12) {
-            Text(number).font(.system(size: 12, design: .monospaced)).foregroundStyle(SweepStyle.accent)
-            Text(title).font(.system(size: 14, weight: .medium))
+            Text(L(number)).font(.system(size: 12, design: .monospaced)).foregroundStyle(SweepStyle.accent)
+            Text(L(title)).font(.system(size: 14, weight: .medium))
         }
     }
 }
@@ -99,16 +99,16 @@ struct CleanupScopeCard: View {
             VStack(alignment: .leading, spacing: 12) {
                 HStack(spacing: 8) {
                     Image(systemName: scope.symbol).font(.system(size: 15, weight: .medium)).frame(width: 20)
-                    Text(scope.rawValue).font(.system(size: 14, weight: .semibold))
+                    Text(L(scope.rawValue)).font(.system(size: 14, weight: .semibold))
                     Spacer(minLength: 0)
                     Image(systemName: selected ? "checkmark.circle.fill" : "chevron.right").font(.system(size: 13))
                 }.foregroundStyle(scope.color)
                 HStack(alignment: .firstTextBaseline, spacing: 8) {
-                    Text(capacity).font(.system(size: 24, weight: .medium, design: .monospaced)).lineLimit(1).minimumScaleFactor(0.75)
+                    Text(L(capacity)).font(.system(size: 24, weight: .medium, design: .monospaced)).lineLimit(1).minimumScaleFactor(0.75)
                     Spacer(minLength: 0)
-                    if let count { Text("\(count) 项").font(.system(size: 12)).foregroundStyle(SweepStyle.secondary) }
+                    if let count { Text(L("\(count) 项")).font(.system(size: 12)).foregroundStyle(SweepStyle.secondary) }
                 }
-                Text(scope.shortDescription).font(.system(size: 12)).foregroundStyle(SweepStyle.secondary).lineLimit(1)
+                Text(L(scope.shortDescription)).font(.system(size: 12)).foregroundStyle(SweepStyle.secondary).lineLimit(1)
             }.padding(16).frame(maxWidth: .infinity, alignment: .leading)
                 .background(scope.color.opacity(selected ? 0.10 : 0.045), in: RoundedRectangle(cornerRadius: 12))
                 .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(scope.color.opacity(selected ? 0.85 : 0.22), lineWidth: selected ? 2 : 1))
@@ -120,7 +120,7 @@ struct CleanupScopeCard: View {
 struct CleanupScopeLabel: View {
     let scope: CleanupScope
     var body: some View {
-        Label(scope.rawValue, systemImage: scope.symbol)
+        Label(L(scope.rawValue), systemImage: scope.symbol)
             .font(.system(size: 12, weight: .medium)).foregroundStyle(scope.color)
             .padding(.horizontal, 10).padding(.vertical, 6)
             .background(scope.color.opacity(0.08), in: RoundedRectangle(cornerRadius: 6))
@@ -134,9 +134,9 @@ struct ModuleStat: View {
     var detail: String = ""
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(title).font(.system(size: 13, weight: .semibold)).foregroundStyle(color)
-            Text(value).font(.system(size: 24, weight: .medium, design: .monospaced)).lineLimit(1).minimumScaleFactor(0.7)
-            if !detail.isEmpty { Text(detail).font(.system(size: 12)).foregroundStyle(SweepStyle.secondary) }
+            Text(L(title)).font(.system(size: 13, weight: .semibold)).foregroundStyle(color)
+            Text(L(value)).font(.system(size: 24, weight: .medium, design: .monospaced)).lineLimit(1).minimumScaleFactor(0.7)
+            if !detail.isEmpty { Text(L(detail)).font(.system(size: 12)).foregroundStyle(SweepStyle.secondary) }
         }.frame(maxWidth: .infinity, alignment: .leading).padding(16)
             .background(color.opacity(0.055), in: RoundedRectangle(cornerRadius: 10))
             .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(color.opacity(0.20)))
@@ -153,14 +153,14 @@ struct ScopeSidebarCard: View {
         Button(action: action) {
             VStack(alignment: .leading, spacing: 10) {
                 HStack(spacing: 8) {
-                    Text(scope.rawValue).font(.system(size: 18, weight: .semibold))
+                    Text(L(scope.rawValue)).font(.system(size: 18, weight: .semibold))
                     Spacer(minLength: 0)
                     if selected { Image(systemName: "checkmark.circle.fill").font(.system(size: 14)) }
                 }.foregroundStyle(scope.color)
                 HStack(alignment: .firstTextBaseline, spacing: 8) {
-                    Text(capacity).font(.system(size: 21, weight: .medium, design: .monospaced)).lineLimit(1).minimumScaleFactor(0.7)
+                    Text(L(capacity)).font(.system(size: 21, weight: .medium, design: .monospaced)).lineLimit(1).minimumScaleFactor(0.7)
                     Spacer(minLength: 0)
-                    if let count { Text("\(count) 项").font(.system(size: 11)).foregroundStyle(SweepStyle.secondary) }
+                    if let count { Text(L("\(count) 项")).font(.system(size: 11)).foregroundStyle(SweepStyle.secondary) }
                 }
             }.padding(14).frame(maxWidth: .infinity, alignment: .leading)
                 .background(scope.color.opacity(selected ? 0.11 : 0.04), in: RoundedRectangle(cornerRadius: 10))

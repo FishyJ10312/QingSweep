@@ -55,7 +55,7 @@ struct SpaceMapView: View {
   private var blocks: [SpaceBlock] { SpaceMapLayout.blocks(model.displayedAppSummaries) }
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {
-      Text("已读取内容的分配空间 · 方块大小不代表可清理程度").font(.system(size: 12)).foregroundStyle(
+      Text(L("已读取内容的分配空间 · 方块大小不代表可清理程度")).font(.system(size: 12)).foregroundStyle(
         SweepStyle.secondary)
       GeometryReader { geometry in
         ZStack(alignment: .topLeading) {
@@ -70,11 +70,11 @@ struct SpaceMapView: View {
             } label: {
               VStack(alignment: .leading, spacing: 5) {
                 if tile.rect.width > 60 && tile.rect.height > 35 {
-                  Text(tile.block.title).font(
+                  Text(L(tile.block.title)).font(
                     .system(size: tile.rect.width > 160 ? 16 : 12, weight: .semibold)
                   ).lineLimit(2)
                   if tile.rect.height > 60 {
-                    Text(formatBytes(tile.block.bytes)).font(.system(size: 12, design: .monospaced))
+                    Text(L(formatBytes(tile.block.bytes))).font(.system(size: 12, design: .monospaced))
                   }
                 }
               }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading).padding(
@@ -87,8 +87,8 @@ struct SpaceMapView: View {
             }.buttonStyle(.plain).frame(
               width: max(0, tile.rect.width - 3), height: max(0, tile.rect.height - 3)
             ).offset(x: tile.rect.minX, y: tile.rect.minY).help(
-              tile.block.title + " · " + formatBytes(tile.block.bytes)
-            ).accessibilityLabel(tile.block.title + "，" + formatBytes(tile.block.bytes))
+              L(tile.block.title + " · " + formatBytes(tile.block.bytes))
+            ).accessibilityLabel(L(tile.block.title + "，" + formatBytes(tile.block.bytes)))
           }
         }
       }
@@ -104,9 +104,9 @@ struct MemoryTrendView: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {
       HStack {
-        Text("最近 30 分钟").font(.system(size: 17, weight: .semibold))
+        Text(L("最近 30 分钟")).font(.system(size: 17, weight: .semibold))
         Spacer()
-        Toggle("菜单栏监控", isOn: $tools.menuEnabled).toggleStyle(.switch).controlSize(.small)
+        Toggle(L("菜单栏监控"), isOn: $tools.menuEnabled).toggleStyle(.switch).controlSize(.small)
       }
       GeometryReader { geometry in
         Path { path in
@@ -122,7 +122,7 @@ struct MemoryTrendView: View {
           }
         }.stroke(CleanupScope.optional.color, lineWidth: 2)
       }.frame(height: 90)
-      Text(tools.memoryTrend.samples.count < 2 ? "采样积累中，每 15 秒更新" : "内存使用量 · 应用变化与约 5 分钟前比较").font(
+      Text(L(tools.memoryTrend.samples.count < 2 ? "采样积累中，每 15 秒更新" : "内存使用量 · 应用变化与约 5 分钟前比较")).font(
         .system(size: 12)
       ).foregroundStyle(SweepStyle.secondary)
     }.padding(16).sweepCard()

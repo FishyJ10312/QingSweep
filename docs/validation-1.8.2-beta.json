@@ -1,0 +1,31 @@
+{
+  "version": "1.8.2",
+  "build": "17",
+  "checks_passed": 650,
+  "retained_regression_checks": 624,
+  "localization_checks": 26,
+  "catalogue_entries_exercised": 787,
+  "automated_sigkill_windows": 9,
+  "native_english_cleanup_restore_verified": true,
+  "restored_fixture_bytes_verified": true,
+  "real_history_unchanged": true,
+  "creative_files_default_unselected": true,
+  "languages": [
+    "en",
+    "zh-Hans"
+  ],
+  "language_preference_persisted": true,
+  "legacy_identifiers_preserved": true,
+  "english_search_of_legacy_index_verified": true,
+  "license": "MIT",
+  "developer_id_signed": false,
+  "notarized": false,
+  "cross_machine_gatekeeper_acceptance": false,
+  "architecture": "arm64",
+  "minimum_os_build_target": "14.0",
+  "actual_os": "27.2",
+  "binary_sha256": "c89bbffddc1185b3169bf5a6554c818fed108456486e73f848c07f42fdc11d54",
+  "installed_production_build_verified": true,
+  "signature_integrity_verified": true,
+  "previous_1_8_1_binary_retained": true
+}

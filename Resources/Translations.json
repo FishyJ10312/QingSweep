@@ -1,0 +1,3150 @@
+[
+  {
+    "source": "应用数据",
+    "english": "Application data"
+  },
+  {
+    "source": "缓存",
+    "english": "Cache"
+  },
+  {
+    "source": "日志",
+    "english": "Logs"
+  },
+  {
+    "source": "偏好设置",
+    "english": "Preferences"
+  },
+  {
+    "source": "窗口状态",
+    "english": "Window state"
+  },
+  {
+    "source": "网页存储",
+    "english": "Web storage"
+  },
+  {
+    "source": "独立数据",
+    "english": "Private data"
+  },
+  {
+    "source": "程序本体",
+    "english": "Application"
+  },
+  {
+    "source": "此位置不在应用私有范围",
+    "english": "This location is outside the application's private data"
+  },
+  {
+    "source": "可能残留 · ",
+    "english": "Possible leftovers · "
+  },
+  {
+    "source": "正在复核 · ",
+    "english": "Checking · "
+  },
+  {
+    "source": "应用仍在运行或位置已变化，本项未处理",
+    "english": "The application is still running or its location changed. This item was skipped."
+  },
+  {
+    "source": "无法核验文件占用，本项未处理",
+    "english": "Could not check whether the file is in use. This item was skipped."
+  },
+  {
+    "source": "仍有进程正在使用，本项未处理",
+    "english": "Another process is still using this item. It was skipped."
+  },
+  {
+    "source": "系统未返回废纸篓位置，请检查清理记录",
+    "english": "macOS did not return a Trash location. Check cleanup history."
+  },
+  {
+    "source": "我的 Mac",
+    "english": "My Mac"
+  },
+  {
+    "source": "清理",
+    "english": "Cleanup"
+  },
+  {
+    "source": "空间分析",
+    "english": "Storage"
+  },
+  {
+    "source": "内存",
+    "english": "Memory"
+  },
+  {
+    "source": "清理记录",
+    "english": "History"
+  },
+  {
+    "source": "工具",
+    "english": "Tools"
+  },
+  {
+    "source": "按用途",
+    "english": "By type"
+  },
+  {
+    "source": "全部文件",
+    "english": "All files"
+  },
+  {
+    "source": "占用最大",
+    "english": "Largest first"
+  },
+  {
+    "source": "最早修改",
+    "english": "Oldest first"
+  },
+  {
+    "source": "文件名称",
+    "english": "File name"
+  },
+  {
+    "source": "全部已选文件",
+    "english": "All selected files"
+  },
+  {
+    "source": "尚未扫描",
+    "english": "Not scanned"
+  },
+  {
+    "source": "忽略列表无法读取，请在设置中重新检查",
+    "english": "The ignore list could not be read. Check it in settings."
+  },
+  {
+    "source": "此文件暂时无法预览",
+    "english": "Preview is unavailable for this file"
+  },
+  {
+    "source": "有 {0} 项已变化或无法访问，未选中；请重新扫描。",
+    "english": "{0} items changed or could not be accessed and were left unselected. Scan again."
+  },
+  {
+    "source": "轻扫扫描结果.json",
+    "english": "QingSweep scan results.json"
+  },
+  {
+    "source": "清理清单需要重新扫描；清理记录与忽略列表已保留",
+    "english": "Scan the cleanup list again. Cleanup history and the ignore list have been preserved."
+  },
+  {
+    "source": "常用位置",
+    "english": "Common locations"
+  },
+  {
+    "source": "大文件",
+    "english": "Large files"
+  },
+  {
+    "source": "选择文件夹",
+    "english": "Choose folder"
+  },
+  {
+    "source": "扫描",
+    "english": "Scan"
+  },
+  {
+    "source": "扫描记录保存失败，本次结果仍可使用",
+    "english": "Could not save the scan record. The current results are still available."
+  },
+  {
+    "source": "忽略列表保存失败",
+    "english": "Could not save the ignore list"
+  },
+  {
+    "source": "正在检查文件与应用占用",
+    "english": "Checking files and application usage"
+  },
+  {
+    "source": "已停止清理",
+    "english": "Cleanup stopped"
+  },
+  {
+    "source": "清理结果",
+    "english": "Cleanup results"
+  },
+  {
+    "source": "正在停止；已发出的退出请求可能仍会完成",
+    "english": "Stopping. Previously sent quit requests may still finish."
+  },
+  {
+    "source": "正在恢复文件",
+    "english": "Restoring files"
+  },
+  {
+    "source": "正在恢复 {0} / {1}",
+    "english": "Restoring {0} / {1}"
+  },
+  {
+    "source": "恢复结果",
+    "english": "Restore results"
+  },
+  {
+    "source": "早期清理记录",
+    "english": "Earlier cleanup"
+  },
+  {
+    "source": "正在核对上次文件操作",
+    "english": "Reconciling the previous file operation"
+  },
+  {
+    "source": "完全磁盘访问",
+    "english": "Full Disk Access"
+  },
+  {
+    "source": "保留的副本也在本次清单中，请取消其中一份的选择",
+    "english": "The retained copy is also selected. Deselect one copy before continuing."
+  },
+  {
+    "source": "每组至少保留一份文件",
+    "english": "Keep at least one file in each group"
+  },
+  {
+    "source": "应用与私有内容",
+    "english": "Applications and private data"
+  },
+  {
+    "source": "正在退出应用与核实内容",
+    "english": "Quitting applications and checking files"
+  },
+  {
+    "source": "重新读取未处理项",
+    "english": "Checking unprocessed items again"
+  },
+  {
+    "source": "已加入忽略列表",
+    "english": "Added to the ignore list"
+  },
+  {
+    "source": "已停止重新检查",
+    "english": "Recheck stopped"
+  },
+  {
+    "source": " · 重试",
+    "english": " · Retry"
+  },
+  {
+    "source": "已按当前文件状态重建清单，请重新核对",
+    "english": "The list was rebuilt from the current file state. Review it again."
+  },
+  {
+    "source": "；另有 {0} 项暂不可用",
+    "english": "; {0} more items are currently unavailable"
+  },
+  {
+    "source": "未处理项已不存在，无需重试",
+    "english": "The unprocessed items no longer exist. No retry is needed."
+  },
+  {
+    "source": "程序",
+    "english": "Application"
+  },
+  {
+    "source": "数据",
+    "english": "Data"
+  },
+  {
+    "source": "UU 加速器",
+    "english": "UU Accelerator"
+  },
+  {
+    "source": "迅雷",
+    "english": "Xunlei"
+  },
+  {
+    "source": "未识别资源",
+    "english": "Unidentified resources"
+  },
+  {
+    "source": "Google 共享资源",
+    "english": "Shared Google resources"
+  },
+  {
+    "source": "Adobe 共享资源",
+    "english": "Shared Adobe resources"
+  },
+  {
+    "source": "Blackmagic 共享资源",
+    "english": "Shared Blackmagic resources"
+  },
+  {
+    "source": "共享剪贴板",
+    "english": "Shared clipboard"
+  },
+  {
+    "source": "系统资源",
+    "english": "System resources"
+  },
+  {
+    "source": "来源不能相互包含，目标也不能位于来源内",
+    "english": "Sources must not contain one another, and the destination must be outside all sources"
+  },
+  {
+    "source": "准备",
+    "english": "Preparing"
+  },
+  {
+    "source": "来源含指向外部的链接，请单独处理",
+    "english": "The source contains an external link. Handle it separately."
+  },
+  {
+    "source": "轻扫归档-",
+    "english": "QingSweep archive-"
+  },
+  {
+    "source": "-未完成",
+    "english": "-incomplete"
+  },
+  {
+    "source": "复制 · ",
+    "english": "Copying · "
+  },
+  {
+    "source": "复制",
+    "english": "Copy"
+  },
+  {
+    "source": "复制未完成：",
+    "english": "Copy incomplete: "
+  },
+  {
+    "source": "目标缺少文件：",
+    "english": "Missing from destination: "
+  },
+  {
+    "source": "校验 · ",
+    "english": "Verifying · "
+  },
+  {
+    "source": "内容校验",
+    "english": "Content verification"
+  },
+  {
+    "source": "内容校验不一致，来源未处理",
+    "english": "The content checksums differ. The source was left untouched."
+  },
+  {
+    "source": "保存校验记录",
+    "english": "Saving verification record"
+  },
+  {
+    "source": "轻扫校验记录.json",
+    "english": "QingSweep verification.json"
+  },
+  {
+    "source": "已有校验副本；是否删除来源由你确认。",
+    "english": "A verified copy is available. You decide whether to delete the source."
+  },
+  {
+    "source": "应用安装包",
+    "english": "Application installers"
+  },
+  {
+    "source": "可重建缓存",
+    "english": "Rebuildable cache"
+  },
+  {
+    "source": "用途未确认的缓存",
+    "english": "Unidentified cache"
+  },
+  {
+    "source": "日志与诊断",
+    "english": "Logs and diagnostics"
+  },
+  {
+    "source": "预设与素材包",
+    "english": "Presets and creative assets"
+  },
+  {
+    "source": "视频素材",
+    "english": "Video footage"
+  },
+  {
+    "source": "照片与 RAW",
+    "english": "Photos and RAW"
+  },
+  {
+    "source": "音频素材",
+    "english": "Audio assets"
+  },
+  {
+    "source": "项目与源代码",
+    "english": "Projects and source code"
+  },
+  {
+    "source": "文档与学习资料",
+    "english": "Documents and study files"
+  },
+  {
+    "source": "用途未确认的压缩包",
+    "english": "Unidentified archives"
+  },
+  {
+    "source": "工具运行资源",
+    "english": "Tool runtime resources"
+  },
+  {
+    "source": "其他待辨认文件",
+    "english": "Other unidentified files"
+  },
+  {
+    "source": "安装包",
+    "english": "Installers"
+  },
+  {
+    "source": "其他缓存",
+    "english": "Other cache"
+  },
+  {
+    "source": "照片与原始图像",
+    "english": "Photos and original images"
+  },
+  {
+    "source": "文档",
+    "english": "Documents"
+  },
+  {
+    "source": "压缩文件",
+    "english": "Archives"
+  },
+  {
+    "source": "工具资源",
+    "english": "Tool resources"
+  },
+  {
+    "source": "其他文件",
+    "english": "Other files"
+  },
+  {
+    "source": "文件名版本与本机已安装版本分别展示；未执行或挂载安装包。",
+    "english": "The version in the file name and the installed version are shown separately. The installer was not run or mounted."
+  },
+  {
+    "source": "请查看该项的分类依据和处理条件。",
+    "english": "Check this item's classification and cleanup conditions."
+  },
+  {
+    "source": "优先核对",
+    "english": "Review first"
+  },
+  {
+    "source": "退出应用后核对",
+    "english": "Review after quitting"
+  },
+  {
+    "source": "进一步确认",
+    "english": "Needs further review"
+  },
+  {
+    "source": "保留并保护",
+    "english": "Manual review"
+  },
+  {
+    "source": "用途待确认",
+    "english": "Purpose unknown"
+  },
+  {
+    "source": "建议清理",
+    "english": "Recommended cleanup"
+  },
+  {
+    "source": "清理前自动退出",
+    "english": "Quit application before cleanup"
+  },
+  {
+    "source": "自行选择",
+    "english": "Choose manually"
+  },
+  {
+    "source": "需自行确认",
+    "english": "Manual review"
+  },
+  {
+    "source": "规则识别",
+    "english": "Rule-based identification"
+  },
+  {
+    "source": "安装介质待确认",
+    "english": "Installer needs review"
+  },
+  {
+    "source": "旧版本安装包",
+    "english": "Older installers"
+  },
+  {
+    "source": "旧安装包",
+    "english": "Old installers"
+  },
+  {
+    "source": "已安装版本的介质",
+    "english": "Installer for an installed version"
+  },
+  {
+    "source": "安装包（已安装）",
+    "english": "Installer (installed)"
+  },
+  {
+    "source": "你的个人资料",
+    "english": "Your personal files"
+  },
+  {
+    "source": "保守保护",
+    "english": "Conservative classification"
+  },
+  {
+    "source": "已 {0} 天未修改；时间只能说明较旧，不能证明不再需要。",
+    "english": "Not modified for {0} days. Age alone does not mean the file is no longer needed."
+  },
+  {
+    "source": "项目、源代码或备份，请核实是否仍需保留。",
+    "english": "Project, source code or backup. Check whether you still need it."
+  },
+  {
+    "source": "根据文件格式、项目标记或所在目录识别。",
+    "english": "Identified by format, project markers or containing folder."
+  },
+  {
+    "source": "预设、素材包或创作资源，请确认用途后决定是否删除。",
+    "english": "Preset, asset pack or creative resource. Check its purpose before deleting."
+  },
+  {
+    "source": "素材目录和名称优先于 ZIP、RAR 等压缩格式。",
+    "english": "Creative folders and file names take precedence over archive extensions such as ZIP and RAR."
+  },
+  {
+    "source": "达芬奇渲染缓存",
+    "english": "DaVinci render cache"
+  },
+  {
+    "source": "已识别渲染帧缓存；删除后需重新计算，项目归属仍需你确认。",
+    "english": "Identified render-frame cache. It must be regenerated after deletion; confirm which project it belongs to."
+  },
+  {
+    "source": "位于 Movies/CacheClip，格式 .dvcc；没有据此判断项目已废弃。",
+    "english": "Located in Movies/CacheClip with the .dvcc format. This does not establish that the project is unused."
+  },
+  {
+    "source": "达芬奇代理文件",
+    "english": "DaVinci proxy media"
+  },
+  {
+    "source": "请先禁用代理并确认原始素材可正常播放；需要时可重新生成代理。",
+    "english": "Disable proxies first and confirm that the original media plays correctly. Proxies can be regenerated when needed."
+  },
+  {
+    "source": "根据代理目录与视频格式识别，未验证原片或项目引用。",
+    "english": "Identified by the proxy folder and video format. Original media and project references have not been verified."
+  },
+  {
+    "source": "视频素材，请核实是否仍需保留。",
+    "english": "Video footage. Check whether you still need it."
+  },
+  {
+    "source": "视频格式 .{0}",
+    "english": "Video format .{0}"
+  },
+  {
+    "source": "照片、RAW 或图像素材，请核实是否仍需保留。",
+    "english": "Photo, RAW or image asset. Check whether you still need it."
+  },
+  {
+    "source": "图像格式 .{0}",
+    "english": "Image format .{0}"
+  },
+  {
+    "source": "音频或音乐素材，请核实是否仍需保留。",
+    "english": "Audio or music asset. Check whether you still need it."
+  },
+  {
+    "source": "音频格式 .{0}",
+    "english": "Audio format .{0}"
+  },
+  {
+    "source": "个人文档与学习资料，请确认用途后决定是否删除。",
+    "english": "Personal document or study material. Check its purpose before deleting."
+  },
+  {
+    "source": "文档格式 .{0}",
+    "english": "Document format .{0}"
+  },
+  {
+    "source": "开发工具",
+    "english": "Developer tools"
+  },
+  {
+    "source": "开发工具运行资源",
+    "english": "Developer runtime resources"
+  },
+  {
+    "source": "工具运行所需的资源，删除后可能需要重新安装或下载。",
+    "english": "Resources required by a tool. Deleting them may require reinstallation or another download."
+  },
+  {
+    "source": "删除浏览器或编解码工具可能使现有工作流失效。",
+    "english": "Removing a browser or codec tool may break an existing workflow."
+  },
+  {
+    "source": "pip 下载与构建缓存",
+    "english": "pip download and build cache"
+  },
+  {
+    "source": "已识别 pip 下载或构建缓存；后续安装会重新下载或构建。",
+    "english": "Identified pip download or build cache. Future installations may download or build it again."
+  },
+  {
+    "source": " 仅匹配 pip 缓存结构，不包含已安装环境。",
+    "english": " Only known pip cache structures are matched, not installed environments."
+  },
+  {
+    "source": "已知缓存目录与格式",
+    "english": "Known cache folder and format"
+  },
+  {
+    "source": "Homebrew 下载缓存",
+    "english": "Homebrew download cache"
+  },
+  {
+    "source": "软件安装介质的下载副本；以后安装可能需要重新下载。",
+    "english": "Downloaded installation media. A future installation may need another download."
+  },
+  {
+    "source": " 位于 downloads 缓存，不是已安装软件目录。",
+    "english": " Located in the downloads cache, not the installed software directory."
+  },
+  {
+    "source": "Camera Raw 图像处理缓存",
+    "english": "Camera Raw image-processing cache"
+  },
+  {
+    "source": "用于加速 RAW 处理，可重建；清理后首次打开照片可能更慢。",
+    "english": "Rebuildable cache used to speed up RAW processing. The first photo load may be slower after cleanup."
+  },
+  {
+    "source": " 相关 Adobe 应用正在运行，暂不加入优先清单。",
+    "english": " Related Adobe applications are running, so this is not added to the recommended list."
+  },
+  {
+    "source": " 清理前会自动退出相关 Adobe 应用。",
+    "english": " Related Adobe applications will be asked to quit before cleanup."
+  },
+  {
+    "source": "Chrome 网页与代码缓存",
+    "english": "Chrome web and code cache"
+  },
+  {
+    "source": "仅识别网页/代码缓存；网页资源会重新下载。",
+    "english": "Only web and code cache is identified. Web resources will be downloaded again."
+  },
+  {
+    "source": " Chrome 正在运行，清理前会自动退出。",
+    "english": " Chrome is running and will be asked to quit before cleanup."
+  },
+  {
+    "source": " 清理前会检查 Chrome 是否已退出。",
+    "english": " Chrome's exit state will be checked before cleanup."
+  },
+  {
+    "source": " 不涉及 Cookie、密码、历史和站点数据库。",
+    "english": " Cookies, passwords, history and site databases are excluded."
+  },
+  {
+    "source": "精确缓存子目录",
+    "english": "Exact cache subfolder"
+  },
+  {
+    "source": "Firefox 网页缓存",
+    "english": "Firefox web cache"
+  },
+  {
+    "source": "网页内容会重新下载；不包含 Cookie、密码、历史或离线站点数据库。",
+    "english": "Web content will be downloaded again. Cookies, passwords, history and offline site databases are excluded."
+  },
+  {
+    "source": "cache2/entries 中的 SHA-1 文件名；",
+    "english": "SHA-1 file names in cache2/entries; "
+  },
+  {
+    "source": "精确缓存子目录与格式",
+    "english": "Exact cache subfolder and format"
+  },
+  {
+    "source": "Edge 网页与代码缓存",
+    "english": "Edge web and code cache"
+  },
+  {
+    "source": "仅处理网页与代码缓存；不包含登录状态、密码和历史。",
+    "english": "Only web and code cache is handled. Sign-in state, passwords and history are excluded."
+  },
+  {
+    "source": "精确 Chromium 缓存结构；",
+    "english": "Exact Chromium cache structure; "
+  },
+  {
+    "source": "未识别应用",
+    "english": "Unidentified application"
+  },
+  {
+    "source": "仅知道位于 Caches，无法确认内容是否仍有用途。",
+    "english": "The file is in Caches, but its purpose could not be established."
+  },
+  {
+    "source": "可能包含离线数据、会话资源或运行依赖；暂不提供清理。",
+    "english": "It may contain offline data, session resources or runtime dependencies. Manual review is required."
+  },
+  {
+    "source": "Xcode 编译中间文件",
+    "english": "Xcode build intermediates"
+  },
+  {
+    "source": "项目生成的编译中间文件；清理后需要重新编译，请自行确认。",
+    "english": "Generated build intermediates. They must be rebuilt after cleanup; confirm the selection yourself."
+  },
+  {
+    "source": "仅识别 DerivedData 的 Build/Intermediates.noindex；排除源码包、Archives 与模块缓存。",
+    "english": "Only DerivedData Build/Intermediates.noindex is identified. Source packages, Archives and module cache are excluded."
+  },
+  {
+    "source": "应用",
+    "english": "Applications"
+  },
+  {
+    "source": " 日志",
+    "english": " logs"
+  },
+  {
+    "source": "可能用于排查问题；本轮不自动加入候选。",
+    "english": "May help diagnose a problem. It is not automatically added as a candidate."
+  },
+  {
+    "source": "个人下载",
+    "english": "Personal downloads"
+  },
+  {
+    "source": "待辨认压缩包",
+    "english": "Unidentified archives"
+  },
+  {
+    "source": "压缩格式不能证明是安装包，可能装有素材、项目或备份。",
+    "english": "An archive extension does not prove this is an installer. It may contain assets, projects or backups."
+  },
+  {
+    "source": "未解压或执行内容，保留等待人工辨认。",
+    "english": "Contents were not extracted or executed. Keep it for manual review."
+  },
+  {
+    "source": "个人文件",
+    "english": "Personal files"
+  },
+  {
+    "source": "用途不足以确定，暂不加入清理。",
+    "english": "The purpose is unclear. Manual review is required."
+  },
+  {
+    "source": " 旧版本安装包",
+    "english": " older installer"
+  },
+  {
+    "source": " 较新版本安装介质",
+    "english": " newer installation media"
+  },
+  {
+    "source": " 已安装版本的介质",
+    "english": " installation media for the installed version"
+  },
+  {
+    "source": "本机已安装更高版本；如果不需要回退，可考虑移走此安装介质。",
+    "english": "A newer version is installed. Consider removing this installer if you do not need to roll back."
+  },
+  {
+    "source": "文件名版本高于本机安装版本，可能用于升级，先保留核对。",
+    "english": "The file name indicates a newer version than the installed application. It may be needed for an upgrade."
+  },
+  {
+    "source": "对应应用已安装；是否保留重装介质由你决定。",
+    "english": "The application is installed. You decide whether to keep its reinstallation media."
+  },
+  {
+    "source": "文件名版本 {0}；已安装 {1}（{2}）。未挂载安装包、未核验包内版本。",
+    "english": "File-name version {0}; installed {1} ({2}). The installer was not mounted and its internal version was not verified."
+  },
+  {
+    "source": "文件名 + 本机安装信息",
+    "english": "File name and installed application information"
+  },
+  {
+    "source": " 安装介质待确认",
+    "english": " installer needs review"
+  },
+  {
+    "source": "对应应用已安装，安装包内部版本仍未核实。",
+    "english": "The matching application is installed, but the installer's internal version is unverified."
+  },
+  {
+    "source": "名称匹配，版本未核实",
+    "english": "Name match; version unverified"
+  },
+  {
+    "source": "对应应用未确认",
+    "english": "Matching application unconfirmed"
+  },
+  {
+    "source": "身份未确认的安装介质",
+    "english": "Unidentified installation media"
+  },
+  {
+    "source": "文件扩展名是安装介质；尚不能确认对应应用或版本。",
+    "english": "The extension indicates installation media, but the application or version could not be confirmed."
+  },
+  {
+    "source": "可能存在同名应用、备份镜像或未安装软件，暂不提供清理。",
+    "english": "It may be a similarly named application, backup image or uninstalled software. Manual review is required."
+  },
+  {
+    "source": "进程 {0}",
+    "english": "Process {0}"
+  },
+  {
+    "source": "无法检查文件占用，本次未清理。请稍后重试。",
+    "english": "File usage could not be checked. No cleanup was performed. Try again later."
+  },
+  {
+    "source": "已停止清理。",
+    "english": "Cleanup stopped."
+  },
+  {
+    "source": "保留副本也被选中，本项未清理",
+    "english": "The retained copy is also selected. This item was not cleaned."
+  },
+  {
+    "source": "正在退出 {0}…",
+    "english": "Quitting {0}…"
+  },
+  {
+    "source": "等待 {0} 退出；如有保存窗口，请先保存",
+    "english": "Waiting for {0} to quit. Save your work if a save window appears."
+  },
+  {
+    "source": " 仍在使用，已跳过；保存完成或任务结束后可重试。",
+    "english": " is still in use and was skipped. Retry after saving or finishing the task."
+  },
+  {
+    "source": "校验并移入废纸篓 {0} / {1}",
+    "english": "Verifying and moving to Trash {0} / {1}"
+  },
+  {
+    "source": "Homebrew 安装任务",
+    "english": "Homebrew installation task"
+  },
+  {
+    "source": "pip 安装任务",
+    "english": "pip installation task"
+  },
+  {
+    "source": "推荐清理",
+    "english": "Recommended"
+  },
+  {
+    "source": "可自行选择",
+    "english": "Choose manually"
+  },
+  {
+    "source": "旧安装包与下载缓存",
+    "english": "Old installers and download cache"
+  },
+  {
+    "source": "查看影响后手动选择",
+    "english": "Review the impact, then choose"
+  },
+  {
+    "source": "手动选择，二次确认",
+    "english": "Select manually, then confirm again"
+  },
+  {
+    "source": "至少 7 天未修改的已识别旧安装包、下载缓存；只添加当前范围",
+    "english": "Identified old installers and download cache unchanged for at least 7 days. Adds candidates only within the current scope."
+  },
+  {
+    "source": "可重建缓存、日志和重装介质；请查看影响后手动选择",
+    "english": "Rebuildable cache, logs and reinstallation media. Review the impact, then select manually."
+  },
+  {
+    "source": "素材和项目默认不选；可全选、按组或逐项选择，清理前二次确认",
+    "english": "Media and projects start unselected. Select all, by group or individually, then confirm again before cleanup."
+  },
+  {
+    "source": "操作日志无法保存，已停止后续文件操作。请检查可用空间和访问权限后重开轻扫。",
+    "english": "The operation log could not be saved. Further file operations stopped. Check free space and access permissions, then reopen QingSweep."
+  },
+  {
+    "source": "操作日志无法完整读取，已保留原文件并暂停清理。请勿删除日志文件。",
+    "english": "The operation log could not be fully read. The original log was preserved and cleanup is paused. Do not delete the log file."
+  },
+  {
+    "source": "上次操作还有待核对的文件，请先在清理记录中重新核对。",
+    "english": "Files from the previous operation still need reconciliation. Recheck them in History first."
+  },
+  {
+    "source": "无法读取废纸篓。请在系统设置的「完全磁盘访问」中允许轻扫，重开后重新核对。",
+    "english": "Trash cannot be read. Allow QingSweep in System Settings under Full Disk Access, reopen it, then reconcile again."
+  },
+  {
+    "source": "上次操作意外中断；已核对的文件可在此恢复，未处理项需重新确认。",
+    "english": "The previous operation was interrupted. Reconciled files can be restored here; unprocessed items require fresh confirmation."
+  },
+  {
+    "source": "此项需要手动选择，并完成二次确认后再清理。",
+    "english": "Select this item manually and complete the second confirmation before cleanup."
+  },
+  {
+    "source": "用途尚未确认，请手动选择并完成二次确认。",
+    "english": "This item's purpose is unconfirmed. Select it manually and complete the second confirmation."
+  },
+  {
+    "source": "相关应用仍在运行或已重新打开，本项已跳过。",
+    "english": "The related application is running or has reopened. This item was skipped."
+  },
+  {
+    "source": "受保护的位置、链接或云端文件，已跳过。",
+    "english": "A restricted location, link or cloud file was skipped."
+  },
+  {
+    "source": "文件已不存在，或不再符合清理条件。",
+    "english": "The file no longer exists or no longer meets cleanup conditions."
+  },
+  {
+    "source": "文件在扫描后发生变化，请重新扫描。",
+    "english": "The file changed after scanning. Scan again."
+  },
+  {
+    "source": "请选择个人文件夹；系统、应用、隐藏目录和资料库不在清理范围。",
+    "english": "Choose a personal folder. System locations, applications, hidden folders and libraries are outside this cleanup scope."
+  },
+  {
+    "source": "正在读取 {0}；首次访问时，请处理 macOS 的授权提示。",
+    "english": "Reading {0}. On first access, respond to the macOS permission prompt."
+  },
+  {
+    "source": "无法扫描：{0}（不存在、未获权限或受保护）",
+    "english": "Cannot scan: {0} (missing, not permitted or restricted)"
+  },
+  {
+    "source": "无法读取：{0}",
+    "english": "Cannot read: {0}"
+  },
+  {
+    "source": "目录超过安全深度：",
+    "english": "Folder exceeds the safe depth limit: "
+  },
+  {
+    "source": "{0}：已调用系统移入废纸篓，但未返回位置；请在访达中检查。",
+    "english": "{0}: macOS was asked to move this item to Trash but returned no location. Check it in Finder."
+  },
+  {
+    "source": "正常",
+    "english": "Normal"
+  },
+  {
+    "source": "偏高",
+    "english": "Elevated"
+  },
+  {
+    "source": "紧张",
+    "english": "High"
+  },
+  {
+    "source": "未知",
+    "english": "Unknown"
+  },
+  {
+    "source": "已识别的旧安装包和下载缓存，可添加当前推荐项",
+    "english": "Identified old installers and download cache. Add recommendations within the current scope."
+  },
+  {
+    "source": "缓存、日志与重装介质，查看影响后选择",
+    "english": "Cache, logs and reinstallation media. Review the impact before choosing."
+  },
+  {
+    "source": "素材和项目默认不选，手动选择后需二次确认",
+    "english": "Media and projects start unselected. Manual selection requires a second confirmation."
+  },
+  {
+    "source": "{0} 项",
+    "english": "{0} items"
+  },
+  {
+    "source": "检查 {0} 项",
+    "english": "Review {0} items"
+  },
+  {
+    "source": "片段比较",
+    "english": "Comparing samples"
+  },
+  {
+    "source": "校验内容 · ",
+    "english": "Verifying content · "
+  },
+  {
+    "source": "完整内容校验",
+    "english": "Full content verification"
+  },
+  {
+    "source": "已停止后续操作",
+    "english": "Further operations stopped"
+  },
+  {
+    "source": "文件或目录已变化，请重新检查",
+    "english": "The file or folder changed. Check it again."
+  },
+  {
+    "source": "尚未读取：",
+    "english": "Not read: "
+  },
+  {
+    "source": "目录尚未读完整，请选择较小范围",
+    "english": "The folder is incomplete. Choose a smaller scope."
+  },
+  {
+    "source": "目标磁盘空间不足",
+    "english": "Not enough space on the destination disk"
+  },
+  {
+    "source": "原磁盘未连接，操作已停止",
+    "english": "The original disk is disconnected. Operations stopped."
+  },
+  {
+    "source": "保留的副本已变化或磁盘未连接，本项未清理",
+    "english": "The retained copy changed or its disk is disconnected. This item was not cleaned."
+  },
+  {
+    "source": "检查超时，请选择较小范围",
+    "english": "The check timed out. Choose a smaller scope."
+  },
+  {
+    "source": "可恢复",
+    "english": "Available to restore"
+  },
+  {
+    "source": "已不在废纸篓",
+    "english": "No longer in Trash"
+  },
+  {
+    "source": "文件已变化",
+    "english": "File changed"
+  },
+  {
+    "source": "原位置已有文件",
+    "english": "Original location is occupied"
+  },
+  {
+    "source": "原位置不可用",
+    "english": "Original location unavailable"
+  },
+  {
+    "source": "%.1f 秒",
+    "english": "%.1f seconds"
+  },
+  {
+    "source": "没有可读取的视频轨道",
+    "english": "No readable video track"
+  },
+  {
+    "source": "视频参数无法读取",
+    "english": "Video information could not be read"
+  },
+  {
+    "source": "未知编码",
+    "english": "Unknown codec"
+  },
+  {
+    "source": "代理文件",
+    "english": "Proxy media"
+  },
+  {
+    "source": "CacheClip 缓存",
+    "english": "CacheClip cache"
+  },
+  {
+    "source": "优化媒体",
+    "english": "Optimized media"
+  },
+  {
+    "source": "清理后可能需要重新生成；请确认项目用途。",
+    "english": "It may need to be regenerated after cleanup. Confirm the project's purpose."
+  },
+  {
+    "source": "按目录与文件格式识别，未判断项目已废弃。",
+    "english": "Identified by folder and format. This does not establish that the project is unused."
+  },
+  {
+    "source": "{0} / {1} 项",
+    "english": "{0} / {1} items"
+  },
+  {
+    "source": "已检查 {0} 项",
+    "english": "Checked {0} items"
+  },
+  {
+    "source": "{0} 时 {1} 分",
+    "english": "{0} hr {1} min"
+  },
+  {
+    "source": "{0} 分 {1} 秒",
+    "english": "{0} min {1} sec"
+  },
+  {
+    "source": "{0} 秒",
+    "english": "{0} sec"
+  },
+  {
+    "source": "已归档来源",
+    "english": "Archived sources"
+  },
+  {
+    "source": "清理后将依赖归档副本；操作前再次检查副本。",
+    "english": "Cleanup will leave you dependent on the archive copy, which is checked again before the operation."
+  },
+  {
+    "source": "达芬奇代理",
+    "english": "DaVinci proxies"
+  },
+  {
+    "source": "清理后需要使用原片，或重新生成代理。",
+    "english": "After cleanup, use the originals or generate new proxies."
+  },
+  {
+    "source": "达芬奇缓存",
+    "english": "DaVinci cache"
+  },
+  {
+    "source": "相关项目可能需要重新渲染或生成优化媒体。",
+    "english": "The project may need rendering or optimized media generation again."
+  },
+  {
+    "source": "删除本地安装介质；以后重装或回退需重新获取。",
+    "english": "Removes local installation media. A reinstall or rollback will require another copy."
+  },
+  {
+    "source": "下次使用可能重新下载或生成，首次打开会变慢。",
+    "english": "The next use may download or generate data again and take longer."
+  },
+  {
+    "source": "将失去这些诊断记录，可能影响之后排查问题。",
+    "english": "These diagnostic records will be lost, which may affect later troubleshooting."
+  },
+  {
+    "source": "会移除项目文件；请核对备份和其他文件的引用。",
+    "english": "Removes project files. Check backups and references from other files."
+  },
+  {
+    "source": "素材",
+    "english": "Media"
+  },
+  {
+    "source": "可能导致剪辑或图库中的引用离线；请确认备份。",
+    "english": "Editing or library references may become offline. Confirm your backup."
+  },
+  {
+    "source": "可能影响正在使用的字体、预设、模板或素材。",
+    "english": "May affect fonts, presets, templates or creative assets in use."
+  },
+  {
+    "source": "可能影响工具运行；请先核对用途。",
+    "english": "May affect tool operation. Check the purpose first."
+  },
+  {
+    "source": "用途尚未完全确认，请核对内容和引用后再处理。",
+    "english": "The purpose is not fully established. Check the contents and references before proceeding."
+  },
+  {
+    "source": "媒体扫描",
+    "english": "Media scan"
+  },
+  {
+    "source": "重复文件检查",
+    "english": "Duplicate check"
+  },
+  {
+    "source": "归档",
+    "english": "Archive"
+  },
+  {
+    "source": "归档来源检查",
+    "english": "Archive source check"
+  },
+  {
+    "source": "应用读取",
+    "english": "Application inventory"
+  },
+  {
+    "source": "应用内容检查",
+    "english": "Application content check"
+  },
+  {
+    "source": "残留检查",
+    "english": "Leftover check"
+  },
+  {
+    "source": "启动项读取",
+    "english": "Startup item inventory"
+  },
+  {
+    "source": "启动项更改",
+    "english": "Startup item change"
+  },
+  {
+    "source": "媒体参数",
+    "english": "Media information"
+  },
+  {
+    "source": "进行中",
+    "english": "Running"
+  },
+  {
+    "source": "已完成",
+    "english": "Completed"
+  },
+  {
+    "source": "部分完成",
+    "english": "Partially completed"
+  },
+  {
+    "source": "已停止",
+    "english": "Stopped"
+  },
+  {
+    "source": "未完成",
+    "english": "Incomplete"
+  },
+  {
+    "source": "已中断",
+    "english": "Interrupted"
+  },
+  {
+    "source": "任务记录无法读取",
+    "english": "Task history could not be read"
+  },
+  {
+    "source": "清理影响",
+    "english": "Cleanup impact"
+  },
+  {
+    "source": "{0} 项 · ",
+    "english": "{0} items · "
+  },
+  {
+    "source": "前往系统设置",
+    "english": "Open System Settings"
+  },
+  {
+    "source": "已恢复",
+    "english": "Restored"
+  },
+  {
+    "source": "已移入废纸篓",
+    "english": "Moved to Trash"
+  },
+  {
+    "source": "未处理",
+    "english": "Unprocessed"
+  },
+  {
+    "source": "文件仍在废纸篓，可从清理记录恢复；清空废纸篓后才释放空间。",
+    "english": "Files remain in Trash and can be restored from History. Space is freed only after Trash is emptied."
+  },
+  {
+    "source": "加载更多详情",
+    "english": "Load more details"
+  },
+  {
+    "source": "记录尚未保存：",
+    "english": "Record not saved: "
+  },
+  {
+    "source": "重新保存记录",
+    "english": "Save records again"
+  },
+  {
+    "source": "查看清理记录",
+    "english": "View history"
+  },
+  {
+    "source": "重新检查未处理项",
+    "english": "Recheck unprocessed items"
+  },
+  {
+    "source": "重试恢复",
+    "english": "Retry restore"
+  },
+  {
+    "source": "完成",
+    "english": "Done"
+  },
+  {
+    "source": "停止",
+    "english": "Stop"
+  },
+  {
+    "source": "最近任务",
+    "english": "Recent tasks"
+  },
+  {
+    "source": "只看未完成",
+    "english": "Unfinished only"
+  },
+  {
+    "source": "重建记录",
+    "english": "Rebuild history"
+  },
+  {
+    "source": "没有未完成任务",
+    "english": "No unfinished tasks"
+  },
+  {
+    "source": "暂无任务",
+    "english": "No tasks yet"
+  },
+  {
+    "source": "新的任务结果会保存在这里",
+    "english": "New task results will appear here"
+  },
+  {
+    "source": "扫描、查重或归档后，可在这里查看结果和重新检查",
+    "english": "After a scan, duplicate check or archive, review results and recheck items here"
+  },
+  {
+    "source": "重新设置",
+    "english": "Configure again"
+  },
+  {
+    "source": "重新检查",
+    "english": "Recheck"
+  },
+  {
+    "source": "查看工具",
+    "english": "View tool"
+  },
+  {
+    "source": "需重新检查，不会自动执行文件操作",
+    "english": "Requires a fresh check. File operations will not run automatically."
+  },
+  {
+    "source": "结果 {0} 项",
+    "english": "{0} results"
+  },
+  {
+    "source": "未读取或跳过 {0} 处",
+    "english": "{0} locations unread or skipped"
+  },
+  {
+    "source": "查看范围与详情",
+    "english": "View scope and details"
+  },
+  {
+    "source": "目标：",
+    "english": "Destination: "
+  },
+  {
+    "source": "空间账本",
+    "english": "Storage ledger"
+  },
+  {
+    "source": "启动磁盘 / 本机存储",
+    "english": "Startup disk / Local storage"
+  },
+  {
+    "source": "停止扫描",
+    "english": "Stop scan"
+  },
+  {
+    "source": "开始扫描",
+    "english": "Start scan"
+  },
+  {
+    "source": "重新扫描",
+    "english": "Scan again"
+  },
+  {
+    "source": "扫描常用位置",
+    "english": "Scan common locations"
+  },
+  {
+    "source": "扫描空间与清理项",
+    "english": "Scan storage and cleanup candidates"
+  },
+  {
+    "source": "查找大文件",
+    "english": "Find large files"
+  },
+  {
+    "source": "范围",
+    "english": "Scope"
+  },
+  {
+    "source": "清理记录 · {0} 项可恢复",
+    "english": "History · {0} items available to restore"
+  },
+  {
+    "source": "可用空间",
+    "english": "Available space"
+  },
+  {
+    "source": "总容量",
+    "english": "Total capacity"
+  },
+  {
+    "source": "已使用 ",
+    "english": "Used "
+  },
+  {
+    "source": "{0}% 已使用",
+    "english": "{0}% used"
+  },
+  {
+    "source": "清理清单",
+    "english": "Cleanup list"
+  },
+  {
+    "source": " 扫描",
+    "english": " scan"
+  },
+  {
+    "source": "正在检查 {0} 项",
+    "english": "Checking {0} items"
+  },
+  {
+    "source": "正在分析应用占用",
+    "english": "Analyzing application storage"
+  },
+  {
+    "source": "读取中",
+    "english": "Reading"
+  },
+  {
+    "source": "待扫描",
+    "english": "Not scanned"
+  },
+  {
+    "source": "选择范围后开始扫描",
+    "english": "Choose a scope to start scanning"
+  },
+  {
+    "source": "部分结果",
+    "english": "Partial results"
+  },
+  {
+    "source": "扫描完成",
+    "english": "Scan complete"
+  },
+  {
+    "source": "详情",
+    "english": "Details"
+  },
+  {
+    "source": "占用排行",
+    "english": "Largest consumers"
+  },
+  {
+    "source": "正在读取应用数据",
+    "english": "Reading application data"
+  },
+  {
+    "source": "按应用查看空间去向",
+    "english": "Explore storage by application"
+  },
+  {
+    "source": " · 部分",
+    "english": " · Partial"
+  },
+  {
+    "source": "浏览全部占用",
+    "english": "Browse all storage"
+  },
+  {
+    "source": "轻扫 · 磁盘与内存",
+    "english": "QingSweep · Storage and Memory"
+  },
+  {
+    "source": "扫描个人大文件",
+    "english": "Scan large personal files"
+  },
+  {
+    "source": "选择文件夹…",
+    "english": "Choose folder…"
+  },
+  {
+    "source": "代理文件：确认原始素材仍可用后再删除；需要时可重新生成代理。",
+    "english": "Proxies: confirm the original media is still available before deleting. Proxies can be regenerated when needed."
+  },
+  {
+    "source": "渲染缓存：删除后需要重新计算，首次播放可能变慢；请先确认原始素材可用。",
+    "english": "Render cache: it must be recalculated after deletion and initial playback may be slower. Confirm that the originals are available first."
+  },
+  {
+    "source": "正在读取上次结果",
+    "english": "Loading previous results"
+  },
+  {
+    "source": "正在检查文件",
+    "english": "Checking files"
+  },
+  {
+    "source": "从常用位置开始",
+    "english": "Start with common locations"
+  },
+  {
+    "source": "加载更多 · 每次 100 项",
+    "english": "Load more · 100 at a time"
+  },
+  {
+    "source": "全部应用",
+    "english": "All applications"
+  },
+  {
+    "source": "· 部分结果",
+    "english": "· Partial results"
+  },
+  {
+    "source": "扫描详情",
+    "english": "Scan details"
+  },
+  {
+    "source": "重新扫描当前范围",
+    "english": "Scan the current scope again"
+  },
+  {
+    "source": "扫描文件夹",
+    "english": "Scan folder"
+  },
+  {
+    "source": "返回上一级",
+    "english": "Back to parent"
+  },
+  {
+    "source": "显示方式",
+    "english": "View"
+  },
+  {
+    "source": "搜索此范围",
+    "english": "Search this scope"
+  },
+  {
+    "source": "清除搜索",
+    "english": "Clear search"
+  },
+  {
+    "source": "用途",
+    "english": "Type"
+  },
+  {
+    "source": "全部用途",
+    "english": "All types"
+  },
+  {
+    "source": "大小",
+    "english": "Size"
+  },
+  {
+    "source": "全部大小",
+    "english": "All sizes"
+  },
+  {
+    "source": "至少 100 MB",
+    "english": "At least 100 MB"
+  },
+  {
+    "source": "至少 1 GB",
+    "english": "At least 1 GB"
+  },
+  {
+    "source": "只看已选文件",
+    "english": "Selected files only"
+  },
+  {
+    "source": "筛选",
+    "english": "Filter"
+  },
+  {
+    "source": "排序",
+    "english": "Sort"
+  },
+  {
+    "source": " 以上",
+    "english": " or larger"
+  },
+  {
+    "source": "清除筛选",
+    "english": "Clear filters"
+  },
+  {
+    "source": "已选全部推荐",
+    "english": "All recommendations selected"
+  },
+  {
+    "source": "全选推荐项",
+    "english": "Select recommendations"
+  },
+  {
+    "source": "取消全选",
+    "english": "Deselect all"
+  },
+  {
+    "source": "全选当前范围",
+    "english": "Select all in scope"
+  },
+  {
+    "source": "此范围没有推荐项",
+    "english": "No recommendations in this scope"
+  },
+  {
+    "source": "没有匹配的文件",
+    "english": "No matching files"
+  },
+  {
+    "source": "查看可自行选择",
+    "english": "View manual choices"
+  },
+  {
+    "source": "未选择",
+    "english": "Nothing selected"
+  },
+  {
+    "source": "/ {0} 项",
+    "english": "/ {0} items"
+  },
+  {
+    "source": "其他范围 {0} 项",
+    "english": "{0} items in other scopes"
+  },
+  {
+    "source": "素材默认不选 · 清理前二次确认",
+    "english": "Media starts unselected · Confirm again before cleanup"
+  },
+  {
+    "source": "清空",
+    "english": "Clear"
+  },
+  {
+    "source": "复核所选",
+    "english": "Review selection"
+  },
+  {
+    "source": "使用时会重新生成或下载，首次打开可能更慢",
+    "english": "May be regenerated or downloaded on next use, making the first load slower"
+  },
+  {
+    "source": "移除历史诊断记录，可能影响旧问题的排查",
+    "english": "Removes diagnostic history, which may affect investigation of earlier issues"
+  },
+  {
+    "source": "保留已安装程序；这份离线安装介质将移到废纸篓",
+    "english": "Keeps the installed application and moves this offline installer to Trash"
+  },
+  {
+    "source": "选择 ",
+    "english": "Select "
+  },
+  {
+    "source": "已选 {0}",
+    "english": "Selected {0}"
+  },
+  {
+    "source": "查看分类依据",
+    "english": "View classification"
+  },
+  {
+    "source": "查看文件",
+    "english": "View files"
+  },
+  {
+    "source": "预览 ",
+    "english": "Preview "
+  },
+  {
+    "source": "预览",
+    "english": "Preview"
+  },
+  {
+    "source": "查看详情",
+    "english": "View details"
+  },
+  {
+    "source": "在访达中查看",
+    "english": "Show in Finder"
+  },
+  {
+    "source": "复制完整路径",
+    "english": "Copy full path"
+  },
+  {
+    "source": "忽略此文件",
+    "english": "Ignore this file"
+  },
+  {
+    "source": "忽略所在文件夹",
+    "english": "Ignore containing folder"
+  },
+  {
+    "source": "文件详情",
+    "english": "File details"
+  },
+  {
+    "source": "所属应用",
+    "english": "Application"
+  },
+  {
+    "source": "建议",
+    "english": "Suggestion"
+  },
+  {
+    "source": "修改日期",
+    "english": "Modified"
+  },
+  {
+    "source": "判断依据",
+    "english": "Classification evidence"
+  },
+  {
+    "source": "官方说明",
+    "english": "Official documentation"
+  },
+  {
+    "source": "其他 · {0} 类",
+    "english": "Other · {0} categories"
+  },
+  {
+    "source": "已读取内容的分配空间 · 方块大小不代表可清理程度",
+    "english": "Allocated space for read content · Tile size does not indicate cleanup suitability"
+  },
+  {
+    "source": "最近 30 分钟",
+    "english": "Last 30 minutes"
+  },
+  {
+    "source": "菜单栏监控",
+    "english": "Menu bar monitor"
+  },
+  {
+    "source": "采样积累中，每 15 秒更新",
+    "english": "Collecting samples, updated every 15 seconds"
+  },
+  {
+    "source": "内存使用量 · 应用变化与约 5 分钟前比较",
+    "english": "Memory use · Application changes compared with about 5 minutes ago"
+  },
+  {
+    "source": "仅管理当前用户的 LaunchAgents",
+    "english": "Only the current user's LaunchAgents are managed"
+  },
+  {
+    "source": "文件不属于当前用户",
+    "english": "This file is not owned by the current user"
+  },
+  {
+    "source": "此服务请在系统设置中管理",
+    "english": "Manage this service in System Settings"
+  },
+  {
+    "source": "系统未接受更改：",
+    "english": "macOS did not accept the change: "
+  },
+  {
+    "source": "未能载入，已恢复停用：",
+    "english": "Could not load the service; restored its disabled state: "
+  },
+  {
+    "source": "未能退出，已恢复启用：",
+    "english": "Could not unload the service; restored its enabled state: "
+  },
+  {
+    "source": "项目资料",
+    "english": "Project files"
+  },
+  {
+    "source": "系统数据目录",
+    "english": "System data folders"
+  },
+  {
+    "source": "本机工具数据",
+    "english": "Local tool data"
+  },
+  {
+    "source": "文稿与项目",
+    "english": "Documents and projects"
+  },
+  {
+    "source": "照片与图库",
+    "english": "Photos and libraries"
+  },
+  {
+    "source": "视频与素材",
+    "english": "Video and media"
+  },
+  {
+    "source": "下载文件",
+    "english": "Downloads"
+  },
+  {
+    "source": "桌面文件",
+    "english": "Desktop files"
+  },
+  {
+    "source": "音乐与音频",
+    "english": "Music and audio"
+  },
+  {
+    "source": "应用支持数据",
+    "english": "Application support data"
+  },
+  {
+    "source": "应用共享数据",
+    "english": "Shared application data"
+  },
+  {
+    "source": "应用独立数据",
+    "english": "Private application data"
+  },
+  {
+    "source": "应用缓存",
+    "english": "Application cache"
+  },
+  {
+    "source": "应用日志",
+    "english": "Application logs"
+  },
+  {
+    "source": "资料库 / ",
+    "english": "Library / "
+  },
+  {
+    "source": "应用程序",
+    "english": "Applications"
+  },
+  {
+    "source": "共享资料库",
+    "english": "Shared Library"
+  },
+  {
+    "source": "系统与临时数据",
+    "english": "System and temporary data"
+  },
+  {
+    "source": "macOS 系统",
+    "english": "macOS system"
+  },
+  {
+    "source": "用户 / ",
+    "english": "User / "
+  },
+  {
+    "source": "需要访问权限",
+    "english": "Permission required"
+  },
+  {
+    "source": "系统访问限制",
+    "english": "System access restriction"
+  },
+  {
+    "source": "位置不存在",
+    "english": "Location missing"
+  },
+  {
+    "source": "磁盘未连接",
+    "english": "Disk disconnected"
+  },
+  {
+    "source": "暂时无法读取",
+    "english": "Temporarily unreadable"
+  },
+  {
+    "source": "扫描未完成",
+    "english": "Scan incomplete"
+  },
+  {
+    "source": "扫描已停止",
+    "english": "Scan stopped"
+  },
+  {
+    "source": "本轮扫描未完成",
+    "english": "This scan did not finish"
+  },
+  {
+    "source": "位置不存在或无法读取",
+    "english": "The location is missing or unreadable"
+  },
+  {
+    "source": "云端目录或别名未展开",
+    "english": "Cloud folder or alias was not expanded"
+  },
+  {
+    "source": "无法列出文件夹",
+    "english": "Could not list the folder"
+  },
+  {
+    "source": "达到本轮扫描时间上限",
+    "english": "The scan time limit was reached"
+  },
+  {
+    "source": "：仅显示本次已读取的内容",
+    "english": ": showing only content read in this scan"
+  },
+  {
+    "source": "无法读取文件信息",
+    "english": "Could not read file information"
+  },
+  {
+    "source": "达到目录深度上限",
+    "english": "The folder depth limit was reached"
+  },
+  {
+    "source": " 更新缓存",
+    "english": " update cache"
+  },
+  {
+    "source": "跨设备剪贴板",
+    "english": "Cross-device clipboard"
+  },
+  {
+    "source": "归档文件",
+    "english": "Archive files"
+  },
+  {
+    "source": "虚拟机运行资源",
+    "english": "Virtual machine runtime resources"
+  },
+  {
+    "source": "微信",
+    "english": "WeChat"
+  },
+  {
+    "source": "网易云音乐",
+    "english": "NetEase Cloud Music"
+  },
+  {
+    "source": "百度网盘",
+    "english": "Baidu Netdisk"
+  },
+  {
+    "source": "网易邮箱",
+    "english": "NetEase Mail"
+  },
+  {
+    "source": "系统通知",
+    "english": "System notifications"
+  },
+  {
+    "source": "Camera Raw 图像缓存",
+    "english": "Camera Raw image cache"
+  },
+  {
+    "source": "Visual Studio Code 更新缓存",
+    "english": "Visual Studio Code update cache"
+  },
+  {
+    "source": "位置不可用或包含链接",
+    "english": "The location is unavailable or contains a link"
+  },
+  {
+    "source": "此位置无法分析",
+    "english": "This location cannot be analyzed"
+  },
+  {
+    "source": "空间索引需要重建",
+    "english": "The storage index needs rebuilding"
+  },
+  {
+    "source": "空间索引暂时不可用",
+    "english": "The storage index is temporarily unavailable"
+  },
+  {
+    "source": "磁盘空间不足，无法保存空间索引",
+    "english": "Not enough disk space to save the storage index"
+  },
+  {
+    "source": "空间索引正在使用，请稍后重试",
+    "english": "The storage index is in use. Try again later."
+  },
+  {
+    "source": "空间索引暂时无法更新，请重新分析",
+    "english": "The storage index could not be updated. Analyze again."
+  },
+  {
+    "source": "等待补扫",
+    "english": "Waiting for continuation"
+  },
+  {
+    "source": "当前版本尚未通过完全磁盘访问试读；请开启轻扫后重新检查。",
+    "english": "A Full Disk Access read has not succeeded for this version. Enable QingSweep and check again."
+  },
+  {
+    "source": "本轮尚未扫描此位置",
+    "english": "This location has not been scanned yet"
+  },
+  {
+    "source": "文件已恢复，请重新扫描此文件夹",
+    "english": "Files were restored. Scan this folder again."
+  },
+  {
+    "source": "访问已可用，请重新扫描此文件夹",
+    "english": "Access is available. Scan this folder again."
+  },
+  {
+    "source": "按应用",
+    "english": "By application"
+  },
+  {
+    "source": "按文件夹",
+    "english": "By folder"
+  },
+  {
+    "source": "更新已停止",
+    "english": "Update stopped"
+  },
+  {
+    "source": "更新完成",
+    "english": "Update complete"
+  },
+  {
+    "source": "正在接续更新",
+    "english": "Continuing the update"
+  },
+  {
+    "source": "可读取位置已扫描完成，剩余位置需要授权",
+    "english": "Readable locations are complete. The remaining locations need permission."
+  },
+  {
+    "source": "正在检查变化",
+    "english": "Checking for changes"
+  },
+  {
+    "source": "变更记录不可用，正在完整检查",
+    "english": "Change history is unavailable. Performing a full check."
+  },
+  {
+    "source": "正在更新变化的文件夹",
+    "english": "Updating changed folders"
+  },
+  {
+    "source": "没有需要更新的文件夹",
+    "english": "No folders need updating"
+  },
+  {
+    "source": "选择要分析的文件夹",
+    "english": "Choose a folder to analyze"
+  },
+  {
+    "source": "分析文件夹",
+    "english": "Analyze folder"
+  },
+  {
+    "source": "完全磁盘访问试读仍被拒绝，请开启当前版本的轻扫后重新检查。",
+    "english": "The Full Disk Access read is still denied. Enable the current QingSweep version and check again."
+  },
+  {
+    "source": "仍有位置需要授权，请检查轻扫的完全磁盘访问开关",
+    "english": "Some locations still need permission. Check QingSweep's Full Disk Access setting."
+  },
+  {
+    "source": "访问检查完成",
+    "english": "Access check complete"
+  },
+  {
+    "source": "访问已恢复，正在补扫",
+    "english": "Access restored. Continuing the scan."
+  },
+  {
+    "source": "访问检查已完成，空间索引需要重建",
+    "english": "Access check complete. The storage index needs rebuilding."
+  },
+  {
+    "source": " · 部分结果",
+    "english": " · Partial results"
+  },
+  {
+    "source": "停止分析",
+    "english": "Stop analysis"
+  },
+  {
+    "source": "重新分析",
+    "english": "Analyze again"
+  },
+  {
+    "source": "继续分析",
+    "english": "Continue analysis"
+  },
+  {
+    "source": "继续扫描 {0} 个尚未开始的位置，保留已有结果",
+    "english": "Scan {0} locations not yet started while preserving existing results"
+  },
+  {
+    "source": "分析全部位置",
+    "english": "Analyze all locations"
+  },
+  {
+    "source": "更新变化",
+    "english": "Update changes"
+  },
+  {
+    "source": "完整重新分析",
+    "english": "Full analysis"
+  },
+  {
+    "source": "正在整理本机索引",
+    "english": "Preparing the local index"
+  },
+  {
+    "source": "正在分析空间",
+    "english": "Analyzing storage"
+  },
+  {
+    "source": "需要重新分析",
+    "english": "Analysis required"
+  },
+  {
+    "source": "尚未分析",
+    "english": "Not analyzed"
+  },
+  {
+    "source": "暂无已读取内容",
+    "english": "No read content yet"
+  },
+  {
+    "source": "没有匹配项目",
+    "english": "No matching items"
+  },
+  {
+    "source": "重新扫描此文件夹",
+    "english": "Scan this folder again"
+  },
+  {
+    "source": "加载更多 · {0} / {1}",
+    "english": "Load more · {0} / {1}"
+  },
+  {
+    "source": "只读分析",
+    "english": "Read-only analysis"
+  },
+  {
+    "source": "访问助手 · {0}",
+    "english": "Access assistant · {0}"
+  },
+  {
+    "source": "磁盘已用",
+    "english": "Disk used"
+  },
+  {
+    "source": "本卷已统计",
+    "english": "Counted on this volume"
+  },
+  {
+    "source": "待分析",
+    "english": "Not analyzed"
+  },
+  {
+    "source": "系统与辅助卷",
+    "english": "System and support volumes"
+  },
+  {
+    "source": "正在核对",
+    "english": "Reconciling"
+  },
+  {
+    "source": "待核对差额",
+    "english": "Unreconciled space"
+  },
+  {
+    "source": "已扣除系统与辅助卷。剩余差额涉及下方未完成、权限受限位置与 APFS 分配口径；容量无法在授权前准确确定。",
+    "english": "System and support volumes are excluded. The remainder includes incomplete or restricted locations and differences in APFS allocation. Its size cannot be determined precisely before access is granted."
+  },
+  {
+    "source": "正在自动续扫",
+    "english": "Continuing automatically"
+  },
+  {
+    "source": "还有位置可继续扫描",
+    "english": "More locations can be scanned"
+  },
+  {
+    "source": "授权访问 · {0} 处",
+    "english": "Grant access · {0} locations"
+  },
+  {
+    "source": "授权后自动检查并补扫",
+    "english": "Checks and continues after permission is granted"
+  },
+  {
+    "source": "达芬奇文件",
+    "english": "DaVinci files"
+  },
+  {
+    "source": "检查代理文件",
+    "english": "Inspect proxies"
+  },
+  {
+    "source": "检查渲染缓存",
+    "english": "Inspect render cache"
+  },
+  {
+    "source": "当前范围不完整",
+    "english": "Incomplete scope"
+  },
+  {
+    "source": "旧版扫描未覆盖文稿、图片和影片等位置；请分析全部位置。",
+    "english": "The older scan did not cover Documents, Pictures and Movies. Analyze all locations."
+  },
+  {
+    "source": "文件分配空间与磁盘用量口径不同",
+    "english": "File allocation and disk usage use different accounting"
+  },
+  {
+    "source": "索引需要重建",
+    "english": "Index needs rebuilding"
+  },
+  {
+    "source": "正在合并统计",
+    "english": "Merging totals"
+  },
+  {
+    "source": "返回",
+    "english": "Back"
+  },
+  {
+    "source": "上一级",
+    "english": "Up"
+  },
+  {
+    "source": "应用与个人文件",
+    "english": "Applications and personal files"
+  },
+  {
+    "source": "文件夹",
+    "english": "Folders"
+  },
+  {
+    "source": "列表",
+    "english": "List"
+  },
+  {
+    "source": "空间图",
+    "english": "Space map"
+  },
+  {
+    "source": "浏览方式",
+    "english": "Browse by"
+  },
+  {
+    "source": "搜索名称、应用或路径",
+    "english": "Search name, application or path"
+  },
+  {
+    "source": "名称",
+    "english": "Name"
+  },
+  {
+    "source": "全部位置",
+    "english": "All locations"
+  },
+  {
+    "source": "/ 搜索结果",
+    "english": "/ Search results"
+  },
+  {
+    "source": "部分",
+    "english": "Partial"
+  },
+  {
+    "source": "部分位置尚未读取",
+    "english": "Some locations have not been read"
+  },
+  {
+    "source": "尚未读取",
+    "english": "Not read yet"
+  },
+  {
+    "source": "清理项",
+    "english": "Cleanup candidates"
+  },
+  {
+    "source": "检查清理项",
+    "english": "Review cleanup candidates"
+  },
+  {
+    "source": "未读取",
+    "english": "Unread"
+  },
+  {
+    "source": "检查此文件夹",
+    "english": "Inspect this folder"
+  },
+  {
+    "source": "访问助手",
+    "english": "Access assistant"
+  },
+  {
+    "source": "归属",
+    "english": "Owner"
+  },
+  {
+    "source": "文件",
+    "english": "Files"
+  },
+  {
+    "source": "{0} 个",
+    "english": "{0} files"
+  },
+  {
+    "source": "当前容量仅包含已读取内容",
+    "english": "This size includes only content already read"
+  },
+  {
+    "source": "文件访问助手",
+    "english": "File access assistant"
+  },
+  {
+    "source": "系统设置 → 隐私与安全 → 完全磁盘访问",
+    "english": "System Settings → Privacy & Security → Full Disk Access"
+  },
+  {
+    "source": "开启轻扫后点重新检查；系统要求重开时，重开后会自动补扫。",
+    "english": "Enable QingSweep, then recheck. If macOS requires a relaunch, reopen the app to continue the scan."
+  },
+  {
+    "source": "完全磁盘访问已通过试读",
+    "english": "Full Disk Access read succeeded"
+  },
+  {
+    "source": "系统限制的位置会保留明细，无需重复授权。",
+    "english": "Details for system-restricted locations are retained. Repeated permission changes are unnecessary."
+  },
+  {
+    "source": "查看无法读取的位置",
+    "english": "View unreadable locations"
+  },
+  {
+    "source": "系统与辅助卷：",
+    "english": "System and support volumes: "
+  },
+  {
+    "source": "复制应用路径",
+    "english": "Copy application path"
+  },
+  {
+    "source": "没有待处理的访问问题",
+    "english": "No access issues to resolve"
+  },
+  {
+    "source": "{0} 处",
+    "english": "{0} locations"
+  },
+  {
+    "source": "选择扫描范围",
+    "english": "Choose scan scope"
+  },
+  {
+    "source": "旧扫描记录没有保存范围，请重新选择一次",
+    "english": "The earlier scan did not save its scope. Choose it once more."
+  },
+  {
+    "source": "个人大文件",
+    "english": "Large personal files"
+  },
+  {
+    "source": "指定文件夹",
+    "english": "Specific folder"
+  },
+  {
+    "source": "取消",
+    "english": "Cancel"
+  },
+  {
+    "source": "启动支持",
+    "english": "Startup support"
+  },
+  {
+    "source": "恢复系统",
+    "english": "Recovery system"
+  },
+  {
+    "source": "内存交换",
+    "english": "Swap"
+  },
+  {
+    "source": "本机",
+    "english": "Local"
+  },
+  {
+    "source": "扫描中",
+    "english": "Scanning"
+  },
+  {
+    "source": "文件留在本机",
+    "english": "Files stay on this Mac"
+  },
+  {
+    "source": "刷新状态",
+    "english": "Refresh status"
+  },
+  {
+    "source": "文件操作已暂停",
+    "english": "File operations paused"
+  },
+  {
+    "source": "查看并核对",
+    "english": "View and reconcile"
+  },
+  {
+    "source": "轻扫",
+    "english": "QingSweep"
+  },
+  {
+    "source": "停止清理",
+    "english": "Stop cleanup"
+  },
+  {
+    "source": "为重要的文件留空间",
+    "english": "Make room for the files that matter"
+  },
+  {
+    "source": "启动磁盘",
+    "english": "Startup disk"
+  },
+  {
+    "source": "可用",
+    "english": "Available"
+  },
+  {
+    "source": "忽略列表",
+    "english": "Ignore list"
+  },
+  {
+    "source": "废纸篓",
+    "english": "Trash"
+  },
+  {
+    "source": "检查所选文件",
+    "english": "Review selected files"
+  },
+  {
+    "source": "取消整组",
+    "english": "Deselect group"
+  },
+  {
+    "source": "取消选择",
+    "english": "Deselect"
+  },
+  {
+    "source": "查看依据与路径",
+    "english": "View evidence and path"
+  },
+  {
+    "source": "加载更多文件",
+    "english": "Load more files"
+  },
+  {
+    "source": "移到废纸篓后可恢复；相关应用未退出或文件仍被占用时跳过。",
+    "english": "Files can be restored after moving to Trash. Items are skipped if their application has not quit or they are still in use."
+  },
+  {
+    "source": "{0} 个文件",
+    "english": "{0} files"
+  },
+  {
+    "source": "移到废纸篓",
+    "english": "Move to Trash"
+  },
+  {
+    "source": "继续确认",
+    "english": "Continue to confirmation"
+  },
+  {
+    "source": "再次确认",
+    "english": "Confirm again"
+  },
+  {
+    "source": "本次共 {0} 个文件，{1}；其中以下 {2} 项需要你自行确认",
+    "english": "{0} files, {1} in total. Confirm the following {2} items."
+  },
+  {
+    "source": "确认后自动退出相关应用；如有未保存内容，会等待保存。未退出的应用所用文件会跳过。",
+    "english": "Related applications will be asked to quit. Save your work in any save window. Files belonging to applications that remain open are skipped."
+  },
+  {
+    "source": "我已核实用途，确认删除这些文件",
+    "english": "I have checked these files and confirm their deletion"
+  },
+  {
+    "source": "返回复核",
+    "english": "Back to review"
+  },
+  {
+    "source": "确认移到废纸篓",
+    "english": "Confirm move to Trash"
+  },
+  {
+    "source": "内存状态",
+    "english": "Memory status"
+  },
+  {
+    "source": "活动监视器",
+    "english": "Activity Monitor"
+  },
+  {
+    "source": "内存压力",
+    "english": "Memory pressure"
+  },
+  {
+    "source": "正在使用",
+    "english": "In use"
+  },
+  {
+    "source": "压缩内存",
+    "english": "Compressed"
+  },
+  {
+    "source": "硬盘交换空间",
+    "english": "Swap space"
+  },
+  {
+    "source": "应用占用",
+    "english": "Application usage"
+  },
+  {
+    "source": "统计说明",
+    "english": "About these numbers"
+  },
+  {
+    "source": "每 15 秒更新。按应用合计驻留内存，共享页可能重复统计；数值与活动监视器的统计口径不同。",
+    "english": "Updated every 15 seconds. Resident memory is grouped by application and shared pages may be counted more than once; these numbers differ from Activity Monitor."
+  },
+  {
+    "source": "重新核对",
+    "english": "Reconcile again"
+  },
+  {
+    "source": "待核对详情 · {0} 项",
+    "english": "Reconciliation details · {0} items"
+  },
+  {
+    "source": "清理批次",
+    "english": "Cleanup batches"
+  },
+  {
+    "source": "{0} 次",
+    "english": "{0} batches"
+  },
+  {
+    "source": "恢复全部可恢复项",
+    "english": "Restore all available items"
+  },
+  {
+    "source": "按操作批次",
+    "english": "By operation batch"
+  },
+  {
+    "source": "记录范围",
+    "english": "History scope"
+  },
+  {
+    "source": "全部",
+    "english": "All"
+  },
+  {
+    "source": "暂无清理批次",
+    "english": "No cleanup batches yet"
+  },
+  {
+    "source": "恢复到原位置 · 不覆盖已有文件",
+    "english": "Restore to original location · Never overwrite existing files"
+  },
+  {
+    "source": "打开废纸篓",
+    "english": "Open Trash"
+  },
+  {
+    "source": "恢复此批 · {0} 项",
+    "english": "Restore batch · {0} items"
+  },
+  {
+    "source": "移入废纸篓 {0} 项 · ",
+    "english": "Moved to Trash: {0} items · "
+  },
+  {
+    "source": "未处理 {0} 项",
+    "english": "{0} unprocessed items"
+  },
+  {
+    "source": "未处理项已在后续批次完成",
+    "english": "The unprocessed items were completed in later batches"
+  },
+  {
+    "source": "有未处理详情",
+    "english": "Some items need attention"
+  },
+  {
+    "source": "中断后已核对",
+    "english": "Reconciled after interruption"
+  },
+  {
+    "source": "中断批次未记录操作后的可用空间",
+    "english": "Free space after this interrupted batch was not recorded"
+  },
+  {
+    "source": "操作后可用空间变化：",
+    "english": "Available space change after operation: "
+  },
+  {
+    "source": " · 移入废纸篓不等于立即释放空间",
+    "english": " · Moving to Trash does not immediately free space"
+  },
+  {
+    "source": "未处理详情",
+    "english": "Unprocessed details"
+  },
+  {
+    "source": "查看文件 · 当前可恢复 {0} 项",
+    "english": "View files · {0} currently available to restore"
+  },
+  {
+    "source": "正在检查",
+    "english": "Checking"
+  },
+  {
+    "source": "复制原路径",
+    "english": "Copy original path"
+  },
+  {
+    "source": "恢复",
+    "english": "Restore"
+  },
+  {
+    "source": "此批文件已恢复",
+    "english": "This batch has been restored"
+  },
+  {
+    "source": "这些文件和文件夹不会出现在清理扫描中",
+    "english": "These files and folders are excluded from cleanup scans"
+  },
+  {
+    "source": "暂无忽略项目",
+    "english": "No ignored items"
+  },
+  {
+    "source": "取消忽略",
+    "english": "Stop ignoring"
+  },
+  {
+    "source": "已检查 {0} 项 · 用时 {1} 秒",
+    "english": "Checked {0} items · {1} seconds"
+  },
+  {
+    "source": "扫描已停止，当前为部分结果",
+    "english": "Scan stopped. These are partial results."
+  },
+  {
+    "source": "结果达到上限，请选择更小的文件夹",
+    "english": "The result limit was reached. Choose a smaller folder."
+  },
+  {
+    "source": "常用位置列出 1 MB 以上文件，缓存与日志保留最近 7 天；个人大文件从 100 MB 起。图库、数据库、应用、链接和云端文件会跳过。",
+    "english": "Common locations list files over 1 MB and retain cache and logs modified in the last 7 days. Large personal files start at 100 MB. Libraries, databases, applications, links and cloud files are skipped."
+  },
+  {
+    "source": "没有读取错误",
+    "english": "No read errors"
+  },
+  {
+    "source": "达芬奇",
+    "english": "DaVinci"
+  },
+  {
+    "source": "增长",
+    "english": "Growth"
+  },
+  {
+    "source": "重复文件",
+    "english": "Duplicates"
+  },
+  {
+    "source": "启动项",
+    "english": "Startup"
+  },
+  {
+    "source": "任务",
+    "english": "Tasks"
+  },
+  {
+    "source": "任务记录无法读取，新任务暂存于本次会话",
+    "english": "Task history could not be read. New tasks are held in this session."
+  },
+  {
+    "source": "记录保存失败：",
+    "english": "Could not save records: "
+  },
+  {
+    "source": "任务记录保存失败，新任务暂存于本次会话",
+    "english": "Task history could not be saved. New tasks are held in this session."
+  },
+  {
+    "source": "暂时无法重建任务记录：",
+    "english": "Task history cannot be rebuilt right now: "
+  },
+  {
+    "source": "正在停止后续操作",
+    "english": "Stopping further operations"
+  },
+  {
+    "source": "正在停止",
+    "english": "Stopping"
+  },
+  {
+    "source": "未找到默认目录",
+    "english": "No default folders found"
+  },
+  {
+    "source": "未找到默认目录，请选择达芬奇的缓存或代理文件夹",
+    "english": "No default folders found. Choose a DaVinci cache or proxy folder."
+  },
+  {
+    "source": "选择 ProxyMedia、CacheClip 或 OptimizedMedia 文件夹",
+    "english": "Choose a ProxyMedia, CacheClip or OptimizedMedia folder"
+  },
+  {
+    "source": "此格式暂无可读视频参数，也未找到同名原片。可手动关联原片。",
+    "english": "No readable video information or same-name original was found for this format. You can associate an original manually."
+  },
+  {
+    "source": "选择你已核实的原片",
+    "english": "Choose the original file you have verified"
+  },
+  {
+    "source": "选择查重范围",
+    "english": "Choose duplicate-check scope"
+  },
+  {
+    "source": "选择归档来源",
+    "english": "Choose archive sources"
+  },
+  {
+    "source": "选择归档目标文件夹",
+    "english": "Choose archive destination folder"
+  },
+  {
+    "source": "归档已校验，来源保留。",
+    "english": "Archive verified. Sources retained."
+  },
+  {
+    "source": "。来源未处理；如有未完成副本，会保留在目标的‘未完成’目录。",
+    "english": ". Sources were left untouched. Any incomplete copy remains in the destination's incomplete folder."
+  },
+  {
+    "source": "没有符合清理范围且仍与归档一致的来源文件",
+    "english": "No source files both match the archive and meet the cleanup scope"
+  },
+  {
+    "source": "归档记录已不存在",
+    "english": "The archive record no longer exists"
+  },
+  {
+    "source": "选择",
+    "english": "Choose"
+  },
+  {
+    "source": "轻扫 · ",
+    "english": "QingSweep · "
+  },
+  {
+    "source": "内存压力：",
+    "english": "Memory pressure: "
+  },
+  {
+    "source": "正在使用：",
+    "english": "In use: "
+  },
+  {
+    "source": "交换空间：",
+    "english": "Swap: "
+  },
+  {
+    "source": "磁盘可用：",
+    "english": "Disk available: "
+  },
+  {
+    "source": "磁盘可用空间较少",
+    "english": "Disk space is running low"
+  },
+  {
+    "source": "打开轻扫",
+    "english": "Open QingSweep"
+  },
+  {
+    "source": "关闭菜单栏监控",
+    "english": "Disable menu bar monitor"
+  },
+  {
+    "source": "任务进行中",
+    "english": "Task running"
+  },
+  {
+    "source": "重新启用此启动项？",
+    "english": "Enable this startup item again?"
+  },
+  {
+    "source": "停用此启动项？",
+    "english": "Disable this startup item?"
+  },
+  {
+    "source": "启用",
+    "english": "Enable"
+  },
+  {
+    "source": "停用",
+    "english": "Disable"
+  },
+  {
+    "source": "未读取与跳过 · {0}",
+    "english": "Unread or skipped · {0}"
+  },
+  {
+    "source": "达芬奇媒体",
+    "english": "DaVinci media"
+  },
+  {
+    "source": "代理、渲染缓存和优化媒体分开查看；是否仍需要由你确认。 ",
+    "english": "Browse proxies, render cache and optimized media separately. You decide whether they are still needed."
+  },
+  {
+    "source": "部分结果 · 已停止",
+    "english": "Partial results · Stopped"
+  },
+  {
+    "source": "部分结果 · 已达扫描上限",
+    "english": "Partial results · Scan limit reached"
+  },
+  {
+    "source": "选择目录",
+    "english": "Choose folder"
+  },
+  {
+    "source": "检查默认位置",
+    "english": "Check default locations"
+  },
+  {
+    "source": "全部 · {0}",
+    "english": "All · {0}"
+  },
+  {
+    "source": " · {0} 项",
+    "english": " · {0} items"
+  },
+  {
+    "source": "媒体清单",
+    "english": "Media list"
+  },
+  {
+    "source": "全选当前组",
+    "english": "Select current group"
+  },
+  {
+    "source": "选择位置开始检查",
+    "english": "Choose a location to start checking"
+  },
+  {
+    "source": "加载更多",
+    "english": "Load more"
+  },
+  {
+    "source": "已选 {0} 项",
+    "english": "{0} items selected"
+  },
+  {
+    "source": "已确认原片 · ",
+    "english": "Confirmed original · "
+  },
+  {
+    "source": "已确认的原片已变化或离线 · ",
+    "english": "The confirmed original changed or is offline · "
+  },
+  {
+    "source": "参数与原片候选",
+    "english": "Media info and original candidates"
+  },
+  {
+    "source": "关联原片",
+    "english": "Associate original"
+  },
+  {
+    "source": "同名候选 · 尚未确认",
+    "english": "Same-name candidates · Unconfirmed"
+  },
+  {
+    "source": "确认为原片",
+    "english": "Confirm as original"
+  },
+  {
+    "source": "空间增长",
+    "english": "Storage growth"
+  },
+  {
+    "source": "比较相同扫描范围和访问状态的记录。授权或范围变化会建立新基线。",
+    "english": "Compare records with the same scope and access state. Permission or scope changes create a new baseline."
+  },
+  {
+    "source": "更新扫描",
+    "english": "Update scan"
+  },
+  {
+    "source": "比较",
+    "english": "Compare"
+  },
+  {
+    "source": "上次记录",
+    "english": "Previous record"
+  },
+  {
+    "source": "约 7 天",
+    "english": "About 7 days"
+  },
+  {
+    "source": "约 30 天",
+    "english": "About 30 days"
+  },
+  {
+    "source": "查看",
+    "english": "View"
+  },
+  {
+    "source": "完整扫描完成后自动保存第一份记录",
+    "english": "The first record is saved after a complete scan"
+  },
+  {
+    "source": "已有基线，下一次同范围扫描后可比较",
+    "english": "A baseline exists. Compare after the next scan with the same scope."
+  },
+  {
+    "source": "应用与残留",
+    "english": "Applications and leftovers"
+  },
+  {
+    "source": "仅列出程序本体与标识明确匹配的私有目录。数据、素材与项目默认不选。",
+    "english": "Lists applications and private folders matched by exact identifiers. Data, media and projects start unselected."
+  },
+  {
+    "source": "可能残留",
+    "english": "Possible leftovers"
+  },
+  {
+    "source": "读取应用",
+    "english": "Read applications"
+  },
+  {
+    "source": "搜索应用",
+    "english": "Search applications"
+  },
+  {
+    "source": "未处理内容",
+    "english": "Unprocessed content"
+  },
+  {
+    "source": "应用内容",
+    "english": "Application content"
+  },
+  {
+    "source": "全选当前清单",
+    "english": "Select current list"
+  },
+  {
+    "source": "可能属于外置盘或便携应用，请核实后选择。",
+    "english": "This may belong to an external or portable application. Verify before selecting."
+  },
+  {
+    "source": "选择一个应用",
+    "english": "Choose an application"
+  },
+  {
+    "source": "暂无可读内容",
+    "english": "No readable content"
+  },
+  {
+    "source": "检查所选内容",
+    "english": "Review selected content"
+  },
+  {
+    "source": "精确重复文件",
+    "english": "Exact duplicates"
+  },
+  {
+    "source": "同大小、片段比较后逐字节流式计算 SHA-256；每组至少保留一份。",
+    "english": "Sizes and samples are compared before streaming full SHA-256 checks. Keep at least one copy in each group."
+  },
+  {
+    "source": "重复组",
+    "english": "Duplicate groups"
+  },
+  {
+    "source": "{0} 组",
+    "english": "{0} groups"
+  },
+  {
+    "source": "额外副本分配空间",
+    "english": "Extra copy allocation"
+  },
+  {
+    "source": "APFS 克隆可能共享空间，实际释放量会不同",
+    "english": "APFS clones may share space, so the actual freed amount can differ"
+  },
+  {
+    "source": "{0} 份相同内容",
+    "english": "{0} identical copies"
+  },
+  {
+    "source": " / 份",
+    "english": " / copy"
+  },
+  {
+    "source": "保留",
+    "english": "Keep"
+  },
+  {
+    "source": "加载更多组",
+    "english": "Load more groups"
+  },
+  {
+    "source": "已校验 {0} 项",
+    "english": "Verified {0} items"
+  },
+  {
+    "source": "检查所选副本",
+    "english": "Review selected copies"
+  },
+  {
+    "source": "归档与校验",
+    "english": "Archive and verify"
+  },
+  {
+    "source": "复制到新目录，内容校验完成后保留来源。清理来源需另行勾选确认。",
+    "english": "Copy to a new folder and retain the sources after content verification. Source cleanup requires a separate selection and confirmation."
+  },
+  {
+    "source": "归档设置",
+    "english": "Archive settings"
+  },
+  {
+    "source": "选择来源",
+    "english": "Choose sources"
+  },
+  {
+    "source": "选择目标",
+    "english": "Choose destination"
+  },
+  {
+    "source": "复制并校验",
+    "english": "Copy and verify"
+  },
+  {
+    "source": "已校验归档",
+    "english": "Verified archives"
+  },
+  {
+    "source": "检查来源",
+    "english": "Inspect sources"
+  },
+  {
+    "source": "{0} 个文件 · 内容 SHA-256 校验通过",
+    "english": "{0} files · Content SHA-256 verified"
+  },
+  {
+    "source": "来源文件 · 默认不选",
+    "english": "Source files · Start unselected"
+  },
+  {
+    "source": "全选来源",
+    "english": "Select all sources"
+  },
+  {
+    "source": "加载更多来源 · {0} / {1}",
+    "english": "Load more sources · {0} / {1}"
+  },
+  {
+    "source": "检查所选来源",
+    "english": "Review selected sources"
+  },
+  {
+    "source": "管理当前用户的 LaunchAgents；系统和其他后台项目在系统设置中管理。",
+    "english": "Manage the current user's LaunchAgents. System and other background items are managed in System Settings."
+  },
+  {
+    "source": "系统登录项",
+    "english": "System login items"
+  },
+  {
+    "source": "由轻扫停用",
+    "english": "Disabled by QingSweep"
+  },
+  {
+    "source": "已载入",
+    "english": "Loaded"
+  },
+  {
+    "source": "未载入或状态待确认",
+    "english": "Not loaded or state unconfirmed"
+  },
+  {
+    "source": "确认所选应用内容",
+    "english": "Confirm application content"
+  },
+  {
+    "source": "应用将正常退出；所选内容移到废纸篓，可在清理记录中按批恢复。",
+    "english": "The application will be asked to quit normally. Selected content moves to Trash and can be restored by batch from History."
+  },
+  {
+    "source": "取消此项",
+    "english": "Deselect this item"
+  },
+  {
+    "source": "我已核实数据用途，确认删除所选内容",
+    "english": "I have checked the data and confirm deleting the selected content"
+  },
+  {
+    "source": "已到目录深度上限，请选择较小范围",
+    "english": "The folder depth limit was reached. Choose a smaller scope."
+  },
+  {
+    "source": "语言",
+    "english": "Language"
+  },
+  {
+    "source": "跟随系统",
+    "english": "System default"
+  },
+  {
+    "source": "简体中文",
+    "english": "简体中文"
+  },
+  {
+    "source": "English",
+    "english": "English"
+  },
+  {
+    "source": "{0} 项 · {1}",
+    "english": "{0} items · {1}"
+  },
+  {
+    "source": "{0} · {1} 项",
+    "english": "{0} · {1} items"
+  },
+  {
+    "source": "Spotlight 索引",
+    "english": "Spotlight index"
+  },
+  {
+    "source": "文件系统事件记录",
+    "english": "File system event history"
+  },
+  {
+    "source": "系统文件修订记录",
+    "english": "System file revisions"
+  }
+]

@@ -1,0 +1,7 @@
+"CFBundleDisplayName" = "QingSweep";
+"CFBundleName" = "QingSweep";
+"NSHumanReadableCopyright" = "QingSweep · MIT License";
+"NSDownloadsFolderUsageDescription" = "Read download names, sizes and dates so you can choose files to move to Trash.";
+"NSDocumentsFolderUsageDescription" = "Inspect large documents so you can decide what to clean up.";
+"NSDesktopFolderUsageDescription" = "Inspect large desktop files so you can decide what to clean up.";
+"NSRemovableVolumesUsageDescription" = "Scan the folder you select on an external disk.";

@@ -47,3 +47,6 @@ compiler=(xcrun swiftc -swift-version 5 -O -module-cache-path .build/module-cach
 
 "${compiler[@]}" "${engine[@]}" Tests/CrashRecoveryTests.swift -o .build/crash-recovery-tests
 .build/crash-recovery-tests
+
+"${compiler[@]}" "${engine[@]}" Tests/LocalizationTests.swift -o .build/localization-tests
+.build/localization-tests

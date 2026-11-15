@@ -529,6 +529,7 @@ enum WorkbenchSection: String, CaseIterable, Identifiable {
     memoryTrend.record(snapshot)
     monitor?.update(snapshot)
   }
+  func refreshMemoryMenu(_ snapshot: SystemSnapshot) { monitor?.update(snapshot) }
   private func configureMenu() {
     if menuEnabled {
       if monitor == nil {
@@ -545,11 +546,11 @@ enum WorkbenchSection: String, CaseIterable, Identifiable {
   {
     guard !busy else { return [] }
     let panel = NSOpenPanel()
-    panel.title = title
+    panel.title = L(title)
     panel.canChooseDirectories = directories
     panel.canChooseFiles = files || !directories
     panel.allowsMultipleSelection = multiple
-    panel.prompt = "选择"
+    panel.prompt = L("选择")
     panel.directoryURL = home
     return panel.runModal() == .OK ? panel.urls : []
   }
@@ -563,19 +564,19 @@ enum WorkbenchSection: String, CaseIterable, Identifiable {
     self.disable = disable
     item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     super.init()
-    item.button?.title = "轻扫"
+    item.button?.title = L("轻扫")
     update(SystemSnapshot.sample())
   }
   deinit { NSStatusBar.system.removeStatusItem(item) }
   func update(_ snapshot: SystemSnapshot) {
-    item.button?.title = "轻扫 · " + snapshot.pressureLabel
+    item.button?.title = L("轻扫 · ") + L(snapshot.pressureLabel)
     let menu = NSMenu()
     for title in [
       "内存压力：" + snapshot.pressureLabel, "正在使用：" + formatBytes(snapshot.memoryUsed),
       "交换空间：" + formatBytes(snapshot.swap), "磁盘可用：" + formatBytes(snapshot.diskFree),
-    ] { menu.addItem(NSMenuItem(title: title, action: nil, keyEquivalent: "")) }
+    ] { menu.addItem(NSMenuItem(title: L(title), action: nil, keyEquivalent: "")) }
     if snapshot.diskFree < 20_000_000_000 {
-      menu.addItem(NSMenuItem(title: "磁盘可用空间较少", action: nil, keyEquivalent: ""))
+      menu.addItem(NSMenuItem(title: L("磁盘可用空间较少"), action: nil, keyEquivalent: ""))
     }
     menu.addItem(.separator())
     for app in snapshot.processes.prefix(3) {
@@ -584,10 +585,10 @@ enum WorkbenchSection: String, CaseIterable, Identifiable {
       )
     }
     menu.addItem(.separator())
-    let open = NSMenuItem(title: "打开轻扫", action: #selector(show), keyEquivalent: "")
+    let open = NSMenuItem(title: L("打开轻扫"), action: #selector(show), keyEquivalent: "")
     open.target = self
     menu.addItem(open)
-    let off = NSMenuItem(title: "关闭菜单栏监控", action: #selector(turnOff), keyEquivalent: "")
+    let off = NSMenuItem(title: L("关闭菜单栏监控"), action: #selector(turnOff), keyEquivalent: "")
     off.target = self
     menu.addItem(off)
     item.menu = menu

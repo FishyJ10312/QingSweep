@@ -299,10 +299,12 @@ final class StorageIndex {
     }
     func pendingRoots() throws -> [StorageRoot] { Array(try continuationPlan().jobs.prefix(64)) }
     func invalidateContinuation() throws { try write("DELETE FROM metadata WHERE key='continuation'") }
-    func page(parent: URL? = nil, ownerID: String? = nil, search: String = "", ordering: FileOrdering = .size, offset: Int = 0, limit: Int = 100) throws -> StoragePage {
+    func page(parent: URL? = nil, ownerID: String? = nil, search: String = "", searchOwnerTitles: [String] = [], ordering: FileOrdering = .size, offset: Int = 0, limit: Int = 100) throws -> StoragePage {
         var predicates: [String] = [], bindings: [String] = []
         if !search.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            predicates.append("(search_key LIKE ? ESCAPE '\\' OR lower(path) LIKE ? ESCAPE '\\')"); let needle = "%" + Self.escaped(Self.folded(search)) + "%"; bindings += [needle,needle]
+            let aliases = Array(Set(searchOwnerTitles).prefix(64))
+            let owners = aliases.isEmpty ? "" : " OR owner_title IN (" + Array(repeating: "?", count: aliases.count).joined(separator: ",") + ")"
+            predicates.append("(search_key LIKE ? ESCAPE '\\' OR lower(path) LIKE ? ESCAPE '\\'" + owners + ")"); let needle = "%" + Self.escaped(Self.folded(search)) + "%"; bindings += [needle,needle] + aliases
         } else if let parent { predicates.append("parent=?"); bindings.append(parent.path) }
         else if let ownerID {
             predicates.append("NOT EXISTS(SELECT 1 FROM nodes p WHERE p.path=nodes.parent AND p.owner_id=?)"); bindings.append(ownerID)

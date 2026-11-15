@@ -180,7 +180,7 @@ enum FileOrdering: String, CaseIterable { case size = "占用最大", oldest = "
     private var selectionRevision = 0
     private var filteredCache: (key: String, values: [ScanItem])?
     private var groupsCache: (key: String, values: [AssessmentGroup])?
-    private var filterKey: String { [String(itemsRevision),String(onlySelected ? selectionRevision : 0),search,cleanupScope?.rawValue ?? "",cleanupOwnerFilter ?? "",category?.rawValue ?? "",disposition?.rawValue ?? "",groupFilter ?? "",String(minimumFilter),String(onlySelected),ordering.rawValue].joined(separator: "\0") }
+    private var filterKey: String { [InterfaceLanguage.current.rawValue,String(itemsRevision),String(onlySelected ? selectionRevision : 0),search,cleanupScope?.rawValue ?? "",cleanupOwnerFilter ?? "",category?.rawValue ?? "",disposition?.rawValue ?? "",groupFilter ?? "",String(minimumFilter),String(onlySelected),ordering.rawValue].joined(separator: "\0") }
     var filtered: [ScanItem] {
         let key = filterKey
         if let cache = filteredCache, cache.key == key { return cache.values }
@@ -191,7 +191,7 @@ enum FileOrdering: String, CaseIterable { case size = "占用最大", oldest = "
             (disposition == nil || item.assessment.disposition == disposition) &&
             (groupFilter == nil || item.assessment.groupID == groupFilter) &&
             (!onlySelected || selected.contains(item.id)) &&
-            (search.isEmpty || (item.url.path + " " + item.assessment.owner + " " + item.category.rawValue).localizedCaseInsensitiveContains(search))
+            (search.isEmpty || (item.url.path + " " + item.assessment.owner + " " + item.category.rawValue + " " + L(item.assessment.owner) + " " + L(item.category.rawValue)).localizedCaseInsensitiveContains(search))
         }
         let sorted = values.sorted { a, b in
             switch ordering {
@@ -305,8 +305,8 @@ enum FileOrdering: String, CaseIterable { case size = "占用最大", oldest = "
     func chooseFolder() {
         guard !busy else { return }
         let panel = NSOpenPanel()
-        panel.title = "选择文件夹"; panel.canChooseFiles = false; panel.canChooseDirectories = true; panel.allowsMultipleSelection = false
-        panel.directoryURL = home; panel.prompt = "扫描"
+        panel.title = L("选择文件夹"); panel.canChooseFiles = false; panel.canChooseDirectories = true; panel.allowsMultipleSelection = false
+        panel.directoryURL = home; panel.prompt = L("扫描")
         guard panel.runModal() == .OK, let url = panel.url else { return }
         guard policy.permits(url), policy.hasNoSymlinkComponents(url) else { message = SweepError.rootDenied.localizedDescription; return }
         scan(roots: [url], label: url.lastPathComponent, minimum: 1_000_000)

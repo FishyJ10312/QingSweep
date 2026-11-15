@@ -1,12 +1,12 @@
-# 致谢与许可状态
+# Notices and attribution / 致谢与许可
 
-## 项目状态
+QingSweep’s original code and documentation are licensed under the [MIT License](LICENSE). Third-party references retain their own attribution and licenses.
 
-轻扫 1.8.1 以 Beta 形式发布。项目原创代码与文档使用 [MIT License](LICENSE)。下列第三方参考保留各自的署名与许可，不因项目采用 MIT 而改变。
+轻扫原创代码与文档采用 [MIT License](LICENSE)。第三方参考保留各自署名与许可。
 
-## 设计与流程参考
+## Design and workflow references
 
-- 既有界面整理参考 **unslop**，作者 Damir Sokolovsky（[@heydamir](https://x.com/heydamir)），[原项目页面](https://heydamir.design/unslop)，许可为 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)。此处保留原有署名；轻扫的布局、配色、组件和文案已按本项目流程调整。
-- 部分功能流程参考 MacPaw CleanMyMac 的空间浏览、清理复核和忽略列表。轻扫为独立项目，与 MacPaw 或 Apple 没有隶属或背书关系。
+- Earlier interface work referenced **unslop** by Damir Sokolovsky ([@heydamir](https://x.com/heydamir)), [project page](https://heydamir.design/unslop), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). This attribution is retained; QingSweep’s layout, colors, components and wording were adapted to this project’s workflow.
+- Some workflows were informed by MacPaw CleanMyMac’s storage browsing, cleanup review and ignore lists. QingSweep is an independent project and is not affiliated with or endorsed by MacPaw or Apple.
 
-本项目使用系统框架提供的界面、文件、媒体与系统能力，构建无需下载第三方包。暂未完成 Apple Developer ID 签名和 Apple 公证。
+The app uses macOS system frameworks and does not download third-party packages to build. The current Beta uses a local certificate; it is not Developer ID signed or notarized by Apple.

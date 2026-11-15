@@ -1,0 +1,7 @@
+"CFBundleDisplayName" = "轻扫";
+"CFBundleName" = "轻扫";
+"NSHumanReadableCopyright" = "轻扫 · MIT 许可";
+"NSDownloadsFolderUsageDescription" = "扫描下载文件的大小和日期，供你手动选择移到废纸篓。";
+"NSDocumentsFolderUsageDescription" = "查看文稿中的大文件，供你自行决定是否清理。";
+"NSDesktopFolderUsageDescription" = "查看桌面中的大文件，供你自行决定是否清理。";
+"NSRemovableVolumesUsageDescription" = "扫描你选择的外置磁盘文件夹。";

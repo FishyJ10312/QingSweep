@@ -11,6 +11,15 @@ xcrun swiftc -swift-version 5 -O -target arm64-apple-macos14.0 \
   "${engine[@]}" "${ui[@]}" Sources/QingSweepApp.swift \
   -o "$app_dir/Contents/MacOS/QingSweep"
 cp "$project_dir/Resources/Info.plist" "$app_dir/Contents/Info.plist"
+cp "$project_dir/Resources/Translations.json" "$app_dir/Contents/Resources/Translations.json"
+cp "$project_dir/LICENSE" "$app_dir/Contents/Resources/LICENSE.txt"
+if [[ -f "$project_dir/NOTICE.md" ]]; then
+  cp "$project_dir/NOTICE.md" "$app_dir/Contents/Resources/NOTICE.md"
+fi
+for localization in "$project_dir"/Resources/*.lproj; do
+  [[ -d "$localization" ]] || continue
+  ditto "$localization" "$app_dir/Contents/Resources/${localization:t}"
+done
 if [[ -f "$project_dir/Resources/AppIcon.icns" ]]; then
   cp "$project_dir/Resources/AppIcon.icns" "$app_dir/Contents/Resources/AppIcon.icns"
 fi

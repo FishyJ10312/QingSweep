@@ -20,7 +20,7 @@ extension AppModel {
         for item in items where item.assessment.canBatchSelect && !preferences.isIgnored(item.url) { candidates[ownerResolver.cleanupOwner(item).id, default: 0] += item.bytes }
         let query = storageSearch.trimmingCharacters(in: .whitespacesAndNewlines)
         return appSummaries.map { app in var value = app; value.candidateBytes = candidates[app.id] ?? 0; return value }
-            .filter { query.isEmpty || $0.title.localizedCaseInsensitiveContains(query) || $0.id.localizedCaseInsensitiveContains(query) }
+            .filter { query.isEmpty || $0.title.localizedCaseInsensitiveContains(query) || L($0.title).localizedCaseInsensitiveContains(query) || $0.id.localizedCaseInsensitiveContains(query) }
     }
     var reviewGroups: [CleanupAppGroup] {
         Dictionary(grouping: review, by: { ownerResolver.cleanupOwner($0).id }).map { key, files in
@@ -157,11 +157,12 @@ extension AppModel {
     func queryStoragePage(append: Bool) {
         guard storageInfo != nil, !analyzing else { return }
         let generation = storageQueryGeneration, file = storageIndexURL!, folder = storageFolder, owner = storageOwnerFilter, query = storageSearch, ordering = storageOrdering
+        let aliases = Localization.catalog.sourceTitles(matchingEnglish: query, language: .current)
         let offset = append ? storageItems.count : 0
         queryingStorage = true
         storageQueue.async {
             do {
-                let page = try StorageIndex(url: file).page(parent: folder, ownerID: owner, search: query, ordering: ordering, offset: offset)
+                let page = try StorageIndex(url: file).page(parent: folder, ownerID: owner, search: query, searchOwnerTitles: aliases, ordering: ordering, offset: offset)
                 DispatchQueue.main.async {
                     guard generation == self.storageQueryGeneration else { return }
                     if append { self.storageItems.append(contentsOf: page.items) } else { self.storageItems = page.items }
@@ -213,7 +214,7 @@ extension AppModel {
     }
     func chooseStorageFolder() {
         guard !busy else { return }
-        let panel = NSOpenPanel(); panel.title = "选择要分析的文件夹"; panel.canChooseFiles = false; panel.canChooseDirectories = true; panel.allowsMultipleSelection = false; panel.prompt = "分析文件夹"
+        let panel = NSOpenPanel(); panel.title = L("选择要分析的文件夹"); panel.canChooseFiles = false; panel.canChooseDirectories = true; panel.allowsMultipleSelection = false; panel.prompt = L("分析文件夹")
         guard panel.runModal() == .OK, let url = panel.url else { return }
         // The selected scope is read-only and never changes cleanup eligibility.
         runStorageAnalysis(subtree: url)
