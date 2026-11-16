@@ -154,7 +154,7 @@ extension AppModel {
                     } else if self.storageAutoContinue && !result.cancelled && !pending.isEmpty {
                         DispatchQueue.main.async { self.scheduleAutomaticStorageContinuation() }
                     } else if !result.cancelled && issues.contains(where: { $0.kind == .permission }) {
-                        self.storageAccessStatus = "可读取位置已扫描完成，剩余位置需要授权"
+                        self.storageAccessStatus = "已扫描可读取位置；剩余位置请查看访问状态"
                         self.showingStorageIssues = true
                     }
                 }
@@ -287,7 +287,7 @@ extension AppModel {
                 DispatchQueue.main.async {
                     self.storageAccessIssues = issues; self.storageInfo = info; self.accessCheckRunning = false
                     self.storagePendingRoots = pending
-                    self.storageAccessStatus = readable.isEmpty ? (issues.contains(where: { $0.kind == .permission }) ? "仍有位置需要授权，请检查轻扫的完全磁盘访问开关" : "访问检查完成") : "访问已恢复，正在补扫"
+                    self.storageAccessStatus = readable.isEmpty ? (issues.contains(where: { $0.kind == .permission }) ? "仍有位置无法读取，请检查权限、磁盘连接或系统限制" : "访问检查完成") : "访问已恢复，正在补扫"
                     if !readable.isEmpty && !pending.isEmpty { self.showingStorageIssues = false; self.storageAutoContinue = true; self.scheduleAutomaticStorageContinuation() }
                     else if !pending.isEmpty && self.storageAutoContinue { self.scheduleAutomaticStorageContinuation() }
                 }

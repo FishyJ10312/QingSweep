@@ -124,6 +124,32 @@ struct ScanProgress {
     var current = ""
 }
 
+// Shared read failures are persisted by both cleanup scans and storage analysis.
+enum StorageAccessKind: String, Codable { case permission, restricted, missing, disconnected, unavailable, incomplete
+    var title: String { switch self { case .permission: return "需要访问权限"; case .restricted: return "系统访问限制"; case .missing: return "位置不存在"; case .disconnected: return "磁盘未连接"; case .unavailable: return "暂时无法读取"; case .incomplete: return "扫描未完成" } }
+}
+struct StorageAccessIssue: Identifiable, Codable {
+    var id: String { url.path + "|" + kind.rawValue }
+    let url: URL
+    let root: URL
+    let kind: StorageAccessKind
+    let detail: String
+    static func make(url: URL, root: URL, error: Error? = nil, detail: String = "", incomplete: Bool = false) -> StorageAccessIssue {
+        let e = error as NSError?
+        let missing = FileStamp.read(url) == nil
+        let statError = errno
+        let volume = url.pathComponents.count > 2 && url.pathComponents[1] == "Volumes" ? URL(fileURLWithPath: "/Volumes/" + url.pathComponents[2]) : nil
+        let kind: StorageAccessKind
+        if incomplete { kind = .incomplete }
+        else if let volume, FileStamp.read(volume) == nil { kind = .disconnected }
+        else if missing && [EACCES, EPERM].contains(statError) { kind = .permission }
+        else if e?.domain == NSPOSIXErrorDomain && [Int(EACCES), Int(EPERM)].contains(e!.code) || e?.domain == NSCocoaErrorDomain && e?.code == NSFileReadNoPermissionError { kind = .permission }
+        else if missing { kind = .missing }
+        else { kind = .unavailable }
+        return StorageAccessIssue(url: url, root: root, kind: kind, detail: error?.localizedDescription ?? detail)
+    }
+}
+
 struct ScanResult: Codable {
     var items: [ScanItem] = []
     var visited = 0
@@ -132,6 +158,7 @@ struct ScanResult: Codable {
     var cancelled = false
     var limited = false
     var elapsed: TimeInterval = 0
+    var accessIssues: [StorageAccessIssue]? = nil
 }
 
 struct DiskScanner {
@@ -145,6 +172,11 @@ struct DiskScanner {
         var result = ScanResult()
         let classifier = FileClassifier(policy: policy, context: InspectionContext.collect(home: policy.home))
         var ids = Set<String>()
+        var readIssues: [String: StorageAccessIssue] = [:]
+        func recordReadIssue(_ url: URL, root: URL, error: Error? = nil) {
+            let issue = StorageAccessIssue.make(url: url, root: root, error: error)
+            if readIssues.count < 100 || readIssues[issue.id] != nil { readIssues[issue.id] = issue }
+        }
         var bytes: Int64 = 0
         var lastUpdate = Date.distantPast
         let manager = FileManager.default
@@ -159,13 +191,15 @@ struct DiskScanner {
             if excludedRoots.contains(where: { SafetyPolicy.within(root, $0) }) { continue }
             guard policy.permits(root), policy.hasNoSymlinkComponents(root), FileStamp.read(root)?.isDirectory == true else {
                 result.issues.append("无法扫描：\(root.path)（不存在、未获权限或受保护）")
+                if policy.permits(root) { recordReadIssue(root, root: root) }
                 continue
             }
             guard let enumerator = manager.enumerator(at: root, includingPropertiesForKeys: keys, options: [.skipsPackageDescendants, .skipsHiddenFiles], errorHandler: { url, error in
                 result.skipped += 1
                 if result.issues.count < 100 { result.issues.append("\(url.path)：\(error.localizedDescription)") }
+                recordReadIssue(url, root: root, error: error)
                 return !cancellation.isCancelled
-            }) else { result.issues.append("无法读取：\(root.path)"); continue }
+            }) else { result.issues.append("无法读取：\(root.path)"); recordReadIssue(root, root: root); continue }
             while let url = autoreleasepool(invoking: { enumerator.nextObject() as? URL }) {
                 if cancellation.isCancelled { break }
                 result.visited += 1
@@ -196,6 +230,7 @@ struct DiskScanner {
                 if result.items.count >= limit { result.limited = true; break }
             }
         }
+        result.accessIssues = readIssues.values.sorted { $0.url.path < $1.url.path }
         result.cancelled = cancellation.isCancelled
         result.elapsed = Date().timeIntervalSince(started)
         result.items.sort { $0.bytes == $1.bytes ? $0.id < $1.id : $0.bytes > $1.bytes }

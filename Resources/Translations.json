@@ -3198,5 +3198,41 @@
   {
     "source": "轻扫有停用记录",
     "english": "Previously disabled by QingSweep"
+  },
+  {
+    "source": "尚未读取的位置未计入结果。允许访问后重新检查，会重新扫描当前范围。",
+    "english": "Unread locations are not included in the results. After allowing access, recheck to scan the current scope again."
+  },
+  {
+    "source": "{0} 处尚未读取",
+    "english": "{0} locations unread"
+  },
+  {
+    "source": "处理访问问题",
+    "english": "Resolve access"
+  },
+  {
+    "source": "下载、缓存和日志 · 1 MB 起",
+    "english": "Downloads, cache and logs · 1 MB and larger"
+  },
+  {
+    "source": "可能包含离线数据、会话资源或运行依赖；请自行确认是否仍需保留。",
+    "english": "May contain offline data, session resources or runtime dependencies. Check whether you still need it."
+  },
+  {
+    "source": "可能存在同名应用、备份镜像或未安装软件；请自行确认用途和是否需要保留。",
+    "english": "May refer to a different app, a backup image or uninstalled software. Check its purpose and whether you need to keep it."
+  },
+  {
+    "source": "已扫描可读取位置；剩余位置请查看访问状态",
+    "english": "Readable locations have been scanned. Review the access status of the remaining locations."
+  },
+  {
+    "source": "仍有位置无法读取，请检查权限、磁盘连接或系统限制",
+    "english": "Some locations are still unreadable. Check permissions, disk connections or system restrictions."
+  },
+  {
+    "source": "以下位置受系统访问限制",
+    "english": "These locations have system access restrictions"
   }
 ]

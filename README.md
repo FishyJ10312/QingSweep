@@ -8,19 +8,19 @@ English · [简体中文](README.zh-CN.md)
 
 QingSweep is a local macOS storage browser and manual cleanup tool, licensed under MIT. Explore usage by application or folder, review installers, cache and personal files separately, then choose what to move to Trash.
 
-**1.8.3 Beta · build 18 · English and 简体中文 in one app.** The download uses a local signing certificate and **has not been signed with Developer ID or notarized by Apple**. macOS may show a warning on first launch. See the [installation guide](docs/INSTALL.en.md).
+**1.8.4 Beta · build 19 · English and 简体中文 in one app.** The download uses a local signing certificate and **has not been signed with Developer ID or notarized by Apple**. macOS may show a warning on first launch. See the [installation guide](docs/INSTALL.en.md).
 
-[Download for Apple Silicon](https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.3-beta/QingSweep-1.8.3-beta-arm64.zip) · [Beta release](https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.3-beta) · [Report an issue](https://github.com/FishyJ10312/QingSweep/issues/new?template=bug_report_en.md)
+[Download for Apple Silicon](https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.4-beta/QingSweep-1.8.4-beta-arm64.zip) · [Beta release](https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.4-beta) · [Report an issue](https://github.com/FishyJ10312/QingSweep/issues/new?template=bug_report_en.md)
 
-## Fixes in 1.8.3
+## Fixes in 1.8.4
 
-- Retry verifies that the current source still matches its retained duplicate or archive copy.
-- Failed login-item changes restore the actual prior disabled/loaded state, with recovery errors reported.
-- **Analyze all locations** expands a previous narrow scan. Updating the current scope keeps your chosen locations.
+- Unread cleanup locations open an access assistant with folder selection, System Settings and a real recheck. After relaunch, restored access triggers a rescan of the saved scope.
+- Known video, photo and audio formats keep their type even when names contain “footage” or preset keywords. Media and projects remain unselected; manual cleanup still requires a second confirmation.
+- The first scan names its scope. Access messages distinguish unread and system-restricted locations, and composed English completion labels remain readable.
 
 ## Screenshots and cleanup demo
 
-The gallery was recorded with 1.8.2 using generated files; the selection, review, Trash and restore workflow is retained in 1.8.3.
+The gallery was recorded with 1.8.2 using generated files; the selection, review, Trash and restore workflow is retained in 1.8.4.
 
 **English interface** — review older installers and rebuildable cache in a separate list.
 
@@ -56,10 +56,11 @@ History groups the completed cleanup so eligible files can be restored together 
 
 ## Review-first cleanup
 
-1. Choose a scan scope and explore storage by application or folder.
-2. Read the classification and cleanup impact, then make your selection.
-3. Review the list and remove individual items or whole groups. Manual-review content requires a second confirmation.
-4. Files move to Trash. Restore eligible items to their original locations from History.
+1. Install at one fixed location following the [installation guide](docs/INSTALL.en.md). **Scan common locations** checks Downloads, cache and logs, starting at 1 MB.
+2. If a location is unread, choose a folder, open System Settings or recheck in the access assistant. Grant system permissions yourself; QingSweep verifies actual reads.
+3. Read the classification and cleanup impact, then make your selection.
+4. Review the list and remove individual items or whole groups. Manual-review content requires a second confirmation.
+5. Files move to Trash. Restore eligible items to their original locations from History.
 
 | Section | What it means | Selection |
 | --- | --- | --- |
@@ -95,7 +96,7 @@ Switching language preserves selections and stored records. File names and paths
 | Hardware | Apple Silicon / arm64; no Intel download in this release |
 | macOS | Built for macOS 14 or later; actual device validation on macOS 27.2 |
 | Signing | Persistent local certificate and Hardened Runtime; **no Developer ID or Apple notarization** |
-| Checks | 751 checks, including 26 localization checks and an 800-entry reviewed English catalogue |
+| Checks | 806 checks, including 27 localization checks and an 809-entry reviewed English catalogue |
 | File-operation coverage | Real SIGKILL fixtures for cleanup, application data and restore; native UI walkthroughs use generated files |
 | Still pending | First launch on another Mac with default Gatekeeper, actual macOS 14 hardware, more file systems and physical external-disk disconnection tests |
 
@@ -130,6 +131,6 @@ Tests generate disposable files. Some really move them to Trash, restore them an
 
 Please include your app version, macOS version, chip and reproduction steps in an [issue](https://github.com/FishyJ10312/QingSweep/issues/new?template=bug_report_en.md). Redact personal names and paths in screenshots. Do not attach complete scan databases, cleanup history, media or projects.
 
-[MIT License](LICENSE) · [Third-party attribution](NOTICE.md) · [1.8.3 release notes](docs/RELEASE_1.8.3_BETA.md) · [Launch copy](docs/PROMO.en.md)
+[MIT License](LICENSE) · [Third-party attribution](NOTICE.md) · [1.8.4 release notes](docs/RELEASE_1.8.4_BETA.md) · [Launch copy](docs/PROMO.en.md)
 
 QingSweep is an independent project and is not affiliated with Apple or MacPaw.

@@ -2,13 +2,13 @@
 
 English · [简体中文](INSTALL.zh-CN.md)
 
-For **QingSweep 1.8.3 Beta, build 18**, on Apple Silicon / arm64.
+For **QingSweep 1.8.4 Beta, build 19**, on Apple Silicon / arm64.
 
 The release uses a local signing certificate. **It has no Developer ID signature and has not been notarized by Apple.** You can download the open-source project from GitHub; macOS may require an explicit first-launch exception. Installation on another Mac with default security settings is still awaiting validation.
 
 ## 1. Download and use one installation location
 
-1. Open the [Beta release](https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.3-beta) and download `QingSweep-1.8.3-beta-arm64.zip`.
+1. Open the [Beta release](https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.4-beta) and download `QingSweep-1.8.4-beta-arm64.zip`.
 2. Extract it and move the app to `~/Applications/轻扫.app`. Create your personal Applications folder if necessary. The app may display as **QingSweep** or **轻扫**, depending on macOS language; its underlying bundle folder is `轻扫.app`.
 3. Launch the same installed copy. When upgrading, quit the old version and replace it at the same path. Keep an older copy elsewhere if you need a rollback.
 
@@ -17,7 +17,7 @@ Avoid alternating between copies in Downloads, extracted folders and backups whe
 Optional integrity check: download `SHA256SUMS.txt` and run this in the download directory:
 
 ```sh
-shasum -a 256 QingSweep-1.8.3-beta-arm64.zip
+shasum -a 256 QingSweep-1.8.4-beta-arm64.zip
 ```
 
 Compare the result with the matching file name in the checksum list. Matching hashes establish download consistency, not notarization or freedom from defects.
@@ -36,7 +36,11 @@ The installation does not require globally disabling Gatekeeper, SIP or system s
 
 ## 3. Grant access when needed
 
-macOS may request access to Downloads, Desktop, Documents or a selected external folder. Authorize the locations you intend to inspect. Unread locations remain identified as unread.
+**Scan common locations** checks Downloads, cache and logs for files of 1 MB or larger. It does not mean that every location on the Mac has been read. Storage analysis and **Analyze all locations** are separate read-only views.
+
+macOS may request access to Downloads, Desktop, Documents or a selected external folder. Authorize the locations you intend to inspect. A denied cleanup scan opens the access assistant with **Choose folder**, **Open System Settings** and **Recheck**. Unread locations are excluded from reported totals and remain marked **Not read yet**. Recheck scans the saved scope again; it does not silently expand the scope.
+
+After a permission change that requires relaunch, QingSweep tests previously denied locations and rescans the saved scope if access has actually recovered. If access is still denied, the issue remains available to resolve. No file is selected or deleted automatically.
 
 Before cleanup, QingSweep checks whether Trash can be read so an interrupted operation can be reconciled. If the app reports that Trash or another required location is unreadable:
 

@@ -16,7 +16,7 @@ struct OverviewView: View {
                     if model.scanning || model.analyzing {
                         Button(L("停止扫描"), action: model.stopSmartScan).buttonStyle(SweepOutlineButton())
                     } else {
-                        Button(L(model.scannedAt == nil ? "开始扫描" : "重新扫描")) {
+                        Button(L(model.scannedAt == nil ? "扫描常用位置" : "重新扫描")) {
                             if model.scannedAt == nil { model.quickScan() } else { model.rescan() }
                             model.section = .results
                         }.buttonStyle(SweepPrimaryButton()).disabled(model.busy)
@@ -95,9 +95,9 @@ struct OverviewView: View {
             }
             HStack(spacing: 12) {
                 Image(systemName: "folder").foregroundStyle(SweepStyle.secondary)
-                Text(L(model.scannedAt == nil ? "选择范围后开始扫描" : model.scanLabel + " · " + (model.cleanupIsPartial ? "部分结果" : "扫描完成")))
+                Text(L(model.scannedAt == nil ? "下载、缓存和日志 · 1 MB 起" : model.scanLabel + " · " + (model.cleanupIsPartial ? "部分结果" : "扫描完成")))
                 Spacer()
-                Button(L("详情")) { model.showingIssues = true }.buttonStyle(.plain).disabled(model.result == nil)
+                Button(L(model.result?.accessIssues?.isEmpty == false ? "处理访问问题" : "详情")) { model.showingIssues = true }.buttonStyle(.plain).disabled(model.result == nil)
             }.font(.system(size: 12)).foregroundStyle(SweepStyle.secondary)
         }
     }

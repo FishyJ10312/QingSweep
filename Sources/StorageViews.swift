@@ -240,7 +240,7 @@ struct StorageIssuesView: View {
                     Text(L("系统设置 → 隐私与安全 → 完全磁盘访问")).font(.system(size: 15, weight: .semibold))
                     Text(L("开启轻扫后点重新检查；系统要求重开时，重开后会自动补扫。")).font(.system(size: 13)).foregroundStyle(SweepStyle.secondary)
                 } else if model.storageAccessIssues.contains(where: { $0.kind == .restricted }) {
-                    Text(L("完全磁盘访问已通过试读")).font(.system(size: 15, weight: .semibold))
+                    Text(L("以下位置受系统访问限制")).font(.system(size: 15, weight: .semibold))
                     Text(L("系统限制的位置会保留明细，无需重复授权。")).font(.system(size: 13)).foregroundStyle(SweepStyle.secondary)
                 } else { Text(L("查看无法读取的位置")).font(.system(size: 15, weight: .semibold)) }
                 if !model.storageAccessStatus.isEmpty { Text(L(model.storageAccessStatus)).font(.system(size: 13, weight: .medium)).foregroundStyle(CleanupScope.optional.color) }

@@ -173,7 +173,8 @@ final class FileClassifier {
         if projectExtensions.contains(ext) || inProject(url) || match("(?:^|[/ _-])(project|projects|backup|backups)(?:[/ _.-]|$)|项目|工程|备份", lower) != nil {
             return protectedAssessment(.project, "项目、源代码或备份，请核实是否仍需保留。", "根据文件格式、项目标记或所在目录识别。")
         }
-        if presetExtensions.contains(ext) || match("power[ _-]?grades?|filmforever|colorist factory|grain and textures|editing pack|hudsonfilms|kodak|tropic colour|presets?|footage|素材|预设|调色|胶片|作品集|(?:^|[/ _-])lut(?:[/ _.包-]|$)", lower) != nil {
+        let knownMediaFormat = videoExtensions.contains(ext) || photoExtensions.contains(ext) || audioExtensions.contains(ext)
+        if presetExtensions.contains(ext) || (!knownMediaFormat && match("power[ _-]?grades?|filmforever|colorist factory|grain and textures|editing pack|hudsonfilms|kodak|tropic colour|presets?|footage|素材|预设|调色|胶片|作品集|(?:^|[/ _-])lut(?:[/ _.包-]|$)", lower) != nil) {
             return protectedAssessment(.preset, "预设、素材包或创作资源，请确认用途后决定是否删除。", "素材目录和名称优先于 ZIP、RAR 等压缩格式。")
         }
         if SafetyPolicy.within(url, policy.home.appendingPathComponent("Movies/CacheClip")), ext == "dvcc" {
@@ -214,7 +215,7 @@ final class FileClassifier {
                 return FileAssessment(category: .cache, disposition: .conditional, owner: "Microsoft Edge", group: "Edge 网页与代码缓存", reason: "仅处理网页与代码缓存；不包含登录状态、密码和历史。", evidence: "精确 Chromium 缓存结构；" + ageEvidence, ruleID: "cache-edge", blockingAppIDs: ["com.microsoft.edgemac"], needsClosedApps: true)
             }
             let owner = String(rel.split(separator: "/").first ?? "未识别应用")
-            return FileAssessment(category: .otherCache, disposition: .unknown, owner: owner, group: owner, reason: "仅知道位于 Caches，无法确认内容是否仍有用途。", evidence: "可能包含离线数据、会话资源或运行依赖；暂不提供清理。", ruleID: "unknown-cache")
+            return FileAssessment(category: .otherCache, disposition: .unknown, owner: owner, group: owner, reason: "仅知道位于 Caches，无法确认内容是否仍有用途。", evidence: "可能包含离线数据、会话资源或运行依赖；请自行确认是否仍需保留。", ruleID: "unknown-cache")
         }
         let derived = policy.home.appendingPathComponent("Library/Developer/Xcode/DerivedData")
         if SafetyPolicy.within(url, derived) {
@@ -269,7 +270,7 @@ final class FileClassifier {
                 return FileAssessment(category: .installer, disposition: .manual, owner: owner, group: owner + " 安装介质待确认", reason: "对应应用已安装，安装包内部版本仍未核实。", evidence: installed.map { "\($0.version) / build \($0.build)：\($0.path)" }.joined(separator: "；"), ruleID: "installed-media-unverified", confidence: "名称匹配，版本未核实")
             }
         }
-        return FileAssessment(category: .installer, disposition: .unknown, owner: "对应应用未确认", group: "身份未确认的安装介质", reason: "文件扩展名是安装介质；尚不能确认对应应用或版本。", evidence: "可能存在同名应用、备份镜像或未安装软件，暂不提供清理。", ruleID: "unknown-installer")
+        return FileAssessment(category: .installer, disposition: .unknown, owner: "对应应用未确认", group: "身份未确认的安装介质", reason: "文件扩展名是安装介质；尚不能确认对应应用或版本。", evidence: "可能存在同名应用、备份镜像或未安装软件；请自行确认用途和是否需要保留。", ruleID: "unknown-installer")
     }
 }
 

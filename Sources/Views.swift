@@ -80,7 +80,7 @@ struct ContentView: View {
         VStack(alignment: .leading, spacing: 0) {
             VStack(alignment: .leading, spacing: 4) {
                 Text(L("轻扫")).font(.system(size: 26, weight: .medium)).lineLimit(1).minimumScaleFactor(0.8)
-                Text(L(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.8.2")).font(.system(size: 11, design: .monospaced)).foregroundStyle(.white.opacity(0.5))
+                Text(L(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.8.4")).font(.system(size: 11, design: .monospaced)).foregroundStyle(.white.opacity(0.5))
             }.padding(.horizontal, 12).padding(.top, 20)
             Text(L("为重要的文件留空间")).font(.system(size: 12)).foregroundStyle(.white.opacity(0.58))
                 .padding(.horizontal, 12).padding(.top, 12).padding(.bottom, 28)
@@ -338,17 +338,63 @@ struct IgnoredView: View {
 }
 struct IssueView: View {
     @EnvironmentObject var model: AppModel
+    private var accessIssues: [StorageAccessIssue] { model.result?.accessIssues ?? [] }
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            Text(L("扫描详情")).font(.system(size: 24, weight: .medium))
+        VStack(alignment: .leading, spacing: 16) {
+            Text(L(accessIssues.isEmpty ? "扫描详情" : "文件访问助手")).font(.system(size: 24, weight: .medium))
             if let result = model.result {
                 Text(L("已检查 \(result.visited) 项 · 用时 \(Int(result.elapsed)) 秒")).font(.system(size: 13))
                 if result.cancelled { Text(L("扫描已停止，当前为部分结果")).foregroundStyle(SweepStyle.warning) }
                 if result.limited { Text(L("结果达到上限，请选择更小的文件夹")).foregroundStyle(SweepStyle.warning) }
-                Text(L("常用位置列出 1 MB 以上文件，缓存与日志保留最近 7 天；个人大文件从 100 MB 起。图库、数据库、应用、链接和云端文件会跳过。")).font(.system(size: 13)).foregroundStyle(SweepStyle.secondary).fixedSize(horizontal: false, vertical: true)
-                ScrollView { Text(Localization.error(result.issues.isEmpty ? "没有读取错误" : result.issues.joined(separator: "\n\n"))).font(.system(size: 12)).textSelection(.enabled).frame(maxWidth: .infinity, alignment: .leading) }.frame(height: 240)
+                if !accessIssues.isEmpty {
+                    Text(L("尚未读取的位置未计入结果。允许访问后重新检查，会重新扫描当前范围。"))
+                        .font(.system(size: 13)).foregroundStyle(SweepStyle.secondary).fixedSize(horizontal: false, vertical: true)
+                    HStack(spacing: 12) {
+                        Button(L("选择文件夹")) { model.showingIssues = false; model.chooseFolder() }.buttonStyle(SweepOutlineButton())
+                        if accessIssues.contains(where: { $0.kind == .permission }) {
+                            Button(L("前往系统设置"), action: model.openCleanupScanAccessSettings).buttonStyle(SweepOutlineButton())
+                        }
+                        Button(L("重新检查"), action: model.recheckCleanupScanAccess).buttonStyle(SweepPrimaryButton()).disabled(model.busy)
+                    }
+                    if accessIssues.contains(where: { $0.kind == .permission }) {
+                        HStack {
+                            Text(L("系统设置 → 隐私与安全 → 完全磁盘访问")).foregroundStyle(SweepStyle.secondary)
+                            Spacer()
+                            Button(L("复制应用路径")) { model.copyPath(Bundle.main.bundleURL) }.buttonStyle(.plain)
+                        }.font(.system(size: 12))
+                    }
+                    ScrollView {
+                        LazyVStack(alignment: .leading, spacing: 12) {
+                            ForEach(accessIssues) { issue in
+                                VStack(alignment: .leading, spacing: 8) {
+                                    HStack {
+                                        Text(verbatim: issue.url.lastPathComponent).font(.system(size: 15, weight: .semibold))
+                                        Spacer()
+                                        Text(L("尚未读取")).foregroundStyle(SweepStyle.warning)
+                                    }
+                                    Text(L(issue.kind.title)).font(.system(size: 12)).foregroundStyle(SweepStyle.secondary)
+                                    DisclosureGroup(L("查看详情")) {
+                                        Text(verbatim: issue.url.path).textSelection(.enabled)
+                                        if !issue.detail.isEmpty { Text(Localization.error(issue.detail)).textSelection(.enabled) }
+                                    }.font(.system(size: 12)).foregroundStyle(SweepStyle.secondary)
+                                }.padding(14).sweepCard()
+                            }
+                        }
+                    }.frame(height: 240)
+                    DisclosureGroup(L("扫描详情")) { scanDetails(result) }.font(.system(size: 12))
+                } else {
+                    scanDetails(result)
+                    ScrollView { Text(Localization.error(result.issues.isEmpty ? "没有读取错误" : result.issues.joined(separator: "\n\n"))).font(.system(size: 12)).textSelection(.enabled).frame(maxWidth: .infinity, alignment: .leading) }.frame(height: 240)
+                    if !result.issues.isEmpty {
+                        Button(L("重新检查"), action: model.recheckCleanupScanAccess).buttonStyle(SweepOutlineButton()).disabled(model.busy)
+                    }
+                }
             }
             HStack { Spacer(); Button(L("完成")) { model.showingIssues = false }.keyboardShortcut(.defaultAction) }
-        }.padding(28).frame(width: 620)
+        }.padding(28).frame(width: 720)
+    }
+    private func scanDetails(_ result: ScanResult) -> some View {
+        Text(L("常用位置列出 1 MB 以上文件，缓存与日志保留最近 7 天；个人大文件从 100 MB 起。图库、数据库、应用、链接和云端文件会跳过。"))
+            .font(.system(size: 13)).foregroundStyle(SweepStyle.secondary).fixedSize(horizontal: false, vertical: true)
     }
 }

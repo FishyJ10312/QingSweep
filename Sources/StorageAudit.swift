@@ -105,30 +105,6 @@ struct StorageAuditProgress {
     var current = ""
 }
 
-enum StorageAccessKind: String, Codable { case permission, restricted, missing, disconnected, unavailable, incomplete
-    var title: String { switch self { case .permission: return "需要访问权限"; case .restricted: return "系统访问限制"; case .missing: return "位置不存在"; case .disconnected: return "磁盘未连接"; case .unavailable: return "暂时无法读取"; case .incomplete: return "扫描未完成" } }
-}
-struct StorageAccessIssue: Identifiable, Codable {
-    var id: String { url.path + "|" + kind.rawValue }
-    let url: URL
-    let root: URL
-    let kind: StorageAccessKind
-    let detail: String
-    static func make(url: URL, root: URL, error: Error? = nil, detail: String = "", incomplete: Bool = false) -> StorageAccessIssue {
-        let e = error as NSError?
-        let missing = FileStamp.read(url) == nil
-        let statError = errno
-        let volume = url.pathComponents.count > 2 && url.pathComponents[1] == "Volumes" ? URL(fileURLWithPath: "/Volumes/" + url.pathComponents[2]) : nil
-        let kind: StorageAccessKind
-        if incomplete { kind = .incomplete }
-        else if let volume, FileStamp.read(volume) == nil { kind = .disconnected }
-        else if missing && [EACCES, EPERM].contains(statError) { kind = .permission }
-        else if e?.domain == NSPOSIXErrorDomain && [Int(EACCES), Int(EPERM)].contains(e!.code) || e?.domain == NSCocoaErrorDomain && e?.code == NSFileReadNoPermissionError { kind = .permission }
-        else if missing { kind = .missing }
-        else { kind = .unavailable }
-        return StorageAccessIssue(url: url, root: root, kind: kind, detail: error?.localizedDescription ?? detail)
-    }
-}
 struct StorageRecord {
     let url: URL
     let root: StorageRoot

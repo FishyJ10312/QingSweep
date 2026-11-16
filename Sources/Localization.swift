@@ -137,7 +137,15 @@ final class TranslationCatalog: @unchecked Sendable {
             }).first, let range = Range(match.1.range, in: source) {
                 result += format(match.0, match: match.1, original: original); index = range.upperBound; continue
             }
-            if let fragment = fragments.first(where: { source[index...].hasPrefix($0.source) }) {
+            if let fragment = fragments.first(where: { candidate in
+                guard source[index...].hasPrefix(candidate.source) else { return false }
+                // A suffix such as " 扫描" must not consume the start of " 扫描完成".
+                if candidate.source.first?.isWhitespace == true, candidate.source.last?.isLetter == true {
+                    let end = source.index(index, offsetBy: candidate.source.count)
+                    if end < source.endIndex, source[end].isLetter || source[end].isNumber { return false }
+                }
+                return true
+            }) {
                 result += fragment.english; index = source.index(index, offsetBy: fragment.source.count)
             } else { result.append(source[index]); index = source.index(after: index) }
         }

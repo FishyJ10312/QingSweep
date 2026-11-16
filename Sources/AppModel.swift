@@ -62,6 +62,7 @@ enum FileOrdering: String, CaseIterable { case size = "占用最大", oldest = "
     var ownerResolver = StorageOwnerResolver(applications: [])
     var shouldRecheckAccessOnActivation = false
     private var shouldRecheckCleanupOnActivation = false
+    private var shouldRecheckCleanupScanOnActivation = false
     var accessObserver: NSObjectProtocol?
 
     @Published var expandedStorage = Set<String>()
@@ -160,6 +161,7 @@ enum FileOrdering: String, CaseIterable { case size = "占用最大", oldest = "
             Task { @MainActor in
                 if let self, self.shouldRecheckAccessOnActivation { self.recheckStorageAccess() }
                 if let self,self.shouldRecheckCleanupOnActivation {self.shouldRecheckCleanupOnActivation=false;self.reconcileCleanupOperations()}
+                if let self,self.shouldRecheckCleanupScanOnActivation,!self.busy {self.shouldRecheckCleanupScanOnActivation=false;self.recheckCleanupScanAccess()}
             }
         }
         refresh()
@@ -271,6 +273,7 @@ enum FileOrdering: String, CaseIterable { case size = "占用最大", oldest = "
         DispatchQueue.global(qos: .utility).async {
             var report: ScanArchive?
             var valid: [ScanItem] = []
+            var restoredAccess = false
             if let size = try? url.resourceValues(forKeys: [.fileSizeKey]).fileSize, size < 50_000_000,
                let data = try? Data(contentsOf: url), let decoded = try? JSONDecoder().decode(ScanArchive.self, from: data), [2, 3].contains(decoded.schemaVersion) {
                 let complete: ScanArchive
@@ -280,6 +283,13 @@ enum FileOrdering: String, CaseIterable { case size = "占用最大", oldest = "
                 } else { complete = decoded }
                 report = complete
                 valid = ScanReportLoader.validate(report: complete, policy: policy, context: InspectionContext.collect(), ignored: ignored)
+                if complete.schemaVersion == 3, let config = complete.configuration, config.isValid(policy: policy) {
+                    restoredAccess = complete.result.accessIssues?.contains { issue in
+                        issue.kind == .permission && policy.permits(issue.url) && !ignored.isIgnored(issue.url) &&
+                        config.roots.contains(where: { SafetyPolicy.within(issue.url, $0) }) &&
+                        StorageAccessProbe.problem(at: issue.url, root: issue.root) == nil
+                    } == true
+                }
             }
             DispatchQueue.main.async {
                 if let report {
@@ -290,8 +300,17 @@ enum FileOrdering: String, CaseIterable { case size = "占用最大", oldest = "
                     self.cleanupDisplayLimit = 100
                 }
                 self.loadingReport = false
+                if restoredAccess { self.resumeCleanupScanAfterAccessChange() }
             }
         }
+    }
+    private func resumeCleanupScanAfterAccessChange() {
+        if loadingStorageIndex || loadingReport {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in self?.resumeCleanupScanAfterAccessChange() }
+            return
+        }
+        guard !busy, selected.isEmpty, currentScanConfiguration != nil else { return }
+        recheckCleanupScanAccess()
     }
     func smartScan() { guard !busy else { return }; quickScan(); startStorageAnalysis(navigate: false) }
     func stopSmartScan() { cancellation?.cancel(); auditCancellation?.cancel() }
@@ -322,6 +341,7 @@ enum FileOrdering: String, CaseIterable { case size = "占用最大", oldest = "
         lastRoots = roots; lastMinimum = minimum; scanLabel = label
         currentScanConfiguration = ScanConfiguration(roots: roots, label: label, minimumBytes: minimum)
         cleanupOwnerFilter = nil; cleanupOwnerTitle = nil
+        showingIssues = false
         scanning = true; selected.removeAll(); items = []; result = nil; progress = ScanProgress()
         showDisposition(nil); selectCleanupScope(.recommended); message = nil
         let scanner = DiskScanner(policy: policy, minimumBytes: minimum, excludedRoots: preferences.ignoredPaths.map { URL(fileURLWithPath: $0) })
@@ -329,6 +349,7 @@ enum FileOrdering: String, CaseIterable { case size = "占用最大", oldest = "
             let result = autoreleasepool { scanner.scan(roots: roots, cancellation: token) { update in DispatchQueue.main.async { self.progress = update } } }
             DispatchQueue.main.async {
                 self.result = result; self.items = result.items; self.scannedAt = Date(); self.scanning = false; self.cancellation = nil
+                if result.accessIssues?.contains(where: { $0.kind == .permission }) == true { self.showingIssues = true }
                 self.saveReport(); self.refresh()
             }
         }
@@ -539,6 +560,15 @@ enum FileOrdering: String, CaseIterable { case size = "占用最大", oldest = "
     func refreshReconciledStorage(){
         guard storageInfo != nil,!loadingStorageIndex,!reconcilingCleanup,!cleanupIndexRefreshPaths.isEmpty else{return}
         let paths=cleanupIndexRefreshPaths;cleanupIndexRefreshPaths=[];refreshStorageIndex(paths:paths)
+    }
+    func recheckCleanupScanAccess() {
+        guard !busy else { return }
+        showingIssues = false
+        rescan()
+    }
+    func openCleanupScanAccessSettings() {
+        shouldRecheckCleanupScanOnActivation = true
+        if let url=URL(string:"x-apple.systempreferences:com.apple.preference.security?Privacy_AllFiles"){NSWorkspace.shared.open(url)}
     }
     func openCleanupAccessSettings(){
         shouldRecheckCleanupOnActivation=true

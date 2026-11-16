@@ -8,19 +8,19 @@
 
 轻扫是一款本地运行的 macOS 磁盘分析与清理工具。可以按应用或文件夹查看占用，把旧安装包、缓存、日志与个人文件分开，再决定哪些内容移到废纸篓。
 
-**当前版本：1.8.3 Beta（构建 18）。暂未使用 Apple Developer ID 签名，暂未完成 Apple 公证。** 下载后可能出现开发者验证提示。首次启动与权限操作见[安装授权说明](docs/INSTALL.zh-CN.md)。
+**当前版本：1.8.4 Beta（构建 19）。暂未使用 Apple Developer ID 签名，暂未完成 Apple 公证。** 下载后可能出现开发者验证提示。首次启动与权限操作见[安装授权说明](docs/INSTALL.zh-CN.md)。
 
-[下载安装包](https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.3-beta/QingSweep-1.8.3-beta-arm64.zip) · [Beta 发布页](https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.3-beta) · [反馈问题](https://github.com/FishyJ10312/QingSweep/issues/new?template=bug_report.md)
+[下载安装包](https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.4-beta/QingSweep-1.8.4-beta-arm64.zip) · [Beta 发布页](https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.4-beta) · [反馈问题](https://github.com/FishyJ10312/QingSweep/issues/new?template=bug_report.md)
 
-## 1.8.3 修复
+## 1.8.4 修复
 
-- 重试前重新核对来源与保留的重复文件或归档副本，内容不一致时跳过。
-- 启动项操作失败后恢复系统实际的停用与载入状态，恢复失败会明确提示。
-- **分析全部位置**会补齐原扫描范围；普通更新继续使用已选择的范围。
+- 常用位置读取失败后直接提供访问助手：选择文件夹、前往系统设置、实际重新检查。授权恢复后重开，会按保存范围补扫。
+- 文件名包含 footage、素材或预设关键词时，已知视频、照片和音频仍按实际格式归类。素材与项目继续默认不选，手动清理须二次确认。
+- 首次扫描明确显示范围；访问提示区分未读取与系统限制，修正英文扫描完成状态粘连。
 
 ## 清理与恢复演示
 
-以下画面录制于 1.8.2，全部使用临时文件；1.8.3 延续相同的选择、复核、移到废纸篓与恢复流程。
+以下画面录制于 1.8.2，全部使用临时文件；1.8.4 延续相同的选择、复核、移到废纸篓与恢复流程。
 
 **简体中文界面**：把旧安装包、可重建缓存与个人文件分开查看。
 
@@ -56,10 +56,11 @@
 
 ## 怎么用
 
-1. 选择扫描范围，按应用或文件夹查看空间去向。
-2. 查看分类、占用与清理影响，选择需要处理的文件。
-3. 复核清单，可以取消整组或单项；需自行确认的内容还会经过二次确认。
-4. 文件移到废纸篓后，可在「清理记录」按批次恢复到原位置。
+1. 按[安装说明](docs/INSTALL.zh-CN.md)放到固定位置。「扫描常用位置」检查下载、缓存和日志，列出 1 MB 起的文件。
+2. 未读取时使用访问助手选择文件夹、前往系统设置或重新检查。系统授权由你完成，应用会实际试读。
+3. 查看分类、占用与清理影响，选择需要处理的文件。
+4. 复核清单，可以取消整组或单项；需自行确认的内容还会经过二次确认。
+5. 文件移到废纸篓后，可在「清理记录」按批次恢复到原位置。
 
 | 分类 | 含义 | 选择方式 |
 | --- | --- | --- |
@@ -93,7 +94,7 @@
 | 芯片 | Apple Silicon（arm64）；本版不提供 Intel 安装包 |
 | 系统 | 编译最低版本 macOS 14；实际验收环境为 macOS 27.2 |
 | 签名 | 本机自签名，启用 Hardened Runtime；**无 Developer ID、无 Apple 公证** |
-| 本机检查 | 751 项检查通过，另验证 30,017 文件的完整清单 |
+| 本机检查 | 806 项检查通过，另验证 30,017 文件的完整清单 |
 | 强制退出 | 沿用 9 个真实 SIGKILL 窗口与中断恢复检查，并新增双语显示、原样文件名和英文搜索检查 |
 | 仍待验证 | 另一台 Mac 的默认 Gatekeeper 下载与首次启动、macOS 14 实机、真实外置盘拔插及不同文件系统 |
 
@@ -128,6 +129,6 @@ zsh check.sh
 
 欢迎反馈安装失败、权限问题、分类不准确、扫描遗漏、清理与恢复结果。提交 [Issue](https://github.com/FishyJ10312/QingSweep/issues/new?template=bug_report.md) 时请写明系统版本、芯片、版本号与复现步骤；截图遮住个人文件名和路径。
 
-[1.8.3 Beta 更新说明](docs/RELEASE_1.8.3_BETA.md) · [宣传文案](docs/PROMO.zh-CN.md) · [致谢与许可状态](NOTICE.md)
+[1.8.4 Beta 更新说明](docs/RELEASE_1.8.4_BETA.md) · [宣传文案](docs/PROMO.zh-CN.md) · [致谢与许可状态](NOTICE.md)
 
 本项目原创代码与文档采用 [MIT License](LICENSE)，第三方参考署名见 [NOTICE.md](NOTICE.md)。

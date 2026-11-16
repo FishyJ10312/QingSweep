@@ -54,6 +54,12 @@ compiler=(xcrun swiftc -swift-version 5 -O -module-cache-path .build/module-cach
 "${compiler[@]}" "${engine[@]}" Tests/StorageScopeTests.swift -o .build/storage-scope-tests
 .build/storage-scope-tests
 
+"${compiler[@]}" "${engine[@]}" Tests/FirstUseTests.swift -o .build/first-use-tests
+.build/first-use-tests
+
+"${compiler[@]}" "${common[@]}" Tests/MediaClassificationTests.swift -o .build/media-classification-tests
+.build/media-classification-tests
+
 "${compiler[@]}" "${engine[@]}" Tests/CrashRecoveryTests.swift -o .build/crash-recovery-tests
 .build/crash-recovery-tests
 

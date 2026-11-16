@@ -10,6 +10,13 @@ struct ResultsView: View {
     var body: some View {
         VStack(spacing: 12) {
             header
+            if let issues = model.result?.accessIssues, !issues.isEmpty, !model.scanning {
+                HStack(spacing: 12) {
+                    Label(L("\(issues.count) 处尚未读取"), systemImage: "folder.badge.questionmark")
+                    Spacer()
+                    Button(L("处理访问问题")) { model.showingIssues = true }.buttonStyle(SweepOutlineButton()).disabled(model.busy)
+                }.font(.system(size: 13)).foregroundStyle(SweepStyle.warning).padding(12).sweepCard()
+            }
             if model.scanLabel == "ProxyMedia" { Text(L("代理文件：确认原始素材仍可用后再删除；需要时可重新生成代理。")).font(.system(size: 12)).foregroundStyle(CleanupScope.protected.color).frame(maxWidth: .infinity, alignment: .leading) }
             if model.scanLabel == "CacheClip" { Text(L("渲染缓存：删除后需要重新计算，首次播放可能变慢；请先确认原始素材可用。")).font(.system(size: 12)).foregroundStyle(CleanupScope.protected.color).frame(maxWidth: .infinity, alignment: .leading) }
             HStack(alignment: .top, spacing: 16) {
@@ -144,7 +151,7 @@ struct ResultsView: View {
     }
     private var emptyResult: some View {
         VStack(spacing: 16) {
-            ContentUnavailableView(L(model.cleanupScope == .recommended && !hasFilters ? "此范围没有推荐项" : "没有匹配的文件"), systemImage: "tray")
+            ContentUnavailableView(L(model.result?.accessIssues?.isEmpty == false ? "部分位置尚未读取" : model.cleanupScope == .recommended && !hasFilters ? "此范围没有推荐项" : "没有匹配的文件"), systemImage: "tray")
             if hasFilters { Button(L("清除筛选"), action: model.clearCleanupFilters).buttonStyle(SweepOutlineButton()) }
             if model.cleanupScope == .recommended && !model.scopeItems(.optional).isEmpty { Button(L("查看可自行选择")) { model.selectCleanupScope(.optional) }.buttonStyle(SweepOutlineButton()) }
             Button(L("扫描常用位置"), action: model.quickScan).buttonStyle(.plain).disabled(model.busy)
