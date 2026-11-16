@@ -71,9 +71,48 @@ extension AppModel {
         guard !storagePendingRoots.isEmpty else { return }
         runStorageAnalysis(remainingRoots: storagePendingRoots)
     }
-    func runStorageAnalysis(navigate: Bool = true, subtree: URL? = nil, remainingRoots: [StorageRoot]? = nil, automatically: Bool = false, full: Bool = false) {
+    func analyzeAllStorageLocations(defaultRoots: [StorageRoot]? = nil) {
+        guard !busy else { return }
+        // The optional roots are the filesystem-scope boundary; the UI uses the
+        // real defaults while verification supplies only disposable locations.
+        let roots = defaultRoots ?? StorageRoot.defaults(home: policy.home)
+        if storageInfo == nil || storageIndexUnavailable {
+            runStorageAnalysis(requestedRoots: roots)
+            return
+        }
+        section = .storage; analyzing = true; storageAutoContinue = true
+        storageUpdateStatus = "正在补齐扫描范围"
+        let token = ScanCancellation(); auditCancellation = token
+        let file = storageIndexURL!, apps = storageApplications
+        storageQueue.async {
+            do {
+                let index = try StorageIndex(url: file)
+                if !token.isCancelled {
+                    try index.prepareAllLocations(including: roots, checkpoint: StorageCheckpoint.current())
+                }
+                let info = try index.info(), pending = try index.pendingRoots()
+                let summaries = try index.summaries(applications: apps), issues = try index.issues()
+                DispatchQueue.main.async {
+                    self.analyzing = false; self.auditCancellation = nil
+                    self.storageInfo = info; self.storagePendingRoots = pending
+                    self.appSummaries = summaries; self.storageAccessIssues = issues
+                    guard !token.isCancelled && self.storageAutoContinue else {
+                        self.storageUpdateStatus = "更新已停止"; return
+                    }
+                    if pending.isEmpty { self.storageUpdateStatus = "没有需要更新的文件夹"; self.scheduleStorageQuery() }
+                    else { self.runStorageAnalysis(navigate: false, remainingRoots: pending, automatically: true) }
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    self.analyzing = false; self.auditCancellation = nil
+                    self.message = error.localizedDescription
+                }
+            }
+        }
+    }
+    func runStorageAnalysis(navigate: Bool = true, subtree: URL? = nil, remainingRoots: [StorageRoot]? = nil, automatically: Bool = false, full: Bool = false, requestedRoots: [StorageRoot]? = nil) {
         guard !analyzing, !mutating, !loadingReport, !showingReview else { return }
-        if subtree == nil && remainingRoots == nil && storageInfo != nil && !storageIndexUnavailable {
+        if requestedRoots == nil && subtree == nil && remainingRoots == nil && storageInfo != nil && !storageIndexUnavailable {
             prepareIncrementalAnalysis(navigate: navigate, forceFull: full); return
         }
         if !automatically { storageAutoContinue = true }
@@ -85,8 +124,9 @@ extension AppModel {
         let ownershipRoots = mergeExisting ? storageInfo?.roots ?? [] : []
         storageQueue.async {
             let apps = InspectionContext.collect(home: fixtureHome).applications
-            var roots = StorageRoot.defaults(home: fixtureHome)
-            if let remainingRoots { roots = remainingRoots }
+            var roots = remainingRoots ?? requestedRoots ?? StorageRoot.defaults(home: fixtureHome)
+            var seen = Set<String>()
+            roots = roots.filter { seen.insert($0.url.path).inserted }
             if let subtree { roots = [ownershipRoots.first { $0.url.path == subtree.path } ?? StorageRoot(url: subtree, title: subtree.lastPathComponent, kind: subtree.pathComponents.contains("Caches") || subtree.pathComponents.contains("Logs") ? .cache : .appData)] }
             let staging = indexURL.deletingLastPathComponent().appendingPathComponent("subtree-" + UUID().uuidString + ".sqlite")
             defer { if mergeExisting { try? FileManager.default.removeItem(at: staging) } }

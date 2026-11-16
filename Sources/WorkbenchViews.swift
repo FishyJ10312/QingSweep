@@ -54,13 +54,14 @@ struct WorkbenchPanels: View {
         ManagedReviewView(tools: tools).environmentObject(model)
       }
       .confirmationDialog(
-        L(tools.startupAction?.disabledBySweep == true ? "重新启用此启动项？" : "停用此启动项？"),
+        L(tools.startupAction?.disabled == true ? "重新启用此启动项？" : "停用此启动项？"),
         isPresented: Binding(
           get: { tools.startupAction != nil }, set: { if !$0 { tools.startupAction = nil } }),
         titleVisibility: .visible
       ) {
         if let entry = tools.startupAction {
-          Button(L(entry.disabledBySweep ? "启用" : "停用")) { tools.changeStartup(entry) }
+          Button(L(entry.disabled == true ? "启用" : "停用")) { tools.changeStartup(entry) }
+            .disabled(entry.disabled == nil)
         }
         Button(L("取消"), role: .cancel) { tools.startupAction = nil }
       } message: {
@@ -544,15 +545,22 @@ struct WorkbenchPanels: View {
                 Text(entry.label).font(.system(size: 16, weight: .medium))
                 Text(L(entry.program)).font(.system(size: 12)).foregroundStyle(SweepStyle.secondary)
                   .textSelection(.enabled)
-                Text(L(entry.disabledBySweep ? "由轻扫停用" : entry.loaded ? "已载入" : "未载入或状态待确认")).font(
+                Text(L(
+                  entry.disabled == nil ? "状态待确认，请重新检查"
+                    : entry.disabled == true ? (entry.loaded ? "已停用，仍已载入" : "已停用")
+                    : entry.loaded ? "已载入" : "已启用，未载入"
+                )).font(
                   .system(size: 12)
                 ).foregroundStyle(
-                  entry.disabledBySweep ? CleanupScope.protected.color : CleanupScope.optional.color
+                  entry.disabled == true ? CleanupScope.protected.color : CleanupScope.optional.color
                 )
+                if entry.disabledBySweep {
+                  Text(L("轻扫有停用记录")).font(.system(size: 12)).foregroundStyle(SweepStyle.secondary)
+                }
               }
               Spacer()
-              Button(L(entry.disabledBySweep ? "启用" : "停用")) { tools.startupAction = entry }
-                .buttonStyle(SweepOutlineButton()).disabled(model.busy)
+              Button(L(entry.disabled == true ? "启用" : "停用")) { tools.startupAction = entry }
+                .buttonStyle(SweepOutlineButton()).disabled(model.busy || entry.disabled == nil)
             }.padding(16).sweepCard()
           }
         }

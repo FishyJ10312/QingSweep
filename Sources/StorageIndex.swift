@@ -280,7 +280,8 @@ final class StorageIndex {
     }
     func includeAdditionalRoots(_ additions: [StorageRoot]) throws {
         let old = try info()
-        let missing = additions.filter { root in !old.roots.contains { existing in
+        var seen = Set<String>()
+        let missing = additions.filter { root in seen.insert(root.url.path).inserted && !old.roots.contains { existing in
             Self.contains(root.url, existing.url) && StorageVolumeUsage.identity(for: root.url) == StorageVolumeUsage.identity(for: existing.url)
         } }
         guard !missing.isEmpty else { return }
@@ -294,6 +295,21 @@ final class StorageIndex {
             }
             try savePlan(plan)
             try setInfo(StorageIndexInfo(scannedAt: old.scannedAt, roots: old.roots + missing, visited: old.visited, limited: true, cancelled: old.cancelled, unreadableCount: old.unreadableCount, elapsed: old.elapsed))
+            try execute("COMMIT")
+        } catch { try? execute("ROLLBACK"); throw error }
+    }
+    /// An explicit all-locations request expands the scope and restarts its queue.
+    /// Existing nodes remain browsable until each replacement subtree is read.
+    func prepareAllLocations(including roots: [StorageRoot], checkpoint: StorageCheckpoint) throws {
+        try includeAdditionalRoots(roots)
+        let previous = try info()
+        try execute("BEGIN IMMEDIATE")
+        do {
+            try savePlan(ContinuationPlan(jobs: previous.roots))
+            try saveCheckpoint(checkpoint)
+            try setInfo(StorageIndexInfo(scannedAt: previous.scannedAt, roots: previous.roots,
+                visited: previous.visited, limited: !previous.roots.isEmpty, cancelled: false,
+                unreadableCount: previous.unreadableCount, elapsed: previous.elapsed))
             try execute("COMMIT")
         } catch { try? execute("ROLLBACK"); throw error }
     }

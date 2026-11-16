@@ -1,22 +1,24 @@
-# 轻扫 QingSweep 1.8.2 Beta 宣传文案
+# 轻扫 QingSweep 1.8.3 Beta 宣传文案
 
-[English](PROMO.en.md) · [Release / 发布页](https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.2-beta) · [Media kit / 宣传素材包](https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.2-beta/QingSweep-1.8.2-beta-media-kit.zip)
+[English](PROMO.en.md) · [Release / 发布页](https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.3-beta) · [Media kit / 宣传素材包](https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.2-beta/QingSweep-1.8.2-beta-media-kit.zip)
+
+本版修复副本重试核验、按系统实际状态恢复启动项，以及“分析全部位置”补齐扫描范围。现有截图和宣传素材包录制于 1.8.2，全部使用临时文件；1.8.3 延续相同的清理恢复流程。
 
 ## 社群短版（可直接复制）
 
-轻扫 QingSweep 1.8.2 Beta：看清 Mac 空间占用，确认以后再清理。
+轻扫 QingSweep 1.8.3 Beta：看清 Mac 空间占用，确认以后再清理。
 
 English / 简体中文，MIT 开源，本地运行。素材和项目默认不勾选；清理只移到废纸篓，支持批次恢复。
 
 发布页附中英文截图和 26 秒清理、恢复演示。Apple Silicon 测试版，暂未 Apple 公证，建议先用临时文件夹试用。
 
-下载与演示：https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.2-beta
+下载与演示：https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.3-beta
 
 ## 详细介绍
 
 Mac 空间越来越满，先看清是哪些应用和文件夹在占用，再决定处理什么。轻扫把空间分析、分类、选择清理和恢复放在一条流程里。
 
-1.8.2 Beta 支持 English / 简体中文，采用 MIT 协议开源，扫描和清理记录留在本机。
+1.8.3 Beta 支持 English / 简体中文，采用 MIT 协议开源，扫描和清理记录留在本机。
 
 - 按应用或文件夹浏览占用，支持搜索、分页和返回上级。
 - 把推荐清理、可自行选择、需自行确认的内容分开，查看用途和清理影响后再选择。
@@ -29,7 +31,7 @@ Mac 空间越来越满，先看清是哪些应用和文件夹在占用，再决�
 
 移到废纸篓不等于立即释放空间；恢复依赖文件仍在废纸篓且通过核验，不能替代备份。
 
-下载、安装说明与演示：https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.2-beta
+下载、安装说明与演示：https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.3-beta
 源码：https://github.com/FishyJ10312/QingSweep
 宣传素材包：https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.2-beta/QingSweep-1.8.2-beta-media-kit.zip
 

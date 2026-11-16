@@ -1,22 +1,24 @@
-# QingSweep 1.8.2 Beta launch copy
+# QingSweep 1.8.3 Beta launch copy
 
-[简体中文](PROMO.zh-CN.md) · [Release / 发布页](https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.2-beta) · [Media kit / 宣传素材包](https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.2-beta/QingSweep-1.8.2-beta-media-kit.zip)
+[简体中文](PROMO.zh-CN.md) · [Release / 发布页](https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.3-beta) · [Media kit / 宣传素材包](https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.2-beta/QingSweep-1.8.2-beta-media-kit.zip)
+
+This patch fixes retained-copy retry verification, rollback to the actual login-item state, and expansion of a narrow scan through “Analyze all locations”. The gallery and media kit were recorded with 1.8.2 using generated files; the cleanup workflow is retained in 1.8.3.
 
 ## Short post (ready to copy)
 
-QingSweep 1.8.2 Beta — see what uses your Mac's storage. Review before you clean.
+QingSweep 1.8.3 Beta — see what uses your Mac's storage. Review before you clean.
 
 English / 简体中文 · MIT · Local processing. Media and projects start unselected. Cleanup moves files to Trash, with batch restore in History.
 
 The release includes bilingual screenshots and a 26-second cleanup-and-restore demo in each language. Apple Silicon Beta, not Apple-notarized. Try a disposable folder first.
 
-Download and demos: https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.2-beta
+Download and demos: https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.3-beta
 
 ## Longer introduction
 
 When storage fills up, first see which applications and folders are using it, then decide what to remove. QingSweep connects storage browsing, classification, selection, cleanup review and restore.
 
-1.8.2 Beta includes English and Simplified Chinese in one app. The project is MIT licensed; scans and cleanup records stay on your Mac.
+1.8.3 Beta includes English and Simplified Chinese in one app. The project is MIT licensed; scans and cleanup records stay on your Mac.
 
 - Browse by application or folder, with search, pagination and parent navigation.
 - Review Recommended, Choose manually and Manual review groups separately, including purpose and cleanup impact.
@@ -29,7 +31,7 @@ This is an Apple Silicon Beta, without Developer ID signing or Apple notarizatio
 
 Moving files to Trash does not immediately free disk space. Restore requires the corresponding files to remain in Trash and pass verification; it is not a backup.
 
-Download, installation and demos: https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.2-beta
+Download, installation and demos: https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.3-beta
 Source: https://github.com/FishyJ10312/QingSweep
 Media kit: https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.2-beta/QingSweep-1.8.2-beta-media-kit.zip
 

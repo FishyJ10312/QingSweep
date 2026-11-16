@@ -1,52 +1,48 @@
-# 1.8.2 Beta validation
+# 1.8.3 Beta validation
 
-Date: 2026-11-15 · App **1.8.2 (17)** · Tag `v1.8.2-beta`
+2026-11-16 · App **1.8.3 (18)** · `v1.8.3-beta`
 
 ## Automated checks
 
-**650 checks passed:** the retained 624 regression and crash-recovery checks, plus 26 localization checks. The full-list fixture retains 30,017 files. Localization checks additionally exercise all **787 English catalogue entries**; those catalogue cases are not added to the 650 count.
+`zsh check.sh` completed with exit 0. **751 grouped checks passed**, with no failed or unavailable/skip checks. This retains the previous 650, adds 100 targeted regressions and one additional retained 1.8 check. The standalone **30,017-file complete-list fixture** is reported separately, following the previous release’s counting convention. All 64 frozen source/test/resource inputs stayed unchanged during the run.
 
-| Coverage | Checks |
+| Area | New checks |
 | --- | ---: |
-| Core, classification, interaction, storage, index, navigation, manual selection, application boundaries and 1.6–1.8 regressions | 498 |
-| Per-file journal, restart reconciliation and crash recovery | 126 |
-| Localization, preserved names/paths, preferences, compatibility and English search | 26 |
-| **Total** | **650** |
+| Retained-copy retry: current source/copy equality, identity, cancellation, changed and older records | 21 |
+| Login-item state: real disabled/loaded inputs, uncertain queries, cancellation and before/after-effect errors, recovery failure | 61 |
+| All-locations scope: narrow-to-expanded index, retained chosen roots, duplicate roots, byte accounting, repeat/cancel/fresh scans | 18 |
 
-Language coverage includes system-language fallback, singular/plural counts, composed descriptions, filenames that match UI words, paths containing Chinese characters and spaces, retained raw classification identifiers, and English searches against older Chinese-indexed metadata. Language changes update the menu without adding a duplicate memory sample.
+The existing 1.8 regression also gains an explicit changed-source rejection while preserving ordinary retry reclassification. Existing startup mocks now assert complete query/change/recovery sequences instead of only the last command. No original test was removed to obtain a pass.
 
-## Native English walkthrough
+All **800 English catalogue entries** render the reviewed strings; these catalogue cases are separate from the 751 grouped checks. The 26 localization checks remain included in that total.
 
-A dedicated native test host used the production interface and cleanup engine with a generated home directory. No personal files were used. Actual UI actions verified:
+## Native walkthrough and file checks
 
-1. Media and project files start unselected.
-2. Changing to English preserves a manual selection and leaves original Chinese filenames unchanged.
-3. Select All and individual deselection work, including deselecting the project before review.
-4. Review and the second confirmation appear in English; the move button remains disabled until acknowledgment.
-5. One generated video moves to Trash, appears in History and is restored from its batch.
-6. The restored file matches the original bytes; the generated project and all other fixture files remain byte-identical.
-7. English storage search finds older Chinese-indexed application titles. Folder entry and Up return work.
-8. Tools display in English. Relaunch retains the language; System default returns to Chinese on the test Mac.
+The production views and cleanup engine ran inside a dedicated native host with generated files only. Actual UI actions verified:
 
-The first walkthrough exposed Chinese item-count suffixes in composed English labels and a sheet locale mismatch. Both were corrected and checked again. Native UI walkthroughs are separate from the 650 automated checks.
+1. Adding recommendations leaves media and projects unselected.
+2. Manual Select All works; deselecting the project group retains the video choice. Entering a cleanup group and returning preserves that choice.
+3. Switching to English preserves selections. The second-confirmation move button is disabled until acknowledgment.
+4. One generated video actually moves to Trash and is restored by batch, using English UI.
+5. In Chinese UI, removing the installer group on the final review leaves only the generated cache. The cache actually moves to Trash and is restored by batch.
+6. All six original fixture files match their pre-test SHA-256 values, including the unselected project, notes and deselected installer. Both operation-journal entries end in `restored`.
+7. Storage folder entry, Up return and the separate all-locations/current-scope rescan entries are present and operable. Full scope expansion is verified by the 18 actual-index checks above.
+8. The system-language preference is restored. The final production 1.8.3 app is installed at the existing path and launched successfully; its executable matches the packaged binary.
 
-The actual user's cleanup history and operation journal remained byte-identical to their pre-test backups. The test host uses a separate data directory.
+The user’s history stayed byte-identical. The real journal payload stayed unchanged: production startup increased only two SQLite header counters by one. Reversing those two counter values in memory exactly reproduced the pre-test file hash; no original database was rewritten for this comparison. Native fixture operations used a separate data directory.
 
-## Retained crash-recovery coverage
+## Crash and startup coverage
 
-The retained checks include **nine actual SIGKILL windows**: regular cleanup, application-data cleanup and batch restore, each interrupted after intent commit, after moving a file but before result commit, and after per-item result commit. Restart checks verify identity, no duplicate recovery records and no reused deletion confirmation; restoration verifies the original bytes.
+The 126 retained recovery checks include nine newly executed real SIGKILL windows: cleanup, managed application data and restore, each interrupted after intent commit, after filesystem move and after result commit. All generated files were restored byte-identically. These are process-termination tests, not physical power-loss tests.
 
-The prior 1.8.1 native acceptance also terminated two dedicated test processes and restored the generated files after restart. This is documented separately in [the 1.8.1 record](RELEASE_1.8.1_BETA.md). These are process-termination tests, not physical power-loss tests. Journal write failures use fault injection; the user's real disk was not filled.
+A generated real LaunchAgent passed disable and enable checks. Startup error/cancellation/rollback fault cases use command-boundary fixtures; they do not intentionally fail or alter a personal login item. No personal application was asked to quit by the test suite.
 
-## Delivery checks and limits
+## Delivery and limits
 
-- Local device: Apple Silicon / macOS 27.2. Deployment target: macOS 14; this does not establish actual macOS 14 device compatibility.
-- The app retains its bundle identifier and persistent local signing identity, includes both interface catalogues, the MIT license and attribution, and enables Hardened Runtime.
-- Release ZIP contents, signatures and SHA-256 checksums are checked; the curated source excludes personal scan databases, histories and signing secrets.
-- The prior 1.8.1 release remains available.
-- **No Developer ID signature or Apple notarization.** GitHub open-source publication does not require notarization.
-- Still pending: first launch on another Mac with default Gatekeeper, actual macOS 14 hardware, more file systems and physical external-drive unplugging.
+- Apple Silicon / macOS 27.2; deployment target macOS 14. Actual macOS 14 hardware has not been exercised.
+- The installed app retains its bundle identifier and persistent local signing identity, passes strict signature validation and enables Hardened Runtime.
+- English and Simplified Chinese, MIT license and attribution are included. Curated source excludes personal scan databases, histories and signing credentials.
+- App/source ZIP contents and SHA-256 checksums are verified. The 1.8.2 backup, tag and release assets are retained.
+- **No Developer ID signature or Apple notarization.** Another Mac with default Gatekeeper and physical external-drive disconnection remain unverified. The local machine’s pre-existing security assessment setting was not changed. This remains a **Beta / Pre-release**.
 
-The local Mac's security assessment setting was already non-default and was not changed for this work. Local launch therefore does not establish normal Gatekeeper first-launch acceptance. This remains a **Beta / Pre-release**.
-
-Machine-readable record: [validation-1.8.2-beta.json](validation-1.8.2-beta.json).
+Machine-readable record: [validation-1.8.3-beta.json](validation-1.8.3-beta.json).

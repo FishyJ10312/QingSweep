@@ -2,13 +2,13 @@
 
 [English](INSTALL.en.md) · 简体中文
 
-适用于轻扫 **1.8.2 Beta（17）**，Apple Silicon / arm64。
+适用于轻扫 **1.8.3 Beta（17）**，Apple Silicon / arm64。
 
 **当前安装包使用本机自签名，暂未使用 Developer ID 签名，也暂未经过 Apple 公证。** 首次启动可能被 macOS 拦截。本机运行测试已经完成；另一台 Mac 在默认安全设置下的下载与首次启动仍待验证。
 
 ## 1. 下载并放到固定位置
 
-1. 从 [1.8.2 Beta 发布页](https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.2-beta) 下载 `QingSweep-1.8.2-beta-arm64.zip`。
+1. 从 [1.8.3 Beta 发布页](https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.3-beta) 下载 `QingSweep-1.8.3-beta-arm64.zip`。
 2. 解压后，把「轻扫.app」放入个人应用程序文件夹：`~/Applications/轻扫.app`。没有这个文件夹时可自行创建。
 3. 以后从这个位置启动。升级时先退出旧版本，再替换同一位置的应用；保留需要回退的旧版副本。
 
@@ -17,7 +17,7 @@
 可选的完整性核对：将发布页的 `SHA256SUMS.txt` 放在下载文件旁，在该目录执行：
 
 ```sh
-shasum -a 256 QingSweep-1.8.2-beta-arm64.zip
+shasum -a 256 QingSweep-1.8.3-beta-arm64.zip
 ```
 
 将输出与校验文件中的同名条目比较。SHA-256 用于核对下载文件是否一致，不代表软件已经通过 Apple 公证或没有缺陷。

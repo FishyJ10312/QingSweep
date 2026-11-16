@@ -447,25 +447,35 @@ struct Environment17: CleanupApplicationEnvironment {
         "Label": label, "ProgramArguments": ["/usr/bin/true"], "RunAtLoad": false,
       ], format: .xml, options: 0
     ).write(to: agent)
+    let domain = "gui/\(getuid())"
+    let target = domain + "/" + label
+    let overridesEnabled = ToolCommandResult(
+      status: 0, output: "disabled services = {\n\"\(label)\" => enabled\n}\n")
+    let overridesDisabled = ToolCommandResult(
+      status: 0, output: "disabled services = {\n\"\(label)\" => disabled\n}\n")
+    let absentService = ToolCommandResult(
+      status: 113,
+      output: "Bad request.\nCould not find service \"\(label)\" in domain for user gui: \(getuid())\n")
     let mock = Commands17()
-    mock.responses = [ToolCommandResult(status: 0, output: "")]
+    mock.responses = [overridesEnabled, ToolCommandResult(status: 0, output: "opaque service text")]
     let entries = StartupItems.collect(
       home: home, receipts: [], commands: mock, cancellation: ScanCancellation())
     check(
       entries.0.count == 1 && entries.0[0].loaded,
       "startup inventory uses command status rather than parsing launchctl text")
     let entry = entries.0[0]
-    let target = "gui/\(getuid())/" + label
     let disable = Commands17()
     disable.responses = [
-      .init(status: 0, output: ""), .init(status: 0, output: ""), .init(status: 0, output: ""),
+      overridesEnabled, .init(status: 0, output: ""), .init(status: 0, output: ""),
+      .init(status: 0, output: ""), .init(status: 0, output: ""), overridesDisabled, absentService,
     ]
     let receipt = try StartupItems.set(
       entry, enabled: false, home: home, commands: disable, cancellation: ScanCancellation())
     check(
       receipt.disabled
         && disable.calls.map { Array($0.dropFirst()) } == [
-          ["disable", target], ["print", target], ["bootout", target],
+          ["print-disabled", domain], ["print", target], ["disable", target],
+          ["print", target], ["bootout", target], ["print-disabled", domain], ["print", target],
         ], "disable persists and bootout targets only the exact service")
     check(
       !disable.calls.contains { Array($0.dropFirst()) == ["bootout", "gui/\(getuid())"] },
@@ -474,20 +484,26 @@ struct Environment17: CleanupApplicationEnvironment {
       FileStamp.read(agent) == entry.stamp, "startup operations do not rewrite the user's plist")
     let disabled = StartupEntry(
       label: label, url: agent, stamp: entry.stamp, program: entry.program, loaded: false,
-      disabledBySweep: true)
+      disabledBySweep: true, disabled: true)
     let enable = Commands17()
     enable.responses = [
-      .init(status: 0, output: ""), .init(status: 1, output: ""), .init(status: 0, output: ""),
+      overridesDisabled, absentService, .init(status: 0, output: ""), absentService,
+      .init(status: 0, output: ""), overridesEnabled, .init(status: 0, output: ""),
     ]
     _ = try StartupItems.set(
       disabled, enabled: true, home: home, commands: enable, cancellation: ScanCancellation())
     check(
-      enable.calls.last == ["/bin/launchctl", "bootstrap", "gui/\(getuid())", agent.path],
+      enable.calls.map { Array($0.dropFirst()) } == [
+        ["print-disabled", domain], ["print", target], ["enable", target],
+        ["print", target], ["bootstrap", domain, agent.path],
+        ["print-disabled", domain], ["print", target],
+      ],
       "enable bootstraps the validated exact plist")
     let fail = Commands17()
     fail.responses = [
-      .init(status: 0, output: ""), .init(status: 1, output: ""),
-      .init(status: 5, output: "fixture failure"),
+      overridesDisabled, absentService, .init(status: 0, output: ""), absentService,
+      .init(status: 5, output: "fixture failure"), absentService, .init(status: 0, output: ""),
+      overridesDisabled, absentService,
     ]
     check(
       rejects {
@@ -495,7 +511,11 @@ struct Environment17: CleanupApplicationEnvironment {
           disabled, enabled: true, home: home, commands: fail, cancellation: ScanCancellation())
       }, "failed bootstrap reports failure")
     check(
-      fail.calls.last == ["/bin/launchctl", "disable", target],
+      fail.calls.map { Array($0.dropFirst()) } == [
+        ["print-disabled", domain], ["print", target], ["enable", target],
+        ["print", target], ["bootstrap", domain, agent.path], ["print", target],
+        ["disable", target], ["print-disabled", domain], ["print", target],
+      ],
       "failed enable rolls back to the previous disabled state")
     check(
       !StartupItems.safeLabel("com.apple.finder")
@@ -516,7 +536,7 @@ struct Environment17: CleanupApplicationEnvironment {
         "live disposable LaunchAgent is unloaded by its exact identifier")
       let stopped = StartupEntry(
         label: label, url: agent, stamp: entry.stamp, program: entry.program, loaded: false,
-        disabledBySweep: true)
+        disabledBySweep: true, disabled: true)
       _ = try StartupItems.set(stopped, enabled: true, home: home, cancellation: ScanCancellation())
       check(
         try SystemToolCommands().run("/bin/launchctl", ["print", target]).status == 0,

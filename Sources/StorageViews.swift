@@ -19,9 +19,17 @@ struct StorageView: View {
                     if !model.storagePendingRoots.isEmpty && model.storageHasPersonalCoverage {
                         Button(L("重新分析")) { model.runStorageAnalysis() }.buttonStyle(SweepOutlineButton()).disabled(model.busy)
                         Button(L("继续分析")) { model.continueStorageAnalysis() }.buttonStyle(SweepPrimaryButton(color: color)).disabled(model.busy).help(L("继续扫描 \(model.storagePendingRoots.count) 个尚未开始的位置，保留已有结果"))
-                    } else { Button(L(model.storageInfo == nil || !model.storageHasPersonalCoverage ? "分析全部位置" : "更新变化")) { model.runStorageAnalysis() }.buttonStyle(SweepPrimaryButton(color: color)).disabled(model.busy) }
+                    } else { Button(L(model.storageInfo == nil || !model.storageHasPersonalCoverage ? "分析全部位置" : "更新变化")) {
+                        if model.storageInfo == nil || !model.storageHasPersonalCoverage { model.analyzeAllStorageLocations() }
+                        else { model.runStorageAnalysis() }
+                    }.buttonStyle(SweepPrimaryButton(color: color)).disabled(model.busy) }
                 }
-                if model.storageInfo != nil { Menu { Button(L("完整重新分析")) { model.runStorageAnalysis(full: true) } } label: { Image(systemName: "ellipsis") }.disabled(model.busy) }
+                if model.storageInfo != nil {
+                    Menu {
+                        Button(L("分析全部位置")) { model.analyzeAllStorageLocations() }
+                        Button(L("完整重新分析")) { model.runStorageAnalysis(full: true) }
+                    } label: { Image(systemName: "ellipsis") }.disabled(model.busy)
+                }
             }
             HStack(alignment: .top, spacing: 16) {
                 ScrollView { coverage }.frame(width: 200)
@@ -83,7 +91,7 @@ struct StorageView: View {
             Button(L("检查渲染缓存")) { model.inspectCleanupFolder(model.policy.home.appendingPathComponent("Movies/CacheClip")) }.buttonStyle(SweepOutlineButton()).disabled(model.busy)
             if model.storageInfo != nil && !model.storageHasPersonalCoverage {
                 Label(L("当前范围不完整"), systemImage: "info.circle").font(.system(size: 12, weight: .medium)).foregroundStyle(CleanupScope.protected.color)
-                    .help(L("旧版扫描未覆盖文稿、图片和影片等位置；请分析全部位置。"))
+                    .help(L("当前范围未包含文稿、图片或影片等位置；选择“分析全部位置”补齐。"))
             }
             if model.storageCountedBytes > max(0, model.snapshot.diskTotal - model.snapshot.diskFree) {
                 Text(L("文件分配空间与磁盘用量口径不同")).font(.system(size: 12)).foregroundStyle(SweepStyle.secondary)

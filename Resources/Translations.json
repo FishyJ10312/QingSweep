@@ -3146,5 +3146,57 @@
   {
     "source": "系统文件修订记录",
     "english": "System file revisions"
+  },
+  {
+    "source": "来源与保留副本内容不一致，本项未清理",
+    "english": "The source no longer matches the kept copy. This item was skipped."
+  },
+  {
+    "source": "正在补齐扫描范围",
+    "english": "Expanding scan coverage"
+  },
+  {
+    "source": "当前范围未包含文稿、图片或影片等位置；选择“分析全部位置”补齐。",
+    "english": "The current scope is missing locations such as Documents, Pictures or Movies. Choose “Analyze all locations” to include them."
+  },
+  {
+    "source": "启动项的默认停用设置无效",
+    "english": "The login item has an invalid default disabled setting."
+  },
+  {
+    "source": "启动项停用状态未确认，请重新检查",
+    "english": "Could not confirm whether the login item is disabled. Check again."
+  },
+  {
+    "source": "启动项载入状态未确认，请重新检查",
+    "english": "Could not confirm whether the login item is loaded. Check again."
+  },
+  {
+    "source": "启动项恢复原状态失败，请在系统设置中检查：",
+    "english": "Could not restore the login item’s original state. Check System Settings: "
+  },
+  {
+    "source": "启动项更改后的状态未确认",
+    "english": "Could not confirm the login item’s state after the change."
+  },
+  {
+    "source": "状态待确认，请重新检查",
+    "english": "State unconfirmed. Check again."
+  },
+  {
+    "source": "已停用，仍已载入",
+    "english": "Disabled, still loaded"
+  },
+  {
+    "source": "已停用",
+    "english": "Disabled"
+  },
+  {
+    "source": "已启用，未载入",
+    "english": "Enabled, not loaded"
+  },
+  {
+    "source": "轻扫有停用记录",
+    "english": "Previously disabled by QingSweep"
   }
 ]

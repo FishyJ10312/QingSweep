@@ -2,13 +2,13 @@
 
 English · [简体中文](INSTALL.zh-CN.md)
 
-For **QingSweep 1.8.2 Beta, build 17**, on Apple Silicon / arm64.
+For **QingSweep 1.8.3 Beta, build 18**, on Apple Silicon / arm64.
 
 The release uses a local signing certificate. **It has no Developer ID signature and has not been notarized by Apple.** You can download the open-source project from GitHub; macOS may require an explicit first-launch exception. Installation on another Mac with default security settings is still awaiting validation.
 
 ## 1. Download and use one installation location
 
-1. Open the [Beta release](https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.2-beta) and download `QingSweep-1.8.2-beta-arm64.zip`.
+1. Open the [Beta release](https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.3-beta) and download `QingSweep-1.8.3-beta-arm64.zip`.
 2. Extract it and move the app to `~/Applications/轻扫.app`. Create your personal Applications folder if necessary. The app may display as **QingSweep** or **轻扫**, depending on macOS language; its underlying bundle folder is `轻扫.app`.
 3. Launch the same installed copy. When upgrading, quit the old version and replace it at the same path. Keep an older copy elsewhere if you need a rollback.
 
@@ -17,7 +17,7 @@ Avoid alternating between copies in Downloads, extracted folders and backups whe
 Optional integrity check: download `SHA256SUMS.txt` and run this in the download directory:
 
 ```sh
-shasum -a 256 QingSweep-1.8.2-beta-arm64.zip
+shasum -a 256 QingSweep-1.8.3-beta-arm64.zip
 ```
 
 Compare the result with the matching file name in the checksum list. Matching hashes establish download consistency, not notarization or freedom from defects.

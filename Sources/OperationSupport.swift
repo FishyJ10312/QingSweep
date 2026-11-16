@@ -89,8 +89,11 @@ struct CleanupRetryTarget: Codable, Identifiable {
     blockingAppIDs = item.assessment.blockingAppIDs
     requiresClosedApps = item.assessment.needsClosedApps
   }
-  func recheck(policy: SafetyPolicy, classifier: FileClassifier) throws -> ScanItem {
-    try retainedCopy?.validate()
+  func recheck(
+    policy: SafetyPolicy, classifier: FileClassifier,
+    cancellation: ScanCancellation = ScanCancellation()
+  ) throws -> ScanItem {
+    if cancellation.isCancelled { throw ToolFailure.cancelled }
     guard let stamp = FileStamp.read(url) else { throw ToolFailure.unreadable(url.path) }
     let base = classifier.assess(url, stamp: stamp)
     var assessment =
@@ -104,6 +107,18 @@ struct CleanupRetryTarget: Codable, Identifiable {
     assessment.needsClosedApps = assessment.needsClosedApps || requiresClosedApps == true
     let item = ScanItem(url: url, root: root, stamp: stamp, assessment: assessment)
     try policy.validate(item)
+    if let retainedCopy {
+      try retainedCopy.validate()
+      guard stamp.size == retainedCopy.stamp.size,
+        try LocalFiles.digest(url, expected: stamp, cancellation: cancellation)
+          == LocalFiles.digest(
+            retainedCopy.url, expected: retainedCopy.stamp, cancellation: cancellation)
+      else { throw ToolFailure.invalid("来源与保留副本内容不一致，本项未清理") }
+      // Bind the new proof to both identities until cleanup revalidates their stamps.
+      try policy.validate(item)
+      try retainedCopy.validate()
+    }
+    if cancellation.isCancelled { throw ToolFailure.cancelled }
     return item
   }
 }

@@ -452,6 +452,11 @@ enum WorkbenchSection: String, CaseIterable, Identifiable {
     }
   }
   func changeStartup(_ entry: StartupEntry) {
+    guard let disabled = entry.disabled else {
+      startupAction = nil
+      message = "启动项停用状态未确认，请重新检查"
+      return
+    }
     guard let token = begin(ToolTaskPlan(kind: .startupChange, roots: [entry.url])) else { return }
     startupAction = nil
     let home = self.home
@@ -459,7 +464,7 @@ enum WorkbenchSection: String, CaseIterable, Identifiable {
       do {
         let receipt = try await Task.detached(priority: .utility) {
           try StartupItems.set(
-            entry, enabled: entry.disabledBySweep, home: home, cancellation: token)
+            entry, enabled: disabled, home: home, cancellation: token)
         }.value
         startupReceipts.removeAll { $0.label == receipt.label && $0.path == receipt.path }
         startupReceipts.append(receipt)

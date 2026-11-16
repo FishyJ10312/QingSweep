@@ -2,7 +2,7 @@
 
 English · [简体中文](PRIVACY.zh-CN.md)
 
-Applies to QingSweep 1.8.2 Beta distributed by this repository.
+Applies to QingSweep 1.8.3 Beta distributed by this repository.
 
 ## Processing
 

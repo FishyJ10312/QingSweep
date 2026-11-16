@@ -85,8 +85,15 @@ struct Environment18: CleanupApplicationEnvironment {
     check(
       decoded.retainedCopy?.url == retained && decoded.manualRequired,
       "retry metadata preserves explicit retained-copy and manual-consent requirements")
+    let unguardedReference = CleanupRetryTarget(item: item(video))
     try Data(repeating: 5, count: 16384).write(to: video)
-    let current = try decoded.recheck(
+    check(
+      rejects {
+        _ = try decoded.recheck(
+          policy: SafetyPolicy(home: home),
+          classifier: FileClassifier(policy: SafetyPolicy(home: home), context: InspectionContext()))
+      }, "edited source cannot reuse a retained-copy proof for different contents")
+    let current = try unguardedReference.recheck(
       policy: SafetyPolicy(home: home),
       classifier: FileClassifier(policy: SafetyPolicy(home: home), context: InspectionContext()))
     check(

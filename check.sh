@@ -45,6 +45,15 @@ compiler=(xcrun swiftc -swift-version 5 -O -module-cache-path .build/module-cach
 "${compiler[@]}" "${engine[@]}" Tests/Release18Tests.swift -o .build/release18-tests
 .build/release18-tests
 
+"${compiler[@]}" "${common[@]}" Tests/RetainedRetryTests.swift -o .build/retained-retry-tests
+.build/retained-retry-tests
+
+"${compiler[@]}" "${common[@]}" Sources/StartupItems.swift Tests/StartupStateTests.swift -o .build/startup-state-tests
+.build/startup-state-tests
+
+"${compiler[@]}" "${engine[@]}" Tests/StorageScopeTests.swift -o .build/storage-scope-tests
+.build/storage-scope-tests
+
 "${compiler[@]}" "${engine[@]}" Tests/CrashRecoveryTests.swift -o .build/crash-recovery-tests
 .build/crash-recovery-tests
 

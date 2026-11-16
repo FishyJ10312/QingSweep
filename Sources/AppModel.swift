@@ -645,7 +645,7 @@ extension AppModel {
                 var files:[ScanItem]=[],managed:[ManagedItem]=[],guards:[String:RetainedCopy]=[:],errors:[String]=[]
                 for reference in receipt.retryFiles ?? [] {
                     if token.isCancelled{break}
-                    do{guard !preferences.isIgnored(reference.url) else{throw ToolFailure.invalid("已加入忽略列表")};let item=try reference.recheck(policy:policy,classifier:classifier);files.append(item);guards[item.id]=reference.retainedCopy}catch{errors.append(reference.url.lastPathComponent+"："+error.localizedDescription)}
+                    do{guard !preferences.isIgnored(reference.url) else{throw ToolFailure.invalid("已加入忽略列表")};let item=try reference.recheck(policy:policy,classifier:classifier,cancellation:token);files.append(item);guards[item.id]=reference.retainedCopy}catch{errors.append(reference.url.lastPathComponent+"："+error.localizedDescription)}
                 }
                 for reference in receipt.retryManaged ?? [] {
                     if token.isCancelled{break}
