@@ -23,37 +23,28 @@
 
 ## 清理与恢复演示
 
-以下画面录制于 1.8.2，全部使用临时文件。
+### 轻扫 1.8.6 Beta · 简体中文
 
-**简体中文界面**：把旧安装包、可重建缓存与个人文件分开查看。
+![轻扫 1.8.6 中文清理界面，显示旧安装包和可重建缓存](docs/media/v1.8.6/cleanup-zh-CN.png)
 
-![轻扫简体中文清理界面，仅使用临时演示数据](docs/media/cleanup-zh-CN.png)
+**全选推荐项 → 复核 → 移到废纸篓 → 从清理记录批次恢复。** 两个演示文件均已恢复，内容与原文件一致。
 
-<details>
-<summary>English interface / 英文界面</summary>
+![轻扫 1.8.6 中文清理和批次恢复分步演示](docs/media/v1.8.6/cleanup-restore-zh-CN.gif)
 
-![Stowfin English cleanup interface with temporary demo data](docs/media/cleanup-en.png)
+[下载中文 MP4](https://github.com/FishyJ10312/Stowfin/releases/download/v1.8.6-beta/cleanup-restore-zh-CN.mp4) · [English demo](README.md#screenshots-and-cleanup-demo) · [双语截图与演示说明](docs/DEMO.md)
 
-</details>
-
-**选择推荐项 → 复核 → 移到废纸篓 → 按批次恢复。** 演示也会展示：添加推荐项后，素材和项目仍不勾选。
-
-![轻扫中文分步演示：选择两项临时文件、复核、移到废纸篓，再按批次恢复](docs/media/cleanup-restore-zh-CN.gif)
-
-[下载 MP4](https://github.com/FishyJ10312/Stowfin/releases/download/v1.8.2-beta/cleanup-restore-zh-CN.mp4) · [English demo](README.md#screenshots-and-cleanup-demo) · [全部截图、演示说明与内容核验](docs/DEMO.md)
-
-画面来自隔离演示环境中的实际操作，按步骤截图整理，展示时长经过调整。所有文件名都是生成的示例；两项演示文件实际清理并恢复，内容核验一致。不含个人文件名或用户路径。移到废纸篓不等于立即释放空间。
+画面来自应用在临时磁盘上的实际操作，按步骤整理了播放时长。所有文件均为演示生成，画面不含个人文件名和路径。
 
 <details>
-<summary>素材与项目默认选择、批次恢复界面</summary>
+<summary>素材与项目的默认选择、批次恢复和英文界面</summary>
 
-添加推荐项后，素材和项目仍未勾选。它们也支持手动选择，纳入清理时需要二次确认。
+全选推荐项后，演示视频与项目仍未勾选。
 
-![需自行确认页面：视频与项目均未勾选，仅使用演示数据](docs/media/manual-review-zh-CN.png)
+![中文需自行确认页面，演示视频与项目均未勾选](docs/media/v1.8.6/manual-review-zh-CN.png)
 
-清理记录按批次汇总，可一起恢复仍在废纸篓且通过核验的文件，不覆盖原位置已有内容。
+![中文清理记录，两个演示文件可按批次恢复](docs/media/v1.8.6/history-zh-CN.png)
 
-![清理记录页面：两项临时演示文件可按批次恢复](docs/media/history-zh-CN.png)
+![Stowfin 1.8.6 English cleanup interface](docs/media/v1.8.6/cleanup-en.png)
 
 </details>
 

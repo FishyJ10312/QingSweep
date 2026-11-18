@@ -23,37 +23,28 @@ Stowfin is a local macOS storage browser and manual cleanup tool, licensed under
 
 ## Screenshots and cleanup demo
 
-The gallery and demo show 1.8.2 using generated files.
+### Stowfin 1.8.6 Beta · English
 
-**English interface** — review older installers and rebuildable cache in a separate list.
+![Stowfin 1.8.6 English cleanup screen showing an older installer and rebuildable cache](docs/media/v1.8.6/cleanup-en.png)
 
-![Stowfin English cleanup interface with temporary demo data](docs/media/cleanup-en.png)
+**Select → review → move to Trash → restore in History.** Both generated files were restored and verified against their original contents.
 
-<details>
-<summary>简体中文界面 / Chinese interface</summary>
+![Stowfin 1.8.6 English cleanup and batch restore walkthrough](docs/media/v1.8.6/cleanup-restore-en.gif)
 
-![轻扫简体中文清理界面，仅使用临时演示数据](docs/media/cleanup-zh-CN.png)
+[Download English MP4](https://github.com/FishyJ10312/Stowfin/releases/download/v1.8.6-beta/cleanup-restore-en.mp4) · [中文演示](README.zh-CN.md#清理与恢复演示) · [Both galleries and demo notes](docs/DEMO.md)
 
-</details>
-
-**Select → review → move to Trash → restore a batch.** The demo also shows that adding recommendations leaves media and projects unselected.
-
-![English step-by-step demonstration of selecting two demo files, reviewing cleanup, moving to Trash and restoring the batch](docs/media/cleanup-restore-en.gif)
-
-[Download MP4](https://github.com/FishyJ10312/Stowfin/releases/download/v1.8.2-beta/cleanup-restore-en.mp4) · [中文演示](README.zh-CN.md#清理与恢复演示) · [Screenshots, demo notes and file checks](docs/DEMO.md)
-
-These are step-by-step captures of actual operations in an isolated demo environment, with edited display timing. All filenames are generated examples. Two demo files were moved and restored, and their contents verified. No personal files or user paths appear. Moving to Trash does not immediately free disk space.
+Each step comes from the actual app running with generated files on a temporary volume. The walkthrough uses edited step timing. No personal names or paths appear.
 
 <details>
-<summary>Media/project defaults and batch restore</summary>
+<summary>Media and project selection, batch restore, and the Chinese interface</summary>
 
-Media and projects stay unselected after adding recommendations. They remain manually selectable and require a second confirmation if included.
+Adding recommendations leaves the demo video and project unselected.
 
-![English manual-review groups with video and project checkboxes unselected](docs/media/manual-review-en.png)
+![English Manual review with an unchecked demo video and project](docs/media/v1.8.6/manual-review-en.png)
 
-History groups the completed cleanup so eligible files can be restored together without overwriting existing destinations.
+![English History showing two generated files ready to restore](docs/media/v1.8.6/history-en.png)
 
-![English history showing a temporary cleanup batch with two restorable files](docs/media/history-en.png)
+![轻扫 1.8.6 简体中文清理界面](docs/media/v1.8.6/cleanup-zh-CN.png)
 
 </details>
 
