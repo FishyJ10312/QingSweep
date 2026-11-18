@@ -2,14 +2,14 @@
 
 English · [简体中文](INSTALL.zh-CN.md)
 
-For **QingSweep 1.8.5 Beta, build 20**, on Apple Silicon / arm64.
+For **Stowfin 1.8.5 Beta, build 20**, on Apple Silicon / arm64.
 
 The release uses a local signing certificate. **It has no Developer ID signature and has not been notarized by Apple.** You can download the open-source project from GitHub; macOS may require an explicit first-launch exception. Installation on another Mac with default security settings is still awaiting validation.
 
 ## 1. Download and use one installation location
 
-1. Open the [Beta release](https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.5-beta) and download `QingSweep-1.8.5-beta-arm64.zip`.
-2. Extract it and move the app to `~/Applications/轻扫.app`. Create your personal Applications folder if necessary. The app may display as **QingSweep** or **轻扫**, depending on macOS language; its underlying bundle folder is `轻扫.app`.
+1. Open the [Beta release](https://github.com/FishyJ10312/Stowfin/releases/tag/v1.8.5-beta) and download `QingSweep-1.8.5-beta-arm64.zip`.
+2. Extract it and move the app to `~/Applications/轻扫.app`. Create your personal Applications folder if necessary. The published 1.8.5 build appears as **QingSweep** in English and **轻扫** in Simplified Chinese.
 3. Launch the same installed copy. When upgrading, quit the old version and replace it at the same path. Keep an older copy elsewhere if you need a rollback.
 
 Avoid alternating between copies in Downloads, extracted folders and backups when granting permissions.
@@ -27,7 +27,7 @@ Compare the result with the matching file name in the checksum list. Matching ha
 Try opening the installed app. If macOS cannot verify the developer, and you trust the download and have checked its integrity, follow Apple's single-app process:
 
 1. Open **System Settings → Privacy & Security**.
-2. Find the block message specifically for QingSweep and choose **Open Anyway**.
+2. Find the block message for the installed app and choose **Open Anyway**.
 3. Check the application name and complete macOS's confirmation.
 
 [Apple: Safely open apps on your Mac](https://support.apple.com/en-us/102445). Availability depends on macOS and device-management policy. If macOS reports damage, tampering or detected malware, stop using that file, recheck the download and report the exact message.
@@ -40,15 +40,15 @@ The installation does not require globally disabling Gatekeeper, SIP or system s
 
 macOS may request access to Downloads, Desktop, Documents or a selected external folder. Authorize the locations you intend to inspect. A denied cleanup scan opens the access assistant with **Choose folder**, **Open System Settings** and **Recheck**. Unread locations are excluded from reported totals and remain marked **Not read yet**. Recheck scans the saved scope again; it does not silently expand the scope.
 
-After a permission change that requires relaunch, QingSweep tests previously denied locations and rescans the saved scope if access has actually recovered. If access is still denied, the issue remains available to resolve. No file is selected or deleted automatically.
+After a permission change that requires relaunch, Stowfin tests previously denied locations and rescans the saved scope if access has actually recovered. If access is still denied, the issue remains available to resolve. No file is selected or deleted automatically.
 
-Before cleanup, QingSweep checks whether Trash can be read so an interrupted operation can be reconciled. If the app reports that Trash or another required location is unreadable:
+Before cleanup, Stowfin checks whether Trash can be read so an interrupted operation can be reconciled. If the app reports that Trash or another required location is unreadable:
 
-1. Choose **Open System Settings** in QingSweep.
-2. Open **Privacy & Security → Full Disk Access** and enable QingSweep / 轻扫.
+1. Choose **Open System Settings** in Stowfin.
+2. Open **Privacy & Security → Full Disk Access** and enable the installed app.
 3. If absent, use `+` to add the installed app at `~/Applications/轻扫.app`, then enable it.
 4. Complete the password or Touch ID step yourself. Quit and reopen the app if macOS requests it.
-5. Return to **File access assistant → Recheck**, or **History → Reconcile again** for an interrupted cleanup. QingSweep performs an actual read before updating the result.
+5. Return to **File access assistant → Recheck**, or **History → Reconcile again** for an interrupted cleanup. Stowfin performs an actual read before updating the result.
 
 [Apple: Change Privacy & Security settings](https://support.apple.com/en-my/guide/mac-help/mchl211c911f/mac). Full Disk Access is broad and controlled by macOS; you can revoke it in the same settings. The app cannot enable it itself and never needs you to send your password to the developer.
 
@@ -79,12 +79,12 @@ The operation journal records per-file intent and outcome. After an interruption
 - Restore never overwrites existing destination files. Resolve a conflict yourself, then recheck and retry.
 - If trash access is unavailable or a disk is disconnected, restore access or reconnect the disk, then choose **Recheck** in History.
 - Restore requires the corresponding Trash item to remain available and pass checks. Emptying Trash or changing/moving a file can make recovery unavailable.
-- Moving files to Trash does not immediately reclaim their displayed size. QingSweep does not empty Trash for you.
+- Moving files to Trash does not immediately reclaim their displayed size. Stowfin does not empty Trash for you.
 
 ## If something does not work
 
 If **Open Anyway** is missing, first try launching the app and consult Apple's documentation. Managed Macs may prohibit exceptions. Do not repeatedly add different app copies to solve an access problem.
 
-If permission remains denied, verify the installed copy, relaunch if requested and recheck. Report the macOS version, chip, app version and exact message in an [issue](https://github.com/FishyJ10312/QingSweep/issues/new?template=bug_report_en.md).
+If permission remains denied, verify the installed copy, relaunch if requested and recheck. Report the macOS version, chip, app version and exact message in an [issue](https://github.com/FishyJ10312/Stowfin/issues/new?template=bug_report_en.md).
 
-DaVinci proxies and cache can be reviewed and selected manually. Confirm that original media is available and the project no longer needs the selected files; QingSweep does not read every reference in DaVinci's private project database.
+DaVinci proxies and cache can be reviewed and selected manually. Confirm that original media is available and the project no longer needs the selected files; Stowfin does not read every reference in DaVinci's private project database.

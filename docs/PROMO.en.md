@@ -1,6 +1,6 @@
 # QingSweep 1.8.4 Beta launch copy
 
-[简体中文](PROMO.zh-CN.md) · [Release / 发布页](https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.4-beta) · [Media kit / 宣传素材包](https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.2-beta/QingSweep-1.8.2-beta-media-kit.zip)
+[简体中文](PROMO.zh-CN.md) · [Release / 发布页](https://github.com/FishyJ10312/Stowfin/releases/tag/v1.8.4-beta) · [Media kit / 宣传素材包](https://github.com/FishyJ10312/Stowfin/releases/download/v1.8.2-beta/QingSweep-1.8.2-beta-media-kit.zip)
 
 This patch improves first-use access guidance, resuming scans after permission recovery, and media classification. Unread and system-restricted locations are described separately. Media and projects start unselected; the final review and second confirmation remain required. The existing gallery was recorded with 1.8.2 using generated files.
 
@@ -12,7 +12,7 @@ English / 简体中文 · MIT · Local processing. Media and projects start unse
 
 The release includes bilingual screenshots and a 26-second cleanup-and-restore demo in each language. Apple Silicon Beta, not Apple-notarized. Try a disposable folder first.
 
-Download and demos: https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.4-beta
+Download and demos: https://github.com/FishyJ10312/Stowfin/releases/tag/v1.8.4-beta
 
 ## Longer introduction
 
@@ -31,9 +31,9 @@ This is an Apple Silicon Beta, without Developer ID signing or Apple notarizatio
 
 Moving files to Trash does not immediately free disk space. Restore requires the corresponding files to remain in Trash and pass verification; it is not a backup.
 
-Download, installation and demos: https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.4-beta
-Source: https://github.com/FishyJ10312/QingSweep
-Media kit: https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.2-beta/QingSweep-1.8.2-beta-media-kit.zip
+Download, installation and demos: https://github.com/FishyJ10312/Stowfin/releases/tag/v1.8.4-beta
+Source: https://github.com/FishyJ10312/Stowfin
+Media kit: https://github.com/FishyJ10312/Stowfin/releases/download/v1.8.2-beta/QingSweep-1.8.2-beta-media-kit.zip
 
 ## Repository description / 仓库简介
 

@@ -23,6 +23,9 @@ import Foundation
         check(catalog.error("清理：文件在扫描后发生变化，请重新扫描。",language:.english)=="清理: The file changed after scanning. Scan again.","an error prefix that equals an interface label remains a filename")
         check(catalog.text("推荐清理",language:.chinese)=="推荐清理","Chinese text is returned without modification")
         check(catalog.text("常用位置 · 扫描完成",language:.english)=="Common locations · Scan complete","completed first-use scan status uses a readable English sentence")
+        check(catalog.text("轻扫",language:.english)=="Stowfin","English interface shows the Stowfin name")
+        check(catalog.text("轻扫 · 磁盘与内存",language:.english)=="Stowfin · Storage and Memory","English window title uses the Stowfin name")
+        check(catalog.text("轻扫",language:.chinese)=="轻扫","Chinese interface keeps its localized name")
         let marker=try NSRegularExpression(pattern:#"\{([0-9]+)\}"#)
         var covered=0
         for entry in catalog.entries {

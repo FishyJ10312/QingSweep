@@ -1,6 +1,6 @@
 # 轻扫 QingSweep 1.8.4 Beta 宣传文案
 
-[English](PROMO.en.md) · [Release / 发布页](https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.4-beta) · [Media kit / 宣传素材包](https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.2-beta/QingSweep-1.8.2-beta-media-kit.zip)
+[English](PROMO.en.md) · [Release / 发布页](https://github.com/FishyJ10312/Stowfin/releases/tag/v1.8.4-beta) · [Media kit / 宣传素材包](https://github.com/FishyJ10312/Stowfin/releases/download/v1.8.2-beta/QingSweep-1.8.2-beta-media-kit.zip)
 
 本版完善首次使用的授权引导、授权恢复后的补扫与素材分类；未读取、系统限制分别说明。素材和项目继续默认不勾选，手动纳入后仍需复核与二次确认。现有截图和素材包录制于 1.8.2，全部使用临时文件。
 
@@ -12,7 +12,7 @@ English / 简体中文，MIT 开源，本地运行。素材和项目默认不勾
 
 发布页附中英文截图和 26 秒清理、恢复演示。Apple Silicon 测试版，暂未 Apple 公证，建议先用临时文件夹试用。
 
-下载与演示：https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.4-beta
+下载与演示：https://github.com/FishyJ10312/Stowfin/releases/tag/v1.8.4-beta
 
 ## 详细介绍
 
@@ -31,9 +31,9 @@ Mac 空间越来越满，先看清是哪些应用和文件夹在占用，再决�
 
 移到废纸篓不等于立即释放空间；恢复依赖文件仍在废纸篓且通过核验，不能替代备份。
 
-下载、安装说明与演示：https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.4-beta
-源码：https://github.com/FishyJ10312/QingSweep
-宣传素材包：https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.2-beta/QingSweep-1.8.2-beta-media-kit.zip
+下载、安装说明与演示：https://github.com/FishyJ10312/Stowfin/releases/tag/v1.8.4-beta
+源码：https://github.com/FishyJ10312/Stowfin
+宣传素材包：https://github.com/FishyJ10312/Stowfin/releases/download/v1.8.2-beta/QingSweep-1.8.2-beta-media-kit.zip
 
 ## Repository description / 仓库简介
 

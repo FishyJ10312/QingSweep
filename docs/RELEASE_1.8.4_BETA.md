@@ -5,7 +5,7 @@
 
 English / 简体中文 · MIT · Apple Silicon · **Beta，暂未 Developer ID 签名或 Apple 公证 / Not Developer ID signed or notarized.**
 
-[下载安装包 / Download](https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.4-beta/QingSweep-1.8.4-beta-arm64.zip) · [中文安装授权](https://github.com/FishyJ10312/QingSweep/blob/main/docs/INSTALL.zh-CN.md) · [English installation](https://github.com/FishyJ10312/QingSweep/blob/main/docs/INSTALL.en.md)
+[下载安装包 / Download](https://github.com/FishyJ10312/Stowfin/releases/download/v1.8.4-beta/QingSweep-1.8.4-beta-arm64.zip) · [中文安装授权](https://github.com/FishyJ10312/Stowfin/blob/main/docs/INSTALL.zh-CN.md) · [English installation](https://github.com/FishyJ10312/Stowfin/blob/main/docs/INSTALL.en.md)
 
 ## 首次使用修复 / First-use fixes
 
@@ -26,7 +26,7 @@ English / 简体中文 · MIT · Apple Silicon · **Beta，暂未 Developer ID �
 
 Build **1.8.4 (19)**: 806 grouped checks, a separate 30,017-file list and nine real SIGKILL recovery windows. The final language check covers 809 entries. Native fixture walkthroughs verify access recovery, scope, deselection, confirmation and non-overwriting restore. Two files were actually moved/restored, and all seven original fixture hashes matched. The 1.8.3 tag and assets are retained.
 
-[中文完整验证及限制](https://github.com/FishyJ10312/QingSweep/blob/main/docs/VALIDATION.zh-CN.md) · [Full English validation and limits](https://github.com/FishyJ10312/QingSweep/blob/main/docs/VALIDATION.en.md)
+[中文完整验证及限制](https://github.com/FishyJ10312/Stowfin/blob/main/docs/VALIDATION.zh-CN.md) · [Full English validation and limits](https://github.com/FishyJ10312/Stowfin/blob/main/docs/VALIDATION.en.md)
 
 这仍是本机隔离资料验收，**另一台 Mac 默认安全设置首次启动、全新系统账号首次授权、macOS 14 实机及真实外置盘拔插仍待验证**。授权由用户本人完成，不需要关闭整个系统安全检查。
 
@@ -38,11 +38,11 @@ This is same-Mac isolated-data acceptance. **Another Mac under default Gatekeepe
 
 The existing bilingual gallery was recorded with 1.8.2 using generated files. The selection, review, Trash and batch-restore workflow is retained; this patch has separate native acceptance evidence.
 
-![English cleanup with generated files](https://raw.githubusercontent.com/FishyJ10312/QingSweep/a9bab60db54b33f8391dccbacb6a282b4788acae/docs/media/cleanup-en.png)
+![English cleanup with generated files](https://raw.githubusercontent.com/FishyJ10312/Stowfin/a9bab60db54b33f8391dccbacb6a282b4788acae/docs/media/cleanup-en.png)
 
-![简体中文清理，仅使用临时文件](https://raw.githubusercontent.com/FishyJ10312/QingSweep/a9bab60db54b33f8391dccbacb6a282b4788acae/docs/media/cleanup-zh-CN.png)
+![简体中文清理，仅使用临时文件](https://raw.githubusercontent.com/FishyJ10312/Stowfin/a9bab60db54b33f8391dccbacb6a282b4788acae/docs/media/cleanup-zh-CN.png)
 
-[清理与恢复演示 / Cleanup and restore demo](https://github.com/FishyJ10312/QingSweep/blob/main/docs/DEMO.md)
+[清理与恢复演示 / Cleanup and restore demo](https://github.com/FishyJ10312/Stowfin/blob/main/docs/DEMO.md)
 
 移到废纸篓不会立即释放对应空间。恢复依赖文件仍在废纸篓且通过核验，不能替代备份。  
 Moving to Trash does not immediately free that space. Restore requires the file to remain available and pass checks; it is not a backup.
@@ -53,4 +53,4 @@ Moving to Trash does not immediately free that space. Restore requires the file 
 
 QingSweep 1.8.4 Beta: local Mac storage analysis, review-first cleanup and batch restore. English / 简体中文, MIT. Improved first-use access and media classification; media and projects start unselected. Apple Silicon Beta, not Apple-notarized.
 
-[下载与演示 / Download and demos](https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.4-beta)
+[下载与演示 / Download and demos](https://github.com/FishyJ10312/Stowfin/releases/tag/v1.8.4-beta)

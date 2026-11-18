@@ -2,11 +2,11 @@
 
 English · [简体中文](PRIVACY.zh-CN.md)
 
-Applies to QingSweep 1.8.5 Beta distributed by this repository.
+Applies to Stowfin 1.8.5 Beta distributed by this repository.
 
 ## Processing
 
-QingSweep reads your selected folders and authorized locations locally for storage totals, classification, search, duplicate checks, archiving and cleanup. The app does not upload file contents, paths, scan indexes or cleanup history. It has no application-sent telemetry, advertising or account login.
+Stowfin reads your selected folders and authorized locations locally for storage totals, classification, search, duplicate checks, archiving and cleanup. The app does not upload file contents, paths, scan indexes or cleanup history. It has no application-sent telemetry, advertising or account login.
 
 File operations and verification read actual files. Duplicate checks, archive verification and recovery may calculate SHA-256 content hashes. Media information is inspected locally. Scan contents are not sent to a cloud model.
 
@@ -28,7 +28,7 @@ Storage indexes can be rebuilt. Recovery logs and history are not ordinary scan 
 
 macOS manages folder permissions and Full Disk Access. You grant and revoke them in System Settings. Permission and cleanup eligibility are separate checks; granting access never automatically selects media or projects.
 
-Documentation and rule-source links may open in your browser. GitHub, Apple and other destination sites handle those browser requests. macOS's own diagnostics and privacy mechanisms are outside QingSweep's control.
+Documentation and rule-source links may open in your browser. GitHub, Apple and other destination sites handle those browser requests. macOS's own diagnostics and privacy mechanisms are outside Stowfin's control.
 
 ## Public feedback
 

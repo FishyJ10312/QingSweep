@@ -125,7 +125,7 @@
   },
   {
     "source": "轻扫扫描结果.json",
-    "english": "QingSweep scan results.json"
+    "english": "Stowfin scan results.json"
   },
   {
     "source": "清理清单需要重新扫描；清理记录与忽略列表已保留",
@@ -293,7 +293,7 @@
   },
   {
     "source": "轻扫归档-",
-    "english": "QingSweep archive-"
+    "english": "Stowfin archive-"
   },
   {
     "source": "-未完成",
@@ -333,7 +333,7 @@
   },
   {
     "source": "轻扫校验记录.json",
-    "english": "QingSweep verification.json"
+    "english": "Stowfin verification.json"
   },
   {
     "source": "已有校验副本；是否删除来源由你确认。",
@@ -877,7 +877,7 @@
   },
   {
     "source": "操作日志无法保存，已停止后续文件操作。请检查可用空间和访问权限后重开轻扫。",
-    "english": "The operation log could not be saved. Further file operations stopped. Check free space and access permissions, then reopen QingSweep."
+    "english": "The operation log could not be saved. Further file operations stopped. Check free space and access permissions, then reopen Stowfin."
   },
   {
     "source": "操作日志无法完整读取，已保留原文件并暂停清理。请勿删除日志文件。",
@@ -889,7 +889,7 @@
   },
   {
     "source": "无法读取废纸篓。请在系统设置的「完全磁盘访问」中允许轻扫，重开后重新核对。",
-    "english": "Trash cannot be read. Allow QingSweep in System Settings under Full Disk Access, reopen it, then reconcile again."
+    "english": "Trash cannot be read. Allow Stowfin in System Settings under Full Disk Access, reopen it, then reconcile again."
   },
   {
     "source": "上次操作意外中断；已核对的文件可在此恢复，未处理项需重新确认。",
@@ -1465,7 +1465,7 @@
   },
   {
     "source": "轻扫 · 磁盘与内存",
-    "english": "QingSweep · Storage and Memory"
+    "english": "Stowfin · Storage and Memory"
   },
   {
     "source": "扫描个人大文件",
@@ -1977,7 +1977,7 @@
   },
   {
     "source": "当前版本尚未通过完全磁盘访问试读；请开启轻扫后重新检查。",
-    "english": "A Full Disk Access read has not succeeded for this version. Enable QingSweep and check again."
+    "english": "A Full Disk Access read has not succeeded for this version. Enable Stowfin and check again."
   },
   {
     "source": "本轮尚未扫描此位置",
@@ -2041,11 +2041,11 @@
   },
   {
     "source": "完全磁盘访问试读仍被拒绝，请开启当前版本的轻扫后重新检查。",
-    "english": "The Full Disk Access read is still denied. Enable the current QingSweep version and check again."
+    "english": "The Full Disk Access read is still denied. Enable the current Stowfin version and check again."
   },
   {
     "source": "仍有位置需要授权，请检查轻扫的完全磁盘访问开关",
-    "english": "Some locations still need permission. Check QingSweep's Full Disk Access setting."
+    "english": "Some locations still need permission. Check Stowfin's Full Disk Access setting."
   },
   {
     "source": "访问检查完成",
@@ -2309,7 +2309,7 @@
   },
   {
     "source": "开启轻扫后点重新检查；系统要求重开时，重开后会自动补扫。",
-    "english": "Enable QingSweep, then recheck. If macOS requires a relaunch, reopen the app to continue the scan."
+    "english": "Enable Stowfin, then recheck. If macOS requires a relaunch, reopen the app to continue the scan."
   },
   {
     "source": "完全磁盘访问已通过试读",
@@ -2397,7 +2397,7 @@
   },
   {
     "source": "轻扫",
-    "english": "QingSweep"
+    "english": "Stowfin"
   },
   {
     "source": "停止清理",
@@ -2753,7 +2753,7 @@
   },
   {
     "source": "轻扫 · ",
-    "english": "QingSweep · "
+    "english": "Stowfin · "
   },
   {
     "source": "内存压力：",
@@ -2777,7 +2777,7 @@
   },
   {
     "source": "打开轻扫",
-    "english": "Open QingSweep"
+    "english": "Open Stowfin"
   },
   {
     "source": "关闭菜单栏监控",
@@ -3081,7 +3081,7 @@
   },
   {
     "source": "由轻扫停用",
-    "english": "Disabled by QingSweep"
+    "english": "Disabled by Stowfin"
   },
   {
     "source": "已载入",
@@ -3197,7 +3197,7 @@
   },
   {
     "source": "轻扫有停用记录",
-    "english": "Previously disabled by QingSweep"
+    "english": "Previously disabled by Stowfin"
   },
   {
     "source": "尚未读取的位置未计入结果。允许访问后重新检查，会重新扫描当前范围。",

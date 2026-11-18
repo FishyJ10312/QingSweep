@@ -8,7 +8,7 @@ assignees: ""
 
 ### Environment
 
-- QingSweep version: 1.8.5 Beta / other
+- Stowfin version: 1.8.5 Beta / other
 - macOS version:
 - Chip:
 - Installation: GitHub Release / built from source

@@ -1,6 +1,6 @@
-"CFBundleDisplayName" = "QingSweep";
-"CFBundleName" = "QingSweep";
-"NSHumanReadableCopyright" = "QingSweep · MIT License";
+"CFBundleDisplayName" = "Stowfin";
+"CFBundleName" = "Stowfin";
+"NSHumanReadableCopyright" = "Stowfin · MIT License";
 "NSDownloadsFolderUsageDescription" = "Read download names, sizes and dates so you can choose files to move to Trash.";
 "NSDocumentsFolderUsageDescription" = "Inspect large documents so you can decide what to clean up.";
 "NSDesktopFolderUsageDescription" = "Inspect large desktop files so you can decide what to clean up.";

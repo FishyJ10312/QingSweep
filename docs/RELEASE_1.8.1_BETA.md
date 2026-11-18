@@ -11,7 +11,7 @@
 - `SHA256SUMS.txt`：附件完整性校验值。
 - `INSTALL.zh-CN.md`：首次启动、授权和恢复说明。
 
-[先看安装授权说明](https://github.com/FishyJ10312/QingSweep/blob/main/docs/INSTALL.zh-CN.md) · [验证范围](https://github.com/FishyJ10312/QingSweep/blob/main/docs/VALIDATION.zh-CN.md) · [反馈问题](https://github.com/FishyJ10312/QingSweep/issues/new?template=bug_report.md)
+[先看安装授权说明](https://github.com/FishyJ10312/Stowfin/blob/main/docs/INSTALL.zh-CN.md) · [验证范围](https://github.com/FishyJ10312/Stowfin/blob/main/docs/VALIDATION.zh-CN.md) · [反馈问题](https://github.com/FishyJ10312/Stowfin/issues/new?template=bug_report.md)
 
 ## 使用时的选择规则
 

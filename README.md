@@ -1,16 +1,18 @@
 English · [简体中文](README.zh-CN.md)
 
-<img src="Resources/AppIcon.png" width="88" alt="QingSweep icon">
+<img src="Resources/AppIcon.png" width="88" alt="Stowfin icon">
 
-# QingSweep 轻扫
+# Stowfin 轻扫
 
 **See what uses your Mac's storage. Review before you clean.**
 
-QingSweep is a local macOS storage browser and manual cleanup tool, licensed under MIT. Explore usage by application or folder, review installers, cache and personal files separately, then choose what to move to Trash.
+Stowfin is a local macOS storage browser and manual cleanup tool, licensed under MIT. Explore usage by application or folder, review installers, cache and personal files separately, then choose what to move to Trash.
 
 **1.8.5 Beta · build 20 · English and 简体中文 in one app.** This Beta uses a local signing certificate and ships **without Apple notarization or a Developer ID signature**. macOS may ask you to verify the app on first launch. Follow the [installation guide](docs/INSTALL.en.md).
 
-[Download for Apple Silicon](https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.5-beta/QingSweep-1.8.5-beta-arm64.zip) · [Beta release](https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.5-beta) · [Report an issue](https://github.com/FishyJ10312/QingSweep/issues/new?template=bug_report_en.md)
+[Download for Apple Silicon](https://github.com/FishyJ10312/Stowfin/releases/download/v1.8.5-beta/QingSweep-1.8.5-beta-arm64.zip) · [Beta release](https://github.com/FishyJ10312/Stowfin/releases/tag/v1.8.5-beta) · [Report an issue](https://github.com/FishyJ10312/Stowfin/issues/new?template=bug_report_en.md)
+
+The published 1.8.5 installer predates the rename and displays **QingSweep** in English.
 
 **Media and projects are unselected by default.** You can add them manually, including from file details in Storage. Moving them to Trash requires a second confirmation.
 
@@ -27,7 +29,7 @@ The gallery and demo show 1.8.2 using generated files.
 
 **English interface** — review older installers and rebuildable cache in a separate list.
 
-![QingSweep English cleanup interface with temporary demo data](docs/media/cleanup-en.png)
+![Stowfin English cleanup interface with temporary demo data](docs/media/cleanup-en.png)
 
 <details>
 <summary>简体中文界面 / Chinese interface</summary>
@@ -40,7 +42,7 @@ The gallery and demo show 1.8.2 using generated files.
 
 ![English step-by-step demonstration of selecting two demo files, reviewing cleanup, moving to Trash and restoring the batch](docs/media/cleanup-restore-en.gif)
 
-[Download MP4](https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.2-beta/cleanup-restore-en.mp4) · [中文演示](README.zh-CN.md#清理与恢复演示) · [Screenshots, demo notes and file checks](docs/DEMO.md)
+[Download MP4](https://github.com/FishyJ10312/Stowfin/releases/download/v1.8.2-beta/cleanup-restore-en.mp4) · [中文演示](README.zh-CN.md#清理与恢复演示) · [Screenshots, demo notes and file checks](docs/DEMO.md)
 
 These are step-by-step captures of actual operations in an isolated demo environment, with edited display timing. All filenames are generated examples. Two demo files were moved and restored, and their contents verified. No personal files or user paths appear. Moving to Trash does not immediately free disk space.
 
@@ -60,7 +62,7 @@ History groups the completed cleanup so eligible files can be restored together 
 ## Review-first cleanup
 
 1. Install at a fixed location following the [installation guide](docs/INSTALL.en.md). **Scan common locations** checks Downloads, caches and logs. The file threshold starts at 1 MB, with known smaller caches included in groups.
-2. If a location is unread, choose a folder, open System Settings or recheck in the access assistant. Grant system permissions yourself; QingSweep verifies actual reads.
+2. If a location is unread, choose a folder, open System Settings or recheck in the access assistant. Grant system permissions yourself; Stowfin verifies actual reads.
 3. Read the classification and cleanup impact, then make your selection. To add a single file from Storage, open its details and choose **Add to review**.
 4. Choose **Review all** or review the current scope. Remove individual items or groups as needed. Manual-review content requires a second confirmation.
 5. Files move to Trash. Restore eligible items to their original locations from History.
@@ -73,7 +75,7 @@ History groups the completed cleanup so eligible files can be restored together 
 
 Classification is a review aid. It does not establish that a file is no longer needed. You decide whether a project, proxy or creative asset is still in use.
 
-Cleanup moves files to Trash; QingSweep never empties Trash. **Moved bytes are not the same as immediately freed disk space.** Restore requires the corresponding files to remain in Trash and pass verification. It is not a backup.
+Cleanup moves files to Trash; Stowfin never empties Trash. **Moved bytes are not the same as immediately freed disk space.** Restore requires the corresponding files to remain in Trash and pass verification. It is not a backup.
 
 Related applications may be asked to quit normally. Save your work when prompted; items still in use, changed or unreadable are skipped.
 
@@ -132,8 +134,8 @@ Tests generate disposable files. Some really move them to Trash, restore them an
 
 ## Feedback and license
 
-Please include your app version, macOS version, chip and reproduction steps in an [issue](https://github.com/FishyJ10312/QingSweep/issues/new?template=bug_report_en.md). Redact personal names and paths in screenshots. Do not attach complete scan databases, cleanup history, media or projects.
+Please include your app version, macOS version, chip and reproduction steps in an [issue](https://github.com/FishyJ10312/Stowfin/issues/new?template=bug_report_en.md). Redact personal names and paths in screenshots. Do not attach complete scan databases, cleanup history, media or projects.
 
 [MIT License](LICENSE) · [Third-party attribution](NOTICE.md) · [1.8.5 release notes](docs/RELEASE_1.8.5_BETA.md) · [1.8.4 launch copy](docs/PROMO.en.md)
 
-QingSweep is an independent project and is not affiliated with Apple or MacPaw.
+Stowfin is an independent project and is not affiliated with Apple or MacPaw.

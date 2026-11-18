@@ -1,11 +1,14 @@
-# 轻扫 QingSweep 1.8.5 Beta
+# 轻扫 Stowfin 1.8.5 Beta
 
 **Apple Silicon · 构建 20 / build 20 · English / 简体中文 · MIT**
+
+项目英文名现为 **Stowfin**。1.8.5 安装包制作于改名前，安装后英文界面显示为 **QingSweep**。  
+The project is now **Stowfin**. The 1.8.5 installer predates the rename and displays **QingSweep** in English.
 
 **暂未经过 Apple 公证。** 安装包使用本机签名证书，未使用 Apple Developer ID 签名。macOS 首次启动时可能显示验证提示。  
 **This Beta ships without Apple notarization.** It uses a local signing certificate without an Apple Developer ID signature. macOS may show a verification prompt on first launch.
 
-[下载安装包 / Download for Apple Silicon](https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.5-beta/QingSweep-1.8.5-beta-arm64.zip) · [中文安装与授权](https://github.com/FishyJ10312/QingSweep/blob/v1.8.5-beta/docs/INSTALL.zh-CN.md) · [English installation and permissions](https://github.com/FishyJ10312/QingSweep/blob/v1.8.5-beta/docs/INSTALL.en.md)
+[下载安装包 / Download for Apple Silicon](https://github.com/FishyJ10312/Stowfin/releases/download/v1.8.5-beta/QingSweep-1.8.5-beta-arm64.zip) · [中文安装与授权](https://github.com/FishyJ10312/Stowfin/blob/v1.8.5-beta/docs/INSTALL.zh-CN.md) · [English installation and permissions](https://github.com/FishyJ10312/Stowfin/blob/v1.8.5-beta/docs/INSTALL.en.md)
 
 ## 本版更新
 
@@ -31,15 +34,15 @@
 
 **840 automated checks passed**, including 34 checks for scope, review and restore. A separate 30,017-file fixture verified the complete list. The English and Chinese interfaces were exercised on Apple Silicon running macOS 27.2 with disposable files, covering relaunch, review across scopes, access recheck and byte-for-byte restore. The disconnected-volume case was simulated. First launch on another Mac under default security settings and hardware running macOS 14 are still awaiting validation.
 
-[SHA-256 校验值 / Checksums](https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.5-beta/SHA256SUMS.txt) · [机器可读验收记录 / Machine-readable validation](https://github.com/FishyJ10312/QingSweep/blob/v1.8.5-beta/docs/validation-1.8.5-beta.json)
+[SHA-256 校验值 / Checksums](https://github.com/FishyJ10312/Stowfin/releases/download/v1.8.5-beta/SHA256SUMS.txt) · [机器可读验收记录 / Machine-readable validation](https://github.com/FishyJ10312/Stowfin/blob/v1.8.5-beta/docs/validation-1.8.5-beta.json)
 
 ## 中英文界面与演示 / Screenshots and demo
 
 以下截图和清理、恢复演示来自 1.8.2，使用生成的演示文件。  
 The screenshots and cleanup/restore demo use generated files and show 1.8.2.
 
-![简体中文清理界面 / Chinese cleanup interface](https://raw.githubusercontent.com/FishyJ10312/QingSweep/a9bab60db54b33f8391dccbacb6a282b4788acae/docs/media/cleanup-zh-CN.png)
+![简体中文清理界面 / Chinese cleanup interface](https://raw.githubusercontent.com/FishyJ10312/Stowfin/a9bab60db54b33f8391dccbacb6a282b4788acae/docs/media/cleanup-zh-CN.png)
 
-![English cleanup interface](https://raw.githubusercontent.com/FishyJ10312/QingSweep/a9bab60db54b33f8391dccbacb6a282b4788acae/docs/media/cleanup-en.png)
+![English cleanup interface](https://raw.githubusercontent.com/FishyJ10312/Stowfin/a9bab60db54b33f8391dccbacb6a282b4788acae/docs/media/cleanup-en.png)
 
-[清理与恢复演示 / Cleanup and restore demo](https://github.com/FishyJ10312/QingSweep/blob/v1.8.5-beta/docs/DEMO.md)
+[清理与恢复演示 / Cleanup and restore demo](https://github.com/FishyJ10312/Stowfin/blob/v1.8.5-beta/docs/DEMO.md)

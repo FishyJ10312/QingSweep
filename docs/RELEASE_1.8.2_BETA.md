@@ -6,51 +6,51 @@
 English / 简体中文 · MIT · Apple Silicon · 本地运行 / Local processing  
 **Beta：暂未 Developer ID 签名或 Apple 公证 / Not Developer ID signed or Apple-notarized.**
 
-[下载 Mac 安装包 / Download app](https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.2-beta/QingSweep-1.8.2-beta-arm64.zip) · [中文安装说明](https://github.com/FishyJ10312/QingSweep/blob/main/docs/INSTALL.zh-CN.md) · [English installation](https://github.com/FishyJ10312/QingSweep/blob/main/docs/INSTALL.en.md) · [宣传素材包 / Media kit](https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.2-beta/QingSweep-1.8.2-beta-media-kit.zip)
+[下载 Mac 安装包 / Download app](https://github.com/FishyJ10312/Stowfin/releases/download/v1.8.2-beta/QingSweep-1.8.2-beta-arm64.zip) · [中文安装说明](https://github.com/FishyJ10312/Stowfin/blob/main/docs/INSTALL.zh-CN.md) · [English installation](https://github.com/FishyJ10312/Stowfin/blob/main/docs/INSTALL.en.md) · [宣传素材包 / Media kit](https://github.com/FishyJ10312/Stowfin/releases/download/v1.8.2-beta/QingSweep-1.8.2-beta-media-kit.zip)
 
 ## 简体中文界面与演示
 
 把旧安装包、可重建缓存与个人文件分开查看。**素材和项目默认不勾选**，主动纳入清理时需要复核及二次确认。
 
-![轻扫简体中文清理界面，仅使用临时演示数据](https://raw.githubusercontent.com/FishyJ10312/QingSweep/a9bab60db54b33f8391dccbacb6a282b4788acae/docs/media/cleanup-zh-CN.png)
+![轻扫简体中文清理界面，仅使用临时演示数据](https://raw.githubusercontent.com/FishyJ10312/Stowfin/a9bab60db54b33f8391dccbacb6a282b4788acae/docs/media/cleanup-zh-CN.png)
 
 **选择推荐项 → 复核 → 移到废纸篓 → 按批次恢复。** 添加推荐项后，素材和项目仍未勾选。
 
-![中文清理与恢复分步演示，仅使用临时文件](https://raw.githubusercontent.com/FishyJ10312/QingSweep/a9bab60db54b33f8391dccbacb6a282b4788acae/docs/media/cleanup-restore-zh-CN.gif)
+![中文清理与恢复分步演示，仅使用临时文件](https://raw.githubusercontent.com/FishyJ10312/Stowfin/a9bab60db54b33f8391dccbacb6a282b4788acae/docs/media/cleanup-restore-zh-CN.gif)
 
-[下载中文演示 MP4（26 秒）](https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.2-beta/cleanup-restore-zh-CN.mp4)
+[下载中文演示 MP4（26 秒）](https://github.com/FishyJ10312/Stowfin/releases/download/v1.8.2-beta/cleanup-restore-zh-CN.mp4)
 
 ## English interface and demo
 
 Review installers, rebuildable cache and personal files separately. **Media and projects start unselected.** Including them requires review and a second confirmation.
 
-![QingSweep English cleanup interface with disposable demo data](https://raw.githubusercontent.com/FishyJ10312/QingSweep/a9bab60db54b33f8391dccbacb6a282b4788acae/docs/media/cleanup-en.png)
+![QingSweep English cleanup interface with disposable demo data](https://raw.githubusercontent.com/FishyJ10312/Stowfin/a9bab60db54b33f8391dccbacb6a282b4788acae/docs/media/cleanup-en.png)
 
 **Select recommendations → review → move to Trash → restore a batch.** Adding recommendations leaves media and projects unselected.
 
-![English step-by-step cleanup and batch restore using generated files](https://raw.githubusercontent.com/FishyJ10312/QingSweep/a9bab60db54b33f8391dccbacb6a282b4788acae/docs/media/cleanup-restore-en.gif)
+![English step-by-step cleanup and batch restore using generated files](https://raw.githubusercontent.com/FishyJ10312/Stowfin/a9bab60db54b33f8391dccbacb6a282b4788acae/docs/media/cleanup-restore-en.gif)
 
-[Download English demo MP4 (26 seconds)](https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.2-beta/cleanup-restore-en.mp4)
+[Download English demo MP4 (26 seconds)](https://github.com/FishyJ10312/Stowfin/releases/download/v1.8.2-beta/cleanup-restore-en.mp4)
 
 <details>
 <summary>更多界面：默认选择与批次恢复 / More screenshots: selection defaults and batch restore</summary>
 
 ### 素材与项目默认不勾选 / Media and projects start unselected
 
-![中文需自行确认页面：素材和项目均未勾选](https://raw.githubusercontent.com/FishyJ10312/QingSweep/a9bab60db54b33f8391dccbacb6a282b4788acae/docs/media/manual-review-zh-CN.png)
+![中文需自行确认页面：素材和项目均未勾选](https://raw.githubusercontent.com/FishyJ10312/Stowfin/a9bab60db54b33f8391dccbacb6a282b4788acae/docs/media/manual-review-zh-CN.png)
 
-![English manual-review groups with media and projects unselected](https://raw.githubusercontent.com/FishyJ10312/QingSweep/a9bab60db54b33f8391dccbacb6a282b4788acae/docs/media/manual-review-en.png)
+![English manual-review groups with media and projects unselected](https://raw.githubusercontent.com/FishyJ10312/Stowfin/a9bab60db54b33f8391dccbacb6a282b4788acae/docs/media/manual-review-en.png)
 
 ### 清理记录与批次恢复 / History and batch restore
 
-![中文清理记录：两项临时文件可按批次恢复](https://raw.githubusercontent.com/FishyJ10312/QingSweep/a9bab60db54b33f8391dccbacb6a282b4788acae/docs/media/history-zh-CN.png)
+![中文清理记录：两项临时文件可按批次恢复](https://raw.githubusercontent.com/FishyJ10312/Stowfin/a9bab60db54b33f8391dccbacb6a282b4788acae/docs/media/history-zh-CN.png)
 
-![English History with two generated files available to restore](https://raw.githubusercontent.com/FishyJ10312/QingSweep/a9bab60db54b33f8391dccbacb6a282b4788acae/docs/media/history-en.png)
+![English History with two generated files available to restore](https://raw.githubusercontent.com/FishyJ10312/Stowfin/a9bab60db54b33f8391dccbacb6a282b4788acae/docs/media/history-en.png)
 
 </details>
 
 这些是隔离环境中的实际操作画面，按步骤整理并调整停留时长。每种语言各有两项临时文件实际移入废纸篓并恢复，恢复后内容核验一致；不含个人文件名或用户路径。  
-These are step-by-step captures of actual operations in an isolated demo environment, with edited display timing. Two generated files were moved and restored in each language, with original contents verified. No personal filenames or user paths appear. [制作与核验说明 / Demo notes](https://github.com/FishyJ10312/QingSweep/blob/main/docs/DEMO.md)
+These are step-by-step captures of actual operations in an isolated demo environment, with edited display timing. Two generated files were moved and restored in each language, with original contents verified. No personal filenames or user paths appear. [制作与核验说明 / Demo notes](https://github.com/FishyJ10312/Stowfin/blob/main/docs/DEMO.md)
 
 ## 本版功能 / In this release
 
@@ -75,7 +75,7 @@ Build **1.8.2 (17)** has recorded acceptance of 650 checks, including 26 localiz
 
 This publication update adds the gallery, demos and share material. The original app, source archive and version tag remain unchanged. The media kit contains six screenshots, two GIFs, two MP4s and bilingual short/long copy. A separate media checksum list is supplied; the original `SHA256SUMS.txt` is retained.
 
-[中文验证记录](https://github.com/FishyJ10312/QingSweep/blob/main/docs/VALIDATION.zh-CN.md) · [English validation](https://github.com/FishyJ10312/QingSweep/blob/main/docs/VALIDATION.en.md) · [隐私 / Privacy](https://github.com/FishyJ10312/QingSweep/blob/main/docs/PRIVACY.en.md) · [MIT License](https://github.com/FishyJ10312/QingSweep/blob/main/LICENSE)
+[中文验证记录](https://github.com/FishyJ10312/Stowfin/blob/main/docs/VALIDATION.zh-CN.md) · [English validation](https://github.com/FishyJ10312/Stowfin/blob/main/docs/VALIDATION.en.md) · [隐私 / Privacy](https://github.com/FishyJ10312/Stowfin/blob/main/docs/PRIVACY.en.md) · [MIT License](https://github.com/FishyJ10312/Stowfin/blob/main/LICENSE)
 
 </details>
 
@@ -91,7 +91,7 @@ English / 简体中文，MIT 开源，本地运行。素材和项目默认不勾
 
 发布页附中英文截图和 26 秒清理、恢复演示。Apple Silicon 测试版，暂未 Apple 公证，建议先用临时文件夹试用。
 
-下载与演示：https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.2-beta
+下载与演示：https://github.com/FishyJ10312/Stowfin/releases/tag/v1.8.2-beta
 ```
 
 </details>
@@ -106,9 +106,9 @@ English / 简体中文 · MIT · Local processing. Media and projects start unse
 
 The release includes bilingual screenshots and a 26-second cleanup-and-restore demo in each language. Apple Silicon Beta, not Apple-notarized. Try a disposable folder first.
 
-Download and demos: https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.2-beta
+Download and demos: https://github.com/FishyJ10312/Stowfin/releases/tag/v1.8.2-beta
 ```
 
 </details>
 
-[完整中文宣传文案](https://github.com/FishyJ10312/QingSweep/blob/main/docs/PROMO.zh-CN.md) · [Full English launch copy](https://github.com/FishyJ10312/QingSweep/blob/main/docs/PROMO.en.md) · [打包下载所有宣传素材 / Download media kit](https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.2-beta/QingSweep-1.8.2-beta-media-kit.zip)
+[完整中文宣传文案](https://github.com/FishyJ10312/Stowfin/blob/main/docs/PROMO.zh-CN.md) · [Full English launch copy](https://github.com/FishyJ10312/Stowfin/blob/main/docs/PROMO.en.md) · [打包下载所有宣传素材 / Download media kit](https://github.com/FishyJ10312/Stowfin/releases/download/v1.8.2-beta/QingSweep-1.8.2-beta-media-kit.zip)

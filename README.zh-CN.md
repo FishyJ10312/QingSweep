@@ -2,7 +2,7 @@
 
 <img src="Resources/AppIcon.png" width="88" alt="轻扫图标">
 
-# 轻扫 QingSweep
+# 轻扫 Stowfin
 
 **看清 Mac 空间占用，确认以后再清理。**
 
@@ -10,7 +10,9 @@
 
 **轻扫 1.8.5 Beta（构建 20）暂未经过 Apple 公证。** 安装包使用本机签名证书，未使用 Apple Developer ID 签名。首次启动可能出现开发者验证提示。[安装与授权说明](docs/INSTALL.zh-CN.md)
 
-[下载 Apple 芯片版本](https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.5-beta/QingSweep-1.8.5-beta-arm64.zip) · [Beta 发布页](https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.5-beta) · [反馈问题](https://github.com/FishyJ10312/QingSweep/issues/new?template=bug_report.md)
+[下载 Apple 芯片版本](https://github.com/FishyJ10312/Stowfin/releases/download/v1.8.5-beta/QingSweep-1.8.5-beta-arm64.zip) · [Beta 发布页](https://github.com/FishyJ10312/Stowfin/releases/tag/v1.8.5-beta) · [反馈问题](https://github.com/FishyJ10312/Stowfin/issues/new?template=bug_report.md)
+
+已发布的 1.8.5 安装包制作于改名前，英文界面显示为 **QingSweep**。
 
 **素材和项目默认不勾选。** 可以主动勾选，也可以从空间分析的单文件详情加入待复核。移到废纸篓前需要二次确认。
 
@@ -32,7 +34,7 @@
 <details>
 <summary>English interface / 英文界面</summary>
 
-![QingSweep English cleanup interface with temporary demo data](docs/media/cleanup-en.png)
+![Stowfin English cleanup interface with temporary demo data](docs/media/cleanup-en.png)
 
 </details>
 
@@ -40,7 +42,7 @@
 
 ![轻扫中文分步演示：选择两项临时文件、复核、移到废纸篓，再按批次恢复](docs/media/cleanup-restore-zh-CN.gif)
 
-[下载 MP4](https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.2-beta/cleanup-restore-zh-CN.mp4) · [English demo](README.md#screenshots-and-cleanup-demo) · [全部截图、演示说明与内容核验](docs/DEMO.md)
+[下载 MP4](https://github.com/FishyJ10312/Stowfin/releases/download/v1.8.2-beta/cleanup-restore-zh-CN.mp4) · [English demo](README.md#screenshots-and-cleanup-demo) · [全部截图、演示说明与内容核验](docs/DEMO.md)
 
 画面来自隔离演示环境中的实际操作，按步骤截图整理，展示时长经过调整。所有文件名都是生成的示例；两项演示文件实际清理并恢复，内容核验一致。不含个人文件名或用户路径。移到废纸篓不等于立即释放空间。
 
@@ -130,7 +132,7 @@ zsh check.sh
 
 ## 反馈与项目资料
 
-欢迎反馈安装失败、权限问题、分类不准确、扫描遗漏、清理与恢复结果。提交 [Issue](https://github.com/FishyJ10312/QingSweep/issues/new?template=bug_report.md) 时请写明系统版本、芯片、版本号与复现步骤；截图遮住个人文件名和路径。
+欢迎反馈安装失败、权限问题、分类不准确、扫描遗漏、清理与恢复结果。提交 [Issue](https://github.com/FishyJ10312/Stowfin/issues/new?template=bug_report.md) 时请写明系统版本、芯片、版本号与复现步骤；截图遮住个人文件名和路径。
 
 [1.8.5 Beta 更新说明](docs/RELEASE_1.8.5_BETA.md) · [1.8.4 宣传文案](docs/PROMO.zh-CN.md) · [致谢与许可状态](NOTICE.md)
 

@@ -8,7 +8,7 @@ QingSweep 1.8.2 Beta · Captured on 2026-11-15.
 - [Media and project defaults](media/manual-review-en.png)
 - [Batch history](media/history-en.png)
 - [Animated step-by-step demo](media/cleanup-restore-en.gif)
-- [MP4 for sharing](https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.2-beta/cleanup-restore-en.mp4)
+- [MP4 for sharing](https://github.com/FishyJ10312/Stowfin/releases/download/v1.8.2-beta/cleanup-restore-en.mp4)
 
 ## 简体中文
 
@@ -16,7 +16,7 @@ QingSweep 1.8.2 Beta · Captured on 2026-11-15.
 - [素材和项目默认不勾选](media/manual-review-zh-CN.png)
 - [清理批次与恢复](media/history-zh-CN.png)
 - [分步演示动图](media/cleanup-restore-zh-CN.gif)
-- [方便转发的 MP4](https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.2-beta/cleanup-restore-zh-CN.mp4)
+- [方便转发的 MP4](https://github.com/FishyJ10312/Stowfin/releases/download/v1.8.2-beta/cleanup-restore-zh-CN.mp4)
 
 ## How these were made / 制作方式
 
@@ -34,4 +34,4 @@ The host exported its own view images, without capturing the desktop or other wi
 
 The images and narration follow the repository's [MIT License](../LICENSE); project attribution remains in [NOTICE.md](../NOTICE.md).
 
-[Release gallery / 发布页截图与演示](https://github.com/FishyJ10312/QingSweep/releases/tag/v1.8.2-beta) · [Media kit / 宣传素材包](https://github.com/FishyJ10312/QingSweep/releases/download/v1.8.2-beta/QingSweep-1.8.2-beta-media-kit.zip)
+[Release gallery / 发布页截图与演示](https://github.com/FishyJ10312/Stowfin/releases/tag/v1.8.2-beta) · [Media kit / 宣传素材包](https://github.com/FishyJ10312/Stowfin/releases/download/v1.8.2-beta/QingSweep-1.8.2-beta-media-kit.zip)
