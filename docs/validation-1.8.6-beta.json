@@ -1,0 +1,41 @@
+{
+  "tag": "v1.8.6-beta",
+  "version": "1.8.6",
+  "build": 21,
+  "architecture": "arm64",
+  "minimum_macos": "14.0",
+  "tested_macos": "27.2",
+  "bundle_display_names": {
+    "en": "Stowfin",
+    "zh-Hans": "轻扫"
+  },
+  "uses_existing_local_signing_identity": true,
+  "developer_id_signed": false,
+  "apple_notarized": false,
+  "automated_checks_passed": 126,
+  "automated_suites": {
+    "LocalizationTests": 30,
+    "ScopeAndReviewTests": 34,
+    "CleanupFlowTests": 37,
+    "MediaClassificationTests": 25
+  },
+  "native_validation": {
+    "languages": [
+      "en",
+      "zh-Hans"
+    ],
+    "english_interface_name": "Stowfin",
+    "chinese_interface_name": "轻扫",
+    "english_window_title_verified_after_relaunch": true,
+    "media_and_projects_unselected_after_recommendations": true,
+    "manual_cleanup_second_confirmation_verified": true,
+    "fixture_originals_verified": 3,
+    "same_mac_isolated_profile": true
+  },
+  "unverified": [
+    "First launch on another Mac under default security settings",
+    "Actual macOS 14 hardware"
+  ],
+  "app_zip_sha256": "248a782137a8297c868a268eafd40a884e95307910bc08cc5148074d1ff9bcf3",
+  "executable_sha256": "82d43796d3d4dfd5e679e5005d1f4005bb3e1a67d6328f443b07e096903a69e5"
+}
