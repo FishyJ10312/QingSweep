@@ -17,10 +17,16 @@ extension AppModel {
     var storageHasMore: Bool { storageItems.count < storageTotalMatches }
     var displayedAppSummaries: [AppStorageSummary] {
         var candidates: [String: Int64] = [:]
-        for item in items where item.assessment.canBatchSelect && !preferences.isIgnored(item.url) { candidates[ownerResolver.cleanupOwner(item).id, default: 0] += item.bytes }
+        for item in items where item.assessment.canBatchSelect && !preferences.isIgnored(item.url) {
+            if let info = storageInfo, !info.roots.contains(where: { SafetyPolicy.within(item.url, $0.url) }) { continue }
+            candidates[ownerResolver.cleanupOwner(item).id, default: 0] += item.bytes
+        }
         let query = storageSearch.trimmingCharacters(in: .whitespacesAndNewlines)
-        return appSummaries.map { app in var value = app; value.candidateBytes = candidates[app.id] ?? 0; return value }
-            .filter { query.isEmpty || $0.title.localizedCaseInsensitiveContains(query) || L($0.title).localizedCaseInsensitiveContains(query) || $0.id.localizedCaseInsensitiveContains(query) }
+        return appSummaries.filter { query.isEmpty || $0.title.localizedCaseInsensitiveContains(query) || L($0.title).localizedCaseInsensitiveContains(query) || $0.id.localizedCaseInsensitiveContains(query) }.map { original in
+            var app = original
+            app.candidateBytes = candidates[app.id] ?? 0
+            return app
+        }
     }
     var reviewGroups: [CleanupAppGroup] {
         Dictionary(grouping: review, by: { ownerResolver.cleanupOwner($0).id }).map { key, files in
@@ -38,21 +44,27 @@ extension AppModel {
         let file = storageIndexURL!, home = policy.home
         loadingStorageIndex = FileManager.default.fileExists(atPath: file.path)
         storageQueue.async {
-            let apps = InspectionContext.collect().applications
+            let apps = InspectionContext.collect(home: home).applications
             let volumes = StorageVolumeUsage.collect(home: home)
             do {
                 guard FileManager.default.fileExists(atPath: file.path) else {
-                    DispatchQueue.main.async { self.storageApplications = apps; self.ownerResolver = StorageOwnerResolver(applications: apps); self.loadingStorageIndex = false }; return
+                    DispatchQueue.main.async {
+                        self.storageApplications = apps; self.ownerResolver = StorageOwnerResolver(applications: apps)
+                        self.storageVolumes = volumes; self.loadingStorageIndex = false
+                    }
+                    return
                 }
                 let index = try StorageIndex(url: file); try index.validateIntegrity(); try index.normalizeAccessIssues(home: home)
-                try index.includeAdditionalRoots(StorageRoot.additionalDataRoots)
+                let scope = try index.scanScope()
+                if scope == .allLocations { try index.includeAdditionalRoots(StorageRoot.additionalDataRoots) }
                 if try index.item(at: file)?.bytes != FileStamp.read(file)?.allocated { try index.refresh(urls: [file], applications: apps) }
                 let info = try index.info(), summaries = try index.summaries(applications: apps), issues = try index.issues()
                 let counted = try index.accountedBytes(onDeviceOf: home), pending = try index.pendingRoots()
                 DispatchQueue.main.async {
                     self.loadingStorageIndex = false
                     self.storageApplications = apps; self.ownerResolver = StorageOwnerResolver(applications: apps)
-                    self.storageVolumes = volumes; self.storageInfo = info; self.storageCountedBytes = counted; self.storagePendingRoots = pending; self.appSummaries = summaries; self.storageAccessIssues = issues; self.storageIndexUnavailable = false; self.captureGrowth()
+                    self.storageVolumes = volumes; self.storageInfo = info; self.storageScanScope = scope
+                    self.storageCountedBytes = counted; self.storagePendingRoots = pending; self.appSummaries = summaries; self.storageAccessIssues = issues; self.storageIndexUnavailable = false; self.captureGrowth()
                     self.scheduleStorageQuery()
                     self.refreshReconciledStorage()
                     self.storageAutoContinue = true
@@ -77,7 +89,7 @@ extension AppModel {
         // real defaults while verification supplies only disposable locations.
         let roots = defaultRoots ?? StorageRoot.defaults(home: policy.home)
         if storageInfo == nil || storageIndexUnavailable {
-            runStorageAnalysis(requestedRoots: roots)
+            runStorageAnalysis(requestedRoots: roots, scope: .allLocations)
             return
         }
         section = .storage; analyzing = true; storageAutoContinue = true
@@ -92,9 +104,11 @@ extension AppModel {
                 }
                 let info = try index.info(), pending = try index.pendingRoots()
                 let summaries = try index.summaries(applications: apps), issues = try index.issues()
+                let scope = try index.scanScope()
                 DispatchQueue.main.async {
                     self.analyzing = false; self.auditCancellation = nil
                     self.storageInfo = info; self.storagePendingRoots = pending
+                    self.storageScanScope = scope
                     self.appSummaries = summaries; self.storageAccessIssues = issues
                     guard !token.isCancelled && self.storageAutoContinue else {
                         self.storageUpdateStatus = "更新已停止"; return
@@ -110,10 +124,13 @@ extension AppModel {
             }
         }
     }
-    func runStorageAnalysis(navigate: Bool = true, subtree: URL? = nil, remainingRoots: [StorageRoot]? = nil, automatically: Bool = false, full: Bool = false, requestedRoots: [StorageRoot]? = nil) {
+    func runStorageAnalysis(navigate: Bool = true, subtree: URL? = nil, remainingRoots: [StorageRoot]? = nil, automatically: Bool = false, full: Bool = false, requestedRoots: [StorageRoot]? = nil, scope: StorageScanScope? = nil, recheckingCleanupRoots: [URL] = []) {
         guard !analyzing, !mutating, !loadingReport, !showingReview else { return }
+        if storageIndexUnavailable && storageInfo == nil && subtree == nil && requestedRoots == nil {
+            message = "空间索引需要重建，请选择扫描范围"; return
+        }
         if requestedRoots == nil && subtree == nil && remainingRoots == nil && storageInfo != nil && !storageIndexUnavailable {
-            prepareIncrementalAnalysis(navigate: navigate, forceFull: full); return
+            prepareIncrementalAnalysis(navigate: navigate, forceFull: full, recheckingCleanupRoots: recheckingCleanupRoots); return
         }
         if !automatically { storageAutoContinue = true }
         if navigate { section = .storage }
@@ -122,16 +139,21 @@ extension AppModel {
         let indexURL = storageIndexURL!, fixtureHome = policy.home
         let mergeExisting = (subtree != nil || remainingRoots != nil) && storageInfo != nil && !storageIndexUnavailable
         let ownershipRoots = mergeExisting ? storageInfo?.roots ?? [] : []
+        let savedRoots = storageInfo?.roots
+        let requestedScope = scope ?? (mergeExisting || (requestedRoots == nil && subtree == nil && savedRoots != nil)
+            ? storageScanScope : requestedRoots == nil && subtree == nil ? .allLocations : .selectedFolders)
+        let selectedRoot = subtree.map { url in
+            ownershipRoots.first { $0.url.path == url.path } ?? storageRootForFolder(url)
+        }
         storageQueue.async {
             let apps = InspectionContext.collect(home: fixtureHome).applications
-            var roots = remainingRoots ?? requestedRoots ?? StorageRoot.defaults(home: fixtureHome)
+            let initialRoots = remainingRoots ?? requestedRoots ?? selectedRoot.map { [$0] } ?? savedRoots ?? StorageRoot.defaults(home: fixtureHome)
             var seen = Set<String>()
-            roots = roots.filter { seen.insert($0.url.path).inserted }
-            if let subtree { roots = [ownershipRoots.first { $0.url.path == subtree.path } ?? StorageRoot(url: subtree, title: subtree.lastPathComponent, kind: subtree.pathComponents.contains("Caches") || subtree.pathComponents.contains("Logs") ? .cache : .appData)] }
+            let roots = initialRoots.filter { seen.insert($0.url.path).inserted }
             let staging = indexURL.deletingLastPathComponent().appendingPathComponent("subtree-" + UUID().uuidString + ".sqlite")
             defer { if mergeExisting { try? FileManager.default.removeItem(at: staging) } }
             do {
-                let result = try StorageIndex.build(at: mergeExisting ? staging : indexURL, roots: roots, auditor: StorageAuditor(home: fixtureHome), applications: apps, cancellation: cancellation, ownershipRoots: ownershipRoots) { update in DispatchQueue.main.async { self.storageProgress = update } }
+                let result = try StorageIndex.build(at: mergeExisting ? staging : indexURL, roots: roots, auditor: StorageAuditor(home: fixtureHome), applications: apps, cancellation: cancellation, ownershipRoots: ownershipRoots, scope: requestedScope) { update in DispatchQueue.main.async { self.storageProgress = update } }
                 if mergeExisting, let subtree {
                     let current = try StorageIndex(url: indexURL), fresh = try StorageIndex(url: staging)
                     try current.merge(subtree: subtree, from: fresh)
@@ -141,11 +163,14 @@ extension AppModel {
                 }
                 let index = try StorageIndex(url: indexURL)
                 try index.normalizeAccessIssues(home: fixtureHome)
+                let scanScope = try index.scanScope()
                 let info = try index.info(), summaries = try index.summaries(applications: apps), issues = try index.issues()
                 let counted = try index.accountedBytes(onDeviceOf: fixtureHome), pending = try index.pendingRoots()
+                let volumes = StorageVolumeUsage.collect(home: fixtureHome)
                 DispatchQueue.main.async {
                     self.storageApplications = apps; self.ownerResolver = StorageOwnerResolver(applications: apps)
                     self.storageResult = result; self.storageInfo = info; self.storageCountedBytes = counted; self.storagePendingRoots = pending; self.appSummaries = summaries; self.storageAccessIssues = issues; self.captureGrowth()
+                    self.storageScanScope = scanScope; self.storageVolumes = volumes
                     self.analyzing = false; self.auditCancellation = nil; self.storageIndexUnavailable = false
                     self.storageUpdateStatus = result.cancelled ? "更新已停止" : pending.isEmpty ? "更新完成" : "正在接续更新"
                     self.scheduleStorageQuery()
@@ -161,7 +186,7 @@ extension AppModel {
             } catch { let reason = error.localizedDescription; DispatchQueue.main.async { self.analyzing = false; self.auditCancellation = nil; self.message = reason; self.storageIndexUnavailable = self.storageInfo == nil } }
         }
     }
-    func prepareIncrementalAnalysis(navigate: Bool, forceFull: Bool = false) {
+    func prepareIncrementalAnalysis(navigate: Bool, forceFull: Bool = false, recheckingCleanupRoots: [URL] = []) {
         guard !busy else { return }
         if navigate { section = .storage }
         analyzing = true; storageAutoContinue = true; storageUpdateStatus = "正在检查变化"
@@ -174,8 +199,11 @@ extension AppModel {
                 if try index.pendingRoots().isEmpty {
                     let changes = forceFull ? nil : StorageJournal.changes(since: try index.checkpoint(), roots: info.roots, home: home)
                     if token.isCancelled { DispatchQueue.main.async { self.analyzing = false; self.auditCancellation = nil; self.storageUpdateStatus = "更新已停止" }; return }
-                    try index.prepareRefresh(changes: changes, checkpoint: cursor)
+                    // Recent changes in the cleanup roots may not yet be in the OS journal.
+                    try index.prepareRefresh(changes: changes.map { $0 + recheckingCleanupRoots }, checkpoint: cursor)
                     DispatchQueue.main.async { self.storageUpdateStatus = changes == nil ? "变更记录不可用，正在完整检查" : "正在更新变化的文件夹" }
+                } else if !token.isCancelled && !recheckingCleanupRoots.isEmpty {
+                    try index.queueCleanupRefresh(recheckingCleanupRoots)
                 }
                 let pending = try index.pendingRoots(), updated = try index.info()
                 DispatchQueue.main.async {
@@ -221,43 +249,79 @@ extension AppModel {
     }
     func showAppCleanup(_ app: AppStorageSummary) {
         guard !busy else { return }
-        let maintenance = ["Downloads", "Library/Caches", "Library/Logs"].map { policy.home.appendingPathComponent($0) }
-        let covered = currentScanConfiguration.map { config in config.minimumBytes <= 1_000_000 && maintenance.allSatisfy { location in config.roots.contains { SafetyPolicy.within(location, $0) } } } ?? false
-        if !covered { quickScan() }
-        showDisposition(nil); cleanupOwnerFilter = app.id; cleanupOwnerTitle = app.title
-        selectCleanupScope(scopeItems(.recommended).isEmpty ? .optional : .recommended); section = .results
+        guard !storageIndexUnavailable else { message = StorageIndexError.invalid.localizedDescription; return }
+        if let info = storageInfo {
+            let label = storageFolder?.lastPathComponent ?? (info.roots.count == 1 ? info.roots[0].title : "已分析位置")
+            let configuration = ScanConfiguration(roots: info.roots.map(\.url), label: label, minimumBytes: 1_000_000)
+            beginStorageCleanup(StorageCleanup(configuration: configuration, owner: app, folder: storageFolder))
+        } else {
+            clearCleanupOwner()
+            cleanupOwnerFilter = app.id; cleanupOwnerTitle = app.title
+            selectFirstPopulatedCleanupScope()
+            section = .results
+        }
     }
-    func rescanCleanupOwner() {
-        let owner = cleanupOwnerFilter, title = cleanupOwnerTitle
-        guard !busy else { return }
-        quickScan(); cleanupOwnerFilter = owner; cleanupOwnerTitle = title; section = .results
+    func clearCleanupOwner() {
+        storageCleanup = nil; cleanupOwnerFilter = nil; cleanupOwnerTitle = nil
+        showDisposition(nil); selectCleanupScope(.recommended)
     }
-    func clearCleanupOwner() { cleanupOwnerFilter = nil; cleanupOwnerTitle = nil; showDisposition(nil); selectCleanupScope(.recommended) }
     func removeReviewGroup(_ group: CleanupAppGroup) {
         let paths = Set(group.items.map(\.id)); review.removeAll { paths.contains($0.id) }; selected.subtract(paths);workbench.unselect(paths)
     }
-    func refreshStorageIndex(paths: [URL]) {
+    func refreshStorageIndex(paths: [URL], restoring: Bool = false) {
         guard !paths.isEmpty, storageInfo != nil else { return }
         let file = storageIndexURL!, apps = storageApplications, home = policy.home
+        let source = restoring ? storageCleanup : nil
+        let scanner = DiskScanner(policy: policy, minimumBytes: source?.configuration.minimumBytes ?? 0,
+                                  excludedRoots: preferences.ignoredPaths.map { URL(fileURLWithPath: $0) },
+                                  includeSmallKnownCaches: true)
         storageQueue.async {
             do {
                 let index = try StorageIndex(url: file); try index.refresh(urls: paths, applications: apps)
                 let summaries = try index.summaries(applications: apps), counted = try index.accountedBytes(onDeviceOf: home)
-                DispatchQueue.main.async { self.storageCountedBytes = counted; self.appSummaries = summaries; self.scheduleStorageQuery() }
+                var recovered: [ScanItem] = []
+                if let source, let owner = source.owner {
+                    let classifier = FileClassifier(policy: scanner.policy, context: InspectionContext(applications: apps))
+                    for path in paths where source.folder.map({ SafetyPolicy.within(path, $0) }) ?? true {
+                        if let entry = try index.item(at: path), entry.ownerID == owner.id,
+                           let candidate = try? scanner.inspectIndexedFile(path, root: entry.root, classifier: classifier) {
+                            recovered.append(candidate)
+                        }
+                    }
+                }
+                let restoredItems = recovered
+                DispatchQueue.main.async {
+                    self.storageCountedBytes = counted; self.appSummaries = summaries; self.scheduleStorageQuery()
+                    if !restoredItems.isEmpty, self.storageCleanup?.archive?.scannedAt == source?.archive?.scannedAt {
+                        let ids = Set(restoredItems.map(\.id))
+                        self.updateScopedCleanupItems { $0.removeAll { ids.contains($0.id) }; $0 += restoredItems }
+                    }
+                }
             } catch { DispatchQueue.main.async { self.storageIndexUnavailable = true } }
         }
     }
     func inspectCleanupFolder(_ url: URL) {
         guard !busy, policy.permits(url), policy.hasNoSymlinkComponents(url) else { return }
-        scan(roots: [url], label: url.lastPathComponent, minimum: 0)
-        selectCleanupScope(.protected); section = .results
+        let configuration = ScanConfiguration(roots: [url], label: url.lastPathComponent, minimumBytes: 0)
+        beginStorageCleanup(StorageCleanup(configuration: configuration, owner: nil, folder: url))
     }
     func chooseStorageFolder() {
         guard !busy else { return }
         let panel = NSOpenPanel(); panel.title = L("选择要分析的文件夹"); panel.canChooseFiles = false; panel.canChooseDirectories = true; panel.allowsMultipleSelection = false; panel.prompt = L("分析文件夹")
         guard panel.runModal() == .OK, let url = panel.url else { return }
-        // The selected scope is read-only and never changes cleanup eligibility.
-        runStorageAnalysis(subtree: url)
+        analyzeStorageFolder(url)
+    }
+    func analyzeStorageFolder(_ url: URL) {
+        guard !busy else { return }
+        browseAllStorage()
+        storageShowsMap = false
+        runStorageAnalysis(requestedRoots: [storageRootForFolder(url)], scope: .selectedFolders)
+    }
+    private func storageRootForFolder(_ url: URL) -> StorageRoot {
+        let kind: StorageKind
+        if policy.maintenanceRoots.contains(where: { SafetyPolicy.within(url, $0) }) { kind = .cache }
+        else { kind = policy.permits(url) ? .project : .appData }
+        return StorageRoot(url: url, title: url.lastPathComponent, kind: kind)
     }
     func openFileAccessSettings() {
         shouldRecheckAccessOnActivation = true

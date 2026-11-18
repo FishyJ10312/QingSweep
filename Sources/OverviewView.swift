@@ -81,9 +81,8 @@ struct OverviewView: View {
                 if model.scanning || model.loadingReport { ProgressView().controlSize(.small) }
                 else if let date = model.scannedAt { Text(L(date.formatted(Date.FormatStyle(date: .omitted, time: .shortened).locale(InterfaceLanguage.current.locale)) + " 扫描")).font(.system(size: 12)).foregroundStyle(SweepStyle.secondary) }
             }
-            if model.scanning || model.analyzing {
-                Text(L(model.scanning ? "正在检查 \(model.progress.visited) 项" : "正在分析应用占用"))
-                    .font(.system(size: 13)).foregroundStyle(SweepStyle.secondary)
+            if model.scanning {
+                Text(L("正在检查 \(model.progress.visited) 项")).font(.system(size: 13)).foregroundStyle(SweepStyle.secondary)
             }
             HStack(spacing: 12) {
                 ForEach(CleanupScope.allCases) { scope in
@@ -95,7 +94,7 @@ struct OverviewView: View {
             }
             HStack(spacing: 12) {
                 Image(systemName: "folder").foregroundStyle(SweepStyle.secondary)
-                Text(L(model.scannedAt == nil ? "下载、缓存和日志 · 1 MB 起" : model.scanLabel + " · " + (model.cleanupIsPartial ? "部分结果" : "扫描完成")))
+                Text(L(model.scannedAt == nil ? "下载、缓存和日志" : model.scanLabel + " · " + (model.result?.isPartial == true ? "部分结果" : "扫描完成")))
                 Spacer()
                 Button(L(model.result?.accessIssues?.isEmpty == false ? "处理访问问题" : "详情")) { model.showingIssues = true }.buttonStyle(.plain).disabled(model.result == nil)
             }.font(.system(size: 12)).foregroundStyle(SweepStyle.secondary)
@@ -104,6 +103,12 @@ struct OverviewView: View {
     private var storageLedger: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(L("占用排行")).font(.system(size: 17, weight: .semibold))
+            if model.analyzing {
+                Text(L("正在分析空间 · \(model.storageProgress.visited) 项")).font(.system(size: 12)).foregroundStyle(SweepStyle.secondary)
+            } else if let info = model.storageInfo {
+                Text(info.scannedAt.formatted(Date.FormatStyle(date: .omitted, time: .shortened).locale(InterfaceLanguage.current.locale)))
+                    .font(.system(size: 12)).foregroundStyle(SweepStyle.secondary)
+            }
             if model.appSummaries.isEmpty {
                 Text(L(model.analyzing ? "正在读取应用数据" : "按应用查看空间去向")).font(.system(size: 13)).foregroundStyle(SweepStyle.secondary)
             } else {
@@ -123,7 +128,7 @@ struct OverviewView: View {
             Button {
                 model.section = .storage
                 if model.storageInfo == nil && !model.analyzing { model.startStorageAnalysis() }
-            } label: { Label(L("浏览全部占用"), systemImage: "arrow.right") }.buttonStyle(SweepOutlineButton())
+            } label: { Label(L("查看空间分析"), systemImage: "arrow.right") }.buttonStyle(SweepOutlineButton())
             
         }
     }

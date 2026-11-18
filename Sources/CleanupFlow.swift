@@ -24,6 +24,10 @@ enum CleanupScope: String, CaseIterable, Identifiable {
         case .protected: return !item.assessment.canBatchSelect
         }
     }
+    static func forAssessment(_ assessment: FileAssessment) -> CleanupScope {
+        guard assessment.canBatchSelect else { return .protected }
+        return assessment.disposition == .priority ? .recommended : .optional
+    }
 }
 
 struct CleanupLocation {
@@ -46,10 +50,39 @@ struct StorageLocation {
     let ordering: FileOrdering
 }
 
+struct StorageCleanup {
+    let configuration: ScanConfiguration
+    let owner: AppStorageSummary?
+    let folder: URL?
+    var archive: ScanArchive?
+}
+
+struct StoppedCleanupScan {
+    let date: Date
+    let visited: Int
+}
+
 @MainActor extension AppModel {
-    var cleanupIsPartial: Bool { result.map { $0.cancelled || $0.limited || !$0.issues.isEmpty } ?? false }
+    var cleanupItems: [ScanItem] {
+        storageCleanup.map { $0.archive?.result.items ?? [] } ?? items
+    }
+    var cleanupResult: ScanResult? {
+        if let storageCleanup { return storageCleanup.archive?.result }
+        return result
+    }
+    var cleanupScannedAt: Date? {
+        if let storageCleanup { return storageCleanup.archive?.scannedAt }
+        return scannedAt
+    }
+    var cleanupConfiguration: ScanConfiguration? {
+        storageCleanup?.configuration ?? currentScanConfiguration
+    }
+    var cleanupLabel: String { storageCleanup?.configuration.label ?? scanLabel }
+    var cleanupIsPartial: Bool {
+        cleanupResult?.isPartial == true
+    }
     var visibleBatchSelectableItems: [ScanItem] { filtered.filter { $0.assessment.canBatchSelect && !preferences.isIgnored($0.url) } }
-    var unselectedRecommendations: [ScanItem] { visibleBatchSelectableItems.filter { $0.assessment.disposition == .priority && !selected.contains($0.id) } }
+    var unselectedRecommendations: [ScanItem] { visibleBatchSelectableItems.filter { $0.assessment.disposition == .priority && !isSelectedForReview($0) } }
     var visibleSelectableItems: [ScanItem] { filtered.filter { !preferences.isIgnored($0.url) } }
     var allVisibleSelected: Bool { !visibleSelectableItems.isEmpty && visibleSelectableItems.allSatisfy(isSelectedForReview) }
     func allScopeItems(_ scope: CleanupScope) -> [ScanItem] {
@@ -60,13 +93,20 @@ struct StorageLocation {
     }
     func clearCurrentSelection() { selected.subtract(currentSelection.map(\.id)) }
     var cleanupLocation: CleanupLocation { CleanupLocation(scope: cleanupScope, disposition: disposition, category: category, group: groupFilter, search: search, minimum: minimumFilter, onlySelected: onlySelected, presentation: presentation, ordering: ordering) }
-    var canReturnCleanup: Bool { !cleanupTrail.isEmpty }
+    var canReturnCleanup: Bool { !cleanupTrail.isEmpty || storageCleanup != nil }
     var currentSelection: [ScanItem] { filtered.filter(isSelectedForReview) }
     var currentSelectionBytes: Int64 { currentSelection.reduce(0) { $0 + $1.bytes } }
     var otherSelectionCount: Int { selectedItems.count - currentSelection.count }
-    var cleanupGroupTitle: String? { groupFilter.flatMap { id in items.first { $0.assessment.groupID == id }?.assessment.displayGroup } }
+    var cleanupGroupTitle: String? { groupFilter.flatMap { id in cleanupItems.first { $0.assessment.groupID == id }?.assessment.displayGroup } }
     func scopeItems(_ scope: CleanupScope) -> [ScanItem] {
-        items.filter { scope.contains($0) && !preferences.isIgnored($0.url) && (cleanupOwnerFilter == nil || ownerResolver.cleanupOwner($0).id == cleanupOwnerFilter) }
+        cleanupItems.filter { scope.contains($0) && !preferences.isIgnored($0.url) && matchesCleanupOwner($0) }
+    }
+    func matchesCleanupOwner(_ item: ScanItem) -> Bool {
+        storageCleanup != nil || cleanupOwnerFilter == nil || ownerResolver.cleanupOwner(item).id == cleanupOwnerFilter
+    }
+    func selectFirstPopulatedCleanupScope() {
+        let available = Set(cleanupItems.lazy.filter { !self.preferences.isIgnored($0.url) && self.matchesCleanupOwner($0) }.map { CleanupScope.forAssessment($0.assessment) })
+        selectCleanupScope(CleanupScope.allCases.first(where: available.contains) ?? .recommended)
     }
     func selectCleanupScope(_ scope: CleanupScope) {
         clearCleanupFilters(); cleanupScope = scope; disposition = nil
@@ -75,7 +115,15 @@ struct StorageLocation {
         category = nil; groupFilter = nil; search = ""; minimumFilter = 0; onlySelected = false; presentation = .groups; cleanupTrail = []
     }
     func returnCleanup() {
-        guard let previous = cleanupTrail.popLast() else { return }
+        guard !busy else { return }
+        guard let previous = cleanupTrail.popLast() else {
+            if storageCleanup != nil {
+                clearCleanupOwner()
+                stoppedCleanupScan = nil
+                section = .storage
+            }
+            return
+        }
         cleanupScope = previous.scope; disposition = previous.disposition; category = previous.category
         groupFilter = previous.group; search = previous.search; minimumFilter = previous.minimum
         onlySelected = previous.onlySelected; presentation = previous.presentation; ordering = previous.ordering

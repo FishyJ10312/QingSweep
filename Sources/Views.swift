@@ -80,7 +80,7 @@ struct ContentView: View {
         VStack(alignment: .leading, spacing: 0) {
             VStack(alignment: .leading, spacing: 4) {
                 Text(L("轻扫")).font(.system(size: 26, weight: .medium)).lineLimit(1).minimumScaleFactor(0.8)
-                Text(L(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.8.4")).font(.system(size: 11, design: .monospaced)).foregroundStyle(.white.opacity(0.5))
+                Text(L(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.8.5")).font(.system(size: 11, design: .monospaced)).foregroundStyle(.white.opacity(0.5))
             }.padding(.horizontal, 12).padding(.top, 20)
             Text(L("为重要的文件留空间")).font(.system(size: 12)).foregroundStyle(.white.opacity(0.58))
                 .padding(.horizontal, 12).padding(.top, 12).padding(.bottom, 28)
@@ -235,12 +235,15 @@ struct HistoryView: View {
     private var batches: [CleanupHistoryBatch] { model.historyBatches.filter { !model.historyOnlyRecoverable || !model.restorableRecords(in: $0).isEmpty } }
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            HStack { Text(L("清理记录")).font(.system(size: 24, weight: .semibold)); Spacer(); Button(L("刷新状态"), action: model.refresh).buttonStyle(SweepOutlineButton()).disabled(model.sampling) }
+            HStack { Text(L("清理记录")).font(.system(size: 24, weight: .semibold)); Spacer(); Button(L("重新检查"), action: model.refresh).buttonStyle(SweepOutlineButton()).disabled(model.sampling) }
             if model.reconcilingCleanup { HStack { ProgressView().controlSize(.small);Text(L("正在核对上次文件操作")) }.padding(12).sweepCard() }
             if let issue=model.cleanupJournalFailure {
                 HStack { Text(Localization.error(issue)).font(.system(size:13)).foregroundStyle(SweepStyle.warning);Spacer();Button(L("重新核对"),action:model.reconcileCleanupOperations).buttonStyle(SweepOutlineButton()).disabled(model.busy) }.padding(12).sweepCard()
             }
-            if model.cleanupJournalIssues.contains(where:{$0.contains("完全磁盘访问")}) { Button(L("前往系统设置"),action:model.openCleanupAccessSettings).buttonStyle(SweepOutlineButton()) }
+            if model.cleanupJournalIssues.contains(where: { $0.contains("完全磁盘访问") }) ||
+                model.history.contains(where: { model.restoreStates[$0.id] == .permission }) {
+                Button(L("前往系统设置"), action: model.openCleanupAccessSettings).buttonStyle(SweepOutlineButton())
+            }
             if !model.cleanupJournalIssues.isEmpty { DisclosureGroup(L("待核对详情 · \(model.cleanupJournalIssues.count) 项")) { Text(Localization.error(model.cleanupJournalIssues.joined(separator:"\n"))).font(.system(size:12)).textSelection(.enabled) } }
             HStack(alignment: .top, spacing: 16) {
                 VStack(alignment: .leading, spacing: 12) {
@@ -338,11 +341,12 @@ struct IgnoredView: View {
 }
 struct IssueView: View {
     @EnvironmentObject var model: AppModel
-    private var accessIssues: [StorageAccessIssue] { model.result?.accessIssues ?? [] }
+    private var shownResult: ScanResult? { model.section == .results ? model.cleanupResult : model.result }
+    private var accessIssues: [StorageAccessIssue] { shownResult?.accessIssues ?? [] }
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(L(accessIssues.isEmpty ? "扫描详情" : "文件访问助手")).font(.system(size: 24, weight: .medium))
-            if let result = model.result {
+            if let result = shownResult {
                 Text(L("已检查 \(result.visited) 项 · 用时 \(Int(result.elapsed)) 秒")).font(.system(size: 13))
                 if result.cancelled { Text(L("扫描已停止，当前为部分结果")).foregroundStyle(SweepStyle.warning) }
                 if result.limited { Text(L("结果达到上限，请选择更小的文件夹")).foregroundStyle(SweepStyle.warning) }

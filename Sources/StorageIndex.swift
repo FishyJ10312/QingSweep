@@ -33,6 +33,9 @@ struct StorageIndexInfo: Codable {
     let elapsed: TimeInterval
     var partial: Bool { limited || cancelled || unreadableCount > 0 }
 }
+enum StorageScanScope: String {
+    case savedRoots, selectedFolders, allLocations
+}
 enum StorageIndexError: LocalizedError {
     case invalid, unavailable, failure(String)
     var errorDescription: String? { switch self { case .invalid: return "空间索引需要重建"; case .unavailable: return "空间索引暂时不可用"; case .failure(let reason):
@@ -104,24 +107,33 @@ final class StorageIndex {
     @discardableResult func prepareRefresh(changes: [URL]?, checkpoint: StorageCheckpoint) throws -> Int {
         let previous = try info()
         guard try pendingRoots().isEmpty else { return try pendingRoots().count }
-        var jobs: [StorageRoot] = []
-        if let changes {
-            for change in changes {
-                let matching = previous.roots.filter { Self.contains(change, $0.url) || Self.contains($0.url, change) }
-                for scope in matching {
-                    var target = Self.contains(change, scope.url) ? change : scope.url
-                    while FileStamp.read(target)?.isDirectory != true && target.path != scope.url.path { target.deleteLastPathComponent() }
-                    if !jobs.contains(where: { Self.contains(target, $0.url) }) {
-                        jobs.removeAll { Self.contains($0.url, target) }
-                        jobs.append(StorageRoot(url: target, title: target == scope.url ? scope.title : target.lastPathComponent, kind: scope.kind))
-                    }
-                }
-            }
-        } else { jobs = previous.roots }
+        let jobs = changes.map { refreshJobs(for: $0, in: previous.roots) } ?? previous.roots
         try savePlan(ContinuationPlan(jobs: jobs))
         try saveCheckpoint(checkpoint)
         if jobs.isEmpty { try setInfo(StorageIndexInfo(scannedAt: Date(), roots: previous.roots, visited: previous.visited, limited: false, cancelled: false, unreadableCount: previous.unreadableCount, elapsed: 0)) }
         return jobs.count
+    }
+    func queueCleanupRefresh(_ roots: [URL]) throws {
+        var plan = try continuationPlan()
+        let additional = refreshJobs(for: roots, in: try info().roots)
+        for job in additional where !plan.jobs.contains(where: { Self.contains(job.url, $0.url) }) {
+            plan.jobs.removeAll { Self.contains($0.url, job.url) }
+            plan.jobs.append(job)
+        }
+        try savePlan(plan)
+    }
+    private func refreshJobs(for changes: [URL], in scopes: [StorageRoot]) -> [StorageRoot] {
+        var jobs: [StorageRoot] = []
+        for change in changes {
+            for scope in scopes where Self.contains(change, scope.url) || Self.contains(scope.url, change) {
+                var target = Self.contains(change, scope.url) ? change : scope.url
+                while FileStamp.read(target)?.isDirectory != true && target.path != scope.url.path { target.deleteLastPathComponent() }
+                if jobs.contains(where: { Self.contains(target, $0.url) }) { continue }
+                jobs.removeAll { Self.contains($0.url, target) }
+                jobs.append(StorageRoot(url: target, title: target.path == scope.url.path ? scope.title : target.lastPathComponent, kind: scope.kind))
+            }
+        }
+        return jobs
     }
     func execute(_ sql: String) throws {
         guard sqlite3_exec(database, sql, nil, nil, nil) == SQLITE_OK else { throw StorageIndexError.failure(String(cString: sqlite3_errmsg(database))) }
@@ -228,6 +240,13 @@ final class StorageIndex {
         let string = String(data: try JSONEncoder().encode(info), encoding: .utf8)!
         try write("INSERT OR REPLACE INTO metadata VALUES('scan',?)", [string])
     }
+    func scanScope() throws -> StorageScanScope {
+        let value = try rows("SELECT value FROM metadata WHERE key='scope'").first?.first
+        return value.flatMap(StorageScanScope.init(rawValue:)) ?? .savedRoots
+    }
+    private func setScanScope(_ scope: StorageScanScope) throws {
+        try write("INSERT OR REPLACE INTO metadata VALUES('scope',?)", [scope.rawValue])
+    }
     private func decode(_ row: [String]) -> IndexedStorageItem {
         IndexedStorageItem(url: URL(fileURLWithPath: row[0]), parent: row[1], root: URL(fileURLWithPath: row[2]), title: row[3], bytes: Int64(row[4]) ?? 0, isDirectory: row[5] == "1", fileCount: Int(row[6]) ?? 0, ownerID: row[7], ownerTitle: row[8], component: StorageComponent(rawValue: row[9]) ?? .data, state: Int(row[10]) ?? 0)
     }
@@ -305,6 +324,7 @@ final class StorageIndex {
         let previous = try info()
         try execute("BEGIN IMMEDIATE")
         do {
+            try setScanScope(.allLocations)
             try savePlan(ContinuationPlan(jobs: previous.roots))
             try saveCheckpoint(checkpoint)
             try setInfo(StorageIndexInfo(scannedAt: previous.scannedAt, roots: previous.roots,
@@ -315,6 +335,24 @@ final class StorageIndex {
     }
     func pendingRoots() throws -> [StorageRoot] { Array(try continuationPlan().jobs.prefix(64)) }
     func invalidateContinuation() throws { try write("DELETE FROM metadata WHERE key='continuation'") }
+    func visitFiles(ownedBy owner: String, in folder: URL?, _ visit: (URL, URL) -> Bool) throws {
+        var sql = "SELECT path,root FROM nodes WHERE owner_id=? AND is_dir=0 AND state=1"
+        var bindings = [owner]
+        if let folder {
+            sql += " AND path LIKE ? ESCAPE '\\'"
+            let path = Self.canonicalPath(folder)
+            bindings.append(Self.escaped(path == "/" ? path : path + "/") + "%")
+        }
+        let query = try statement(sql, bindings)
+        defer { sqlite3_finalize(query) }
+        while true {
+            let code = sqlite3_step(query)
+            if code == SQLITE_DONE { return }
+            guard code == SQLITE_ROW, let path = sqlite3_column_text(query, 0),
+                  let root = sqlite3_column_text(query, 1) else { throw StorageIndexError.invalid }
+            if !visit(URL(fileURLWithPath: String(cString: path)), URL(fileURLWithPath: String(cString: root))) { return }
+        }
+    }
     func page(parent: URL? = nil, ownerID: String? = nil, search: String = "", searchOwnerTitles: [String] = [], ordering: FileOrdering = .size, offset: Int = 0, limit: Int = 100) throws -> StoragePage {
         var predicates: [String] = [], bindings: [String] = []
         if !search.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -384,7 +422,7 @@ final class StorageIndex {
         return summaries.values.filter { $0.bytes > 0 || $0.partial }.sorted { $0.bytes == $1.bytes ? $0.id < $1.id : $0.bytes > $1.bytes }
     }
 
-    static func build(at url: URL, roots: [StorageRoot], auditor: StorageAuditor, applications: [InstalledApplication], cancellation: ScanCancellation, ownershipRoots: [StorageRoot] = [], progress: @escaping (StorageAuditProgress) -> Void = { _ in }) throws -> StorageAuditResult {
+    static func build(at url: URL, roots: [StorageRoot], auditor: StorageAuditor, applications: [InstalledApplication], cancellation: ScanCancellation, ownershipRoots: [StorageRoot] = [], scope: StorageScanScope = .selectedFolders, progress: @escaping (StorageAuditProgress) -> Void = { _ in }) throws -> StorageAuditResult {
         let manager = FileManager.default
         try manager.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
         let staging = url.deletingLastPathComponent().appendingPathComponent("index-" + UUID().uuidString + ".sqlite")
@@ -433,6 +471,7 @@ final class StorageIndex {
             }
             try index.recalculate()
             try index.saveCheckpoint(checkpoint)
+            try index.setScanScope(scope)
             try index.setInfo(StorageIndexInfo(scannedAt: outcome.scannedAt, roots: roots, visited: outcome.visited, limited: outcome.limited, cancelled: outcome.cancelled, unreadableCount: outcome.unreadableCount, elapsed: outcome.elapsed))
             try index.execute("COMMIT; PRAGMA optimize;")
         }
@@ -462,7 +501,10 @@ final class StorageIndex {
                     let owner: StorageOwner
                     if root.url.lastPathComponent == "Downloads" {
                         let classifier = FileClassifier(policy: SafetyPolicy(home: root.url.deletingLastPathComponent()), context: InspectionContext(applications: applications))
-                        owner = resolver.cleanupOwner(ScanItem(url: url, root: root.url, stamp: stamp, assessment: classifier.assess(url, stamp: stamp)))
+                        let assessment = classifier.assess(url, stamp: stamp)
+                        owner = assessment.canBatchSelect
+                            ? resolver.cleanupOwner(ScanItem(url: url, root: root.url, stamp: stamp, assessment: assessment))
+                            : resolver.resolve(url, root: root)
                     } else { owner = resolver.resolve(url, root: root) }
                     var parents: [URL] = [], cursor = url.deletingLastPathComponent()
                     while cursor.path != root.url.path && Self.contains(cursor, root.url) {

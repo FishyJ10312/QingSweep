@@ -3234,5 +3234,89 @@
   {
     "source": "以下位置受系统访问限制",
     "english": "These locations have system access restrictions"
+  },
+  {
+    "source": "暂时无法读取废纸篓",
+    "english": "Can't read the Trash yet"
+  },
+  {
+    "source": "废纸篓所在磁盘未连接",
+    "english": "Trash volume is disconnected"
+  },
+  {
+    "source": "暂时无法核实",
+    "english": "Unable to verify yet"
+  },
+  {
+    "source": "扫描已停止 · {0} · 本轮检查 {1} 项",
+    "english": "Scan stopped · {0} · {1} checked"
+  },
+  {
+    "source": "返回空间分析",
+    "english": "Back to Storage"
+  },
+  {
+    "source": "查看完整清单",
+    "english": "View full cleanup list"
+  },
+  {
+    "source": "此范围没有清理项",
+    "english": "No cleanup items in this scope"
+  },
+  {
+    "source": "清空当前",
+    "english": "Clear this scope"
+  },
+  {
+    "source": "仅复核当前范围 {0} 项",
+    "english": "Review {0} in this scope"
+  },
+  {
+    "source": "复核全部 {0} 项",
+    "english": "Review all {0} items"
+  },
+  {
+    "source": "选择分析文件夹",
+    "english": "Choose folder to analyze"
+  },
+  {
+    "source": "更新此范围",
+    "english": "Update this scope"
+  },
+  {
+    "source": "本次统计",
+    "english": "Analyzed in this scope"
+  },
+  {
+    "source": "已保存范围 · {0} 处",
+    "english": "Saved scope · {0} locations"
+  },
+  {
+    "source": "正在分析空间 · {0} 项",
+    "english": "Analyzing storage · {0} items"
+  },
+  {
+    "source": "下载、缓存和日志",
+    "english": "Downloads, caches, and logs"
+  },
+  {
+    "source": "已分析位置",
+    "english": "Analyzed locations"
+  },
+  {
+    "source": "加入待复核",
+    "english": "Add to review"
+  },
+  {
+    "source": "无法将此文件加入待复核",
+    "english": "This file couldn't be added to review"
+  },
+  {
+    "source": "空间索引需要重建，请选择扫描范围",
+    "english": "Rebuild the storage index by choosing a scan scope"
+  },
+  {
+    "source": "查看空间分析",
+    "english": "View storage analysis"
   }
 ]

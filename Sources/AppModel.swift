@@ -32,6 +32,7 @@ enum FileOrdering: String, CaseIterable { case size = "占用最大", oldest = "
     @Published var storageItemDetail: IndexedStorageItem?
     @Published var storageCountedBytes: Int64 = 0
     @Published var storageInfo: StorageIndexInfo?
+    @Published var storageScanScope: StorageScanScope = .selectedFolders
     @Published var storagePendingRoots: [StorageRoot] = []
     @Published var storageVolumes: [StorageVolumeUsage] = []
     @Published var storageAutoContinue = false
@@ -51,6 +52,9 @@ enum FileOrdering: String, CaseIterable { case size = "占用最大", oldest = "
     @Published var cleanupOwnerTitle: String?
     @Published var showingScanChooser = false
     @Published var currentScanConfiguration: ScanConfiguration?
+    @Published var storageCleanup: StorageCleanup? { didSet { itemsRevision += 1 } }
+    @Published var stoppedCleanupScan: StoppedCleanupScan?
+    @Published var addingIndexedFile = false
     @Published var accessCheckRunning = false
     @Published var expandedAccessGroups = Set<String>()
     var storageQueue = DispatchQueue(label: "local.qingsweep.storage", qos: .utility)
@@ -70,8 +74,14 @@ enum FileOrdering: String, CaseIterable { case size = "占用最大", oldest = "
     @Published var result: ScanResult?
     @Published var items: [ScanItem] = [] { didSet { itemsRevision += 1 } }
     @Published var selected = Set<String>() {
-        didSet { selectionRevision += 1; manuallySelectedStamps = manuallySelectedStamps.filter { selected.contains($0.key) }; retainedCopies=retainedCopies.filter{selected.contains($0.key)} }
+        didSet {
+            selectionRevision += 1
+            manuallySelectedStamps = manuallySelectedStamps.filter { selected.contains($0.key) }
+            additionalSelections = additionalSelections.filter { selected.contains($0.key) }
+            retainedCopies = retainedCopies.filter { selected.contains($0.key) }
+        }
     }
+    private var additionalSelections: [String: ScanItem] = [:]
     var retainedCopies:[String:RetainedCopy]=[:]
     private var manuallySelectedStamps: [String: FileStamp] = [:]
     @Published var search = "" { didSet { cleanupDisplayLimit = 100 } }
@@ -168,13 +178,17 @@ enum FileOrdering: String, CaseIterable { case size = "占用最大", oldest = "
         if startTimer { timer = Timer.scheduledTimer(withTimeInterval: 15, repeats: true) { [weak self] _ in Task { @MainActor in self?.refresh() } } }
         if needsJournalCheck { reconcileCleanupOperations() }
     }
-    var busy: Bool { scanning || analyzing || mutating || reconcilingCleanup || loadingReport || loadingStorageIndex || showingReview || workbench.busy }
+    var busy: Bool { scanning || analyzing || mutating || reconcilingCleanup || loadingReport || loadingStorageIndex || showingReview || addingIndexedFile || workbench.busy }
     var totalBytes: Int64 { items.reduce(0) { $0 + $1.bytes } }
     func isIndividuallySelected(_ item: ScanItem) -> Bool { selected.contains(item.id) && manuallySelectedStamps[item.id] == item.stamp }
     func isSelectedForReview(_ item: ScanItem) -> Bool {
-        selected.contains(item.id) && (item.assessment.canBatchSelect || isIndividuallySelected(item)) && !preferences.isIgnored(item.url)
+        selected.contains(item.id) && (additionalSelections[item.id].map { $0.stamp == item.stamp } ?? true) &&
+            (item.assessment.canBatchSelect || isIndividuallySelected(item)) && !preferences.isIgnored(item.url)
     }
-    var selectedItems: [ScanItem] { items.filter(isSelectedForReview) }
+    var selectedItems: [ScanItem] {
+        let fromReport = items.filter { additionalSelections[$0.id] == nil && isSelectedForReview($0) }
+        return fromReport + additionalSelections.values.filter(isSelectedForReview).sorted { $0.id < $1.id }
+    }
     var selectedBytes: Int64 { selectedItems.reduce(0) { $0 + $1.bytes } }
     var priorityBytes: Int64 { items.filter { $0.assessment.canBatchSelect && $0.assessment.disposition == .priority && !preferences.isIgnored($0.url) }.reduce(0) { $0 + $1.bytes } }
     var recoverable: [TrashRecord] { history.filter { restoreStates[$0.id] == .available } }
@@ -186,13 +200,13 @@ enum FileOrdering: String, CaseIterable { case size = "占用最大", oldest = "
     var filtered: [ScanItem] {
         let key = filterKey
         if let cache = filteredCache, cache.key == key { return cache.values }
-        let values = items.filter { item in
+        let values = cleanupItems.filter { item in
             !preferences.isIgnored(item.url) && (cleanupScope == nil || cleanupScope!.contains(item)) &&
-            (cleanupOwnerFilter == nil || ownerResolver.cleanupOwner(item).id == cleanupOwnerFilter) &&
+            matchesCleanupOwner(item) &&
             (category == nil || item.category == category) && item.bytes >= minimumFilter &&
             (disposition == nil || item.assessment.disposition == disposition) &&
             (groupFilter == nil || item.assessment.groupID == groupFilter) &&
-            (!onlySelected || selected.contains(item.id)) &&
+            (!onlySelected || isSelectedForReview(item)) &&
             (search.isEmpty || (item.url.path + " " + item.assessment.owner + " " + item.category.rawValue + " " + L(item.assessment.owner) + " " + L(item.category.rawValue)).localizedCaseInsensitiveContains(search))
         }
         let sorted = values.sorted { a, b in
@@ -234,7 +248,16 @@ enum FileOrdering: String, CaseIterable { case size = "占用最大", oldest = "
     func showGroup(_ group: AssessmentGroup) {
         cleanupTrail.append(cleanupLocation); groupFilter = group.id; presentation = .files
     }
-    func selectPriority() { guard !busy else { return }; selected.formUnion(filtered.filter { $0.assessment.canBatchSelect && $0.assessment.disposition == .priority && !preferences.isIgnored($0.url) }.map(\.id)) }
+    func selectPriority() {
+        guard !busy else { return }
+        let recommendations = unselectedRecommendations
+        for item in recommendations { saveSelectionSource(for: item) }
+        selected.formUnion(recommendations.map(\.id))
+    }
+    private func saveSelectionSource(for item: ScanItem) {
+        if storageCleanup != nil { additionalSelections[item.id] = item }
+        else { additionalSelections.removeValue(forKey: item.id) }
+    }
     func toggleGroup(_ group: AssessmentGroup) {
         let ids = Set(group.items.map(\.id))
         toggleSelection(filtered.filter { ids.contains($0.id) && $0.assessment.groupID == group.id })
@@ -250,6 +273,7 @@ enum FileOrdering: String, CaseIterable { case size = "占用最大", oldest = "
                 catch { rejected += 1; continue }
                 manuallySelectedStamps[item.id] = item.stamp
             }
+            saveSelectionSource(for: item)
             accepted.insert(item.id)
         }
         selected.formUnion(accepted)
@@ -312,11 +336,18 @@ enum FileOrdering: String, CaseIterable { case size = "占用最大", oldest = "
         guard !busy, selected.isEmpty, currentScanConfiguration != nil else { return }
         recheckCleanupScanAccess()
     }
-    func smartScan() { guard !busy else { return }; quickScan(); startStorageAnalysis(navigate: false) }
-    func stopSmartScan() { cancellation?.cancel(); auditCancellation?.cancel() }
-    func quickScan() {
-        scan(roots: ["Downloads", "Library/Caches", "Library/Logs"].map { home.appendingPathComponent($0) }, label: "常用位置", minimum: 1_000_000)
+    func smartScan() {
+        guard !busy else { return }
+        let config = currentScanConfiguration ?? commonScanConfiguration
+        runStorageAnalysis(navigate: false, recheckingCleanupRoots: config.roots)
+        startCleanupScan(config)
     }
+    func stopSmartScan() { cancelScan(); cancelStorageAnalysis() }
+    private var commonScanConfiguration: ScanConfiguration {
+        ScanConfiguration(roots: ["Downloads", "Library/Caches", "Library/Logs"].map { home.appendingPathComponent($0) },
+                          label: "常用位置", minimumBytes: 1_000_000)
+    }
+    func quickScan() { startCleanupScan(commonScanConfiguration) }
     func personalScan() {
         let roots = ["Downloads", "Desktop", "Documents", "Movies", "Pictures", "Music"].map { home.appendingPathComponent($0) }.filter { FileManager.default.fileExists(atPath: $0.path) }
         scan(roots: roots, label: "大文件", minimum: 100_000_000)
@@ -332,27 +363,101 @@ enum FileOrdering: String, CaseIterable { case size = "占用最大", oldest = "
     }
     func rescan() {
         guard !busy else { return }
-        if let config = currentScanConfiguration { scan(roots: config.roots, label: config.label, minimum: config.minimumBytes) }
+        if section == .results, let storageCleanup { beginStorageCleanup(storageCleanup) }
+        else if let config = currentScanConfiguration { scan(roots: config.roots, label: config.label, minimum: config.minimumBytes) }
         else { showingScanChooser = true }
     }
     func scan(roots: [URL], label: String, minimum: Int64) {
+        startCleanupScan(ScanConfiguration(roots: roots, label: label, minimumBytes: minimum))
+    }
+    func beginStorageCleanup(_ source: StorageCleanup) {
+        guard !busy else { return }
+        if source.archive == nil {
+            showDisposition(nil)
+            cleanupOwnerFilter = source.owner?.id
+            cleanupOwnerTitle = source.owner?.title
+        }
+        storageCleanup = source
+        section = .results
+        startCleanupScan(source.configuration, source: source)
+    }
+    private func startCleanupScan(_ configuration: ScanConfiguration, source: StorageCleanup? = nil) {
         guard !scanning, !mutating, !loadingReport, !showingReview else { return }
+        if source == nil && storageCleanup != nil { clearCleanupOwner() }
         let token = ScanCancellation(); cancellation = token
-        lastRoots = roots; lastMinimum = minimum; scanLabel = label
-        currentScanConfiguration = ScanConfiguration(roots: roots, label: label, minimumBytes: minimum)
-        cleanupOwnerFilter = nil; cleanupOwnerTitle = nil
         showingIssues = false
-        scanning = true; selected.removeAll(); items = []; result = nil; progress = ScanProgress()
-        showDisposition(nil); selectCleanupScope(.recommended); message = nil
-        let scanner = DiskScanner(policy: policy, minimumBytes: minimum, excludedRoots: preferences.ignoredPaths.map { URL(fileURLWithPath: $0) })
+        scanning = true; progress = ScanProgress(); stoppedCleanupScan = nil; message = nil
+        let scanner = DiskScanner(policy: policy, minimumBytes: configuration.minimumBytes,
+                                  excludedRoots: preferences.ignoredPaths.map { URL(fileURLWithPath: $0) },
+                                  includeSmallKnownCaches: configuration.minimumBytes == 1_000_000)
+        let indexURL = storageIndexURL!
         DispatchQueue.global(qos: .utility).async {
-            let result = autoreleasepool { scanner.scan(roots: roots, cancellation: token) { update in DispatchQueue.main.async { self.progress = update } } }
+            let progress: (ScanProgress) -> Void = { update in DispatchQueue.main.async { self.progress = update } }
+            let result = autoreleasepool {
+                if let source, let owner = source.owner {
+                    return Self.scanIndexedCleanup(indexURL, owner: owner.id, folder: source.folder, scanner: scanner, token: token, progress: progress)
+                }
+                return scanner.scan(roots: configuration.roots, cancellation: token, progress: progress)
+            }
             DispatchQueue.main.async {
-                self.result = result; self.items = result.items; self.scannedAt = Date(); self.scanning = false; self.cancellation = nil
+                let now = Date()
+                self.scanning = false; self.cancellation = nil
+                guard !result.cancelled, !token.isCancelled else {
+                    self.stoppedCleanupScan = StoppedCleanupScan(date: now, visited: result.visited)
+                    return
+                }
+                if var source {
+                    source.archive = ScanArchive(schemaVersion: 3, scannedAt: now, label: configuration.label,
+                                                 result: result, configuration: configuration)
+                    self.storageCleanup = source
+                    self.selectFirstPopulatedCleanupScope()
+                } else {
+                    self.clearCleanupOwner()
+                    self.selected.removeAll()
+                    self.lastRoots = configuration.roots; self.lastMinimum = configuration.minimumBytes
+                    self.currentScanConfiguration = configuration; self.scanLabel = configuration.label
+                    self.result = result; self.items = result.items; self.scannedAt = now
+                    self.selectFirstPopulatedCleanupScope()
+                    self.saveReport()
+                }
                 if result.accessIssues?.contains(where: { $0.kind == .permission }) == true { self.showingIssues = true }
-                self.saveReport(); self.refresh()
+                self.refresh()
             }
         }
+    }
+    nonisolated private static func scanIndexedCleanup(_ indexURL: URL, owner: String, folder: URL?, scanner: DiskScanner,
+                                                       token: ScanCancellation, progress: (ScanProgress) -> Void) -> ScanResult {
+        let start = Date()
+        let classifier = FileClassifier(policy: scanner.policy, context: InspectionContext.collect(home: scanner.policy.home))
+        var result = ScanResult(), bytes: Int64 = 0
+        var issues: [String: StorageAccessIssue] = [:]
+        var lastUpdate = Date.distantPast
+        do {
+            try StorageIndex(url: indexURL).visitFiles(ownedBy: owner, in: folder) { url, root in
+                guard !token.isCancelled else { return false }
+                result.visited += 1
+                autoreleasepool {
+                    do {
+                        if let item = try scanner.inspectIndexedFile(url, root: root, classifier: classifier) {
+                            result.items.append(item); bytes += item.bytes
+                        }
+                    } catch {
+                        let issue = StorageAccessIssue.make(url: url, root: root, error: error)
+                        if issue.kind == .permission && issues.count < 100 { issues[issue.id] = issue }
+                    }
+                }
+                if Date().timeIntervalSince(lastUpdate) > 0.18 {
+                    lastUpdate = Date()
+                    progress(ScanProgress(visited: result.visited, found: result.items.count, bytes: bytes, current: url.deletingLastPathComponent().path))
+                }
+                return true
+            }
+        } catch { result.issues.append(error.localizedDescription) }
+        result.accessIssues = issues.values.sorted { $0.id < $1.id }
+        result.issues += issues.values.map(\.detail)
+        result.cancelled = token.isCancelled
+        result.elapsed = Date().timeIntervalSince(start)
+        return result
     }
     private func saveReport() {
         guard var result, let scannedAt else { return }
@@ -367,6 +472,14 @@ enum FileOrdering: String, CaseIterable { case size = "占用最大", oldest = "
             try JSONEncoder().encode(summary).write(to: reportURL, options: .atomic)
         } catch { message = "扫描记录保存失败，本次结果仍可使用" }
     }
+    func updateScopedCleanupItems(_ change: (inout [ScanItem]) -> Void) {
+        guard var source = storageCleanup, let archive = source.archive else { return }
+        var result = archive.result
+        change(&result.items)
+        source.archive = ScanArchive(schemaVersion: archive.schemaVersion, scannedAt: archive.scannedAt,
+                                     label: archive.label, result: result, configuration: archive.configuration)
+        storageCleanup = source
+    }
     func startStorageAnalysis(navigate: Bool = true) { runStorageAnalysis(navigate: navigate) }
     func cancelStorageAnalysis() { storageAutoContinue = false; auditCancellation?.cancel() }
     func toggleStorage(_ id: String) { if expandedStorage.contains(id) { expandedStorage.remove(id) } else { expandedStorage.insert(id) } }
@@ -374,13 +487,39 @@ enum FileOrdering: String, CaseIterable { case size = "占用最大", oldest = "
     func toggle(_ item: ScanItem, on: Bool) {
         guard !busy, !preferences.isIgnored(item.url) else { return }
         if !on { selected.remove(item.id); return }
-        guard items.contains(where: { $0.id == item.id && $0.stamp == item.stamp }) else { return }
+        guard cleanupItems.contains(where: { $0.id == item.id && $0.stamp == item.stamp }) else { return }
+        selectFile(item, outsideReport: storageCleanup != nil)
+    }
+    private func selectFile(_ item: ScanItem, outsideReport: Bool) {
+        guard !preferences.isIgnored(item.url) else { return }
         if item.assessment.requiresIndividualConfirmation {
             do { try policy.validate(item) }
             catch { message = error.localizedDescription; return }
             manuallySelectedStamps[item.id] = item.stamp
         }
+        if outsideReport { additionalSelections[item.id] = item }
+        else { additionalSelections.removeValue(forKey: item.id) }
         selected.insert(item.id)
+    }
+    func canAddIndexedFile(_ item: IndexedStorageItem) -> Bool {
+        !item.isDirectory && item.state == 1 && policy.permits(item.root) && policy.permits(item.url) &&
+            SafetyPolicy.within(item.url, item.root) && !preferences.isIgnored(item.url)
+    }
+    func addIndexedFileForReview(_ entry: IndexedStorageItem) {
+        guard !busy, canAddIndexedFile(entry) else { return }
+        addingIndexedFile = true
+        let scanner = DiskScanner(policy: policy, minimumBytes: 0,
+                                  excludedRoots: preferences.ignoredPaths.map { URL(fileURLWithPath: $0) })
+        Task {
+            let inspected = await Task.detached(priority: .utility) {
+                let classifier = FileClassifier(policy: scanner.policy, context: InspectionContext.collect(home: scanner.policy.home))
+                return try? scanner.inspectIndexedFile(entry.url, root: entry.root, classifier: classifier)
+            }.value
+            addingIndexedFile = false
+            guard let item = inspected else { message = "无法将此文件加入待复核"; return }
+            selectFile(item, outsideReport: true)
+            if isSelectedForReview(item) { storageItemDetail = nil }
+        }
     }
     func toggleVisible() { toggleSelection(visibleSelectableItems) }
     func ignore(_ url: URL) {
@@ -389,7 +528,9 @@ enum FileOrdering: String, CaseIterable { case size = "占用最大", oldest = "
         do { try next.save(url: preferencesURL); preferences = next }
         catch { message = "忽略列表保存失败"; return }
         let removed = Set(items.filter { preferences.isIgnored($0.url) }.map(\.id))
-        items.removeAll { removed.contains($0.id) }; selected.subtract(removed); inspecting = nil
+        items.removeAll { removed.contains($0.id) }
+        selected.subtract(removed.union(additionalSelections.values.filter { preferences.isIgnored($0.url) }.map(\.id)))
+        inspecting = nil
     }
     func unignore(_ path: String) {
         var next = preferences; next.unignore(path)
@@ -452,7 +593,9 @@ enum FileOrdering: String, CaseIterable { case size = "占用最大", oldest = "
             resolveRetryParent(retryParent,moved:movedPaths)
             cleanupReceipts.insert(receipt, at: 0)
             let removed = Set(result.records.map { $0.original.path });workbench.didMove(result.records.map(\.original))
-            items.removeAll { removed.contains($0.id) }; selected.subtract(removed); history.insert(contentsOf: result.records, at: 0)
+            items.removeAll { removed.contains($0.id) }
+            updateScopedCleanupItems { $0.removeAll { removed.contains($0.id) } }
+            selected.subtract(removed); history.insert(contentsOf: result.records, at: 0)
             let saveError = saveHistory(); mutating = false; canCancelCleanup = false; cleanupCancellation = nil
             operationOutcome=OperationOutcome(title:outcome.cancelled ? "已停止清理":"清理结果",completed:result.records.count,bytes:receipt.movedBytes,errors:result.errors,receipt:receipt,saveFailure:saveError)
             review=[];saveReport();refreshStorageIndex(paths:result.records.map(\.original));refresh()
@@ -468,19 +611,26 @@ enum FileOrdering: String, CaseIterable { case size = "占用最大", oldest = "
         mutating = true; operationProgress = "正在恢复文件"
         let service = TrashService(policy: policy)
         let roots = lastRoots.isEmpty ? ["Downloads", "Library/Caches", "Library/Logs"].map { home.appendingPathComponent($0) } : lastRoots
-        let ignored = preferences, minimum = lastMinimum
+        let scanner = DiskScanner(policy: policy, minimumBytes: lastMinimum,
+                                  excludedRoots: preferences.ignoredPaths.map { URL(fileURLWithPath: $0) },
+                                  includeSmallKnownCaches: lastMinimum == 1_000_000)
+        let folder = storageCleanup?.owner == nil ? storageCleanup?.folder : nil
+        let folderScanner = DiskScanner(policy: policy, minimumBytes: 0, excludedRoots: scanner.excludedRoots)
         DispatchQueue.global(qos: .utility).async {
-            let classifier = FileClassifier(policy: service.policy, context: InspectionContext.collect())
+            let classifier = FileClassifier(policy: service.policy, context: InspectionContext.collect(home: service.policy.home))
             var recoveredItems: [ScanItem] = []
+            var recoveredInFolder: [ScanItem] = []
             var restored = Set<UUID>(), errors: [String] = []
             for (index, record) in records.enumerated() {
                 if journal.isBlocked { break }
                 do {
                     try service.restore(record,journal:journal); restored.insert(record.id)
                     if let root = roots.first(where: { SafetyPolicy.within(record.original, $0) }),
-                       let stamp = FileStamp.read(record.original), stamp.isRegular, stamp.allocated >= minimum, !ignored.isIgnored(record.original) {
-                        let item = ScanItem(url: record.original, root: root, stamp: stamp, assessment: classifier.assess(record.original, stamp: stamp))
-                        if (try? service.policy.validate(item)) != nil { recoveredItems.append(item) }
+                       let item = try? scanner.inspectIndexedFile(record.original, root: root, classifier: classifier) {
+                        recoveredItems.append(item)
+                    }
+                    if let folder, let item = try? folderScanner.inspectIndexedFile(record.original, root: folder, classifier: classifier) {
+                        recoveredInFolder.append(item)
                     }
                 }
                 catch { errors.append(record.original.lastPathComponent + "：" + error.localizedDescription) }
@@ -499,9 +649,14 @@ enum FileOrdering: String, CaseIterable { case size = "占用最大", oldest = "
                 self.history.removeAll { restored.contains($0.id) }
                 let recoveredIDs = Set(recoveredItems.map(\.id))
                 self.items.removeAll { recoveredIDs.contains($0.id) }; self.items.append(contentsOf: recoveredItems)
+                if !recoveredInFolder.isEmpty {
+                    let ids = Set(recoveredInFolder.map(\.id))
+                    self.updateScopedCleanupItems { $0.removeAll { ids.contains($0.id) }; $0 += recoveredInFolder }
+                }
                 let saveError = self.saveHistory(); self.mutating = false; self.saveReport()
                 self.operationOutcome=OperationOutcome(title:"恢复结果",completed:restored.count,bytes:records.filter{restored.contains($0.id)}.reduce(0){$0+$1.bytes},errors:errors,restoreRemaining:records.filter{!restored.contains($0.id)},saveFailure:saveError)
-                self.refreshStorageIndex(paths: records.filter { restored.contains($0.id) }.map(\.original)); self.refresh()
+                self.refreshStorageIndex(paths: records.filter { restored.contains($0.id) }.map(\.original), restoring: true)
+                self.refresh()
             }
         }
     }
@@ -618,7 +773,7 @@ extension AppModel {
         let ids=Set(candidates.map(\.id))
         if guards.filter({ids.contains($0.key)}).values.contains(where:{ids.contains($0.url.path)}) {message="每组至少保留一份文件";return}
         items.removeAll{ids.contains($0.id)};items.append(contentsOf:candidates)
-        for item in candidates{toggle(item,on:true)}
+        for item in candidates { selectFile(item, outsideReport: false) }
         for (path,copy) in guards where selected.contains(path){retainedCopies[path]=copy}
         review=candidates.filter(isSelectedForReview);reviewScopeTitle=title
         if !review.isEmpty{showingReview=true}
@@ -642,7 +797,11 @@ extension AppModel {
             do{try journal.finish(receipt)}catch{cleanupJournalFailure=error.localizedDescription}
             resolveRetryParent(parent,moved:movedSet);cleanupReceipts.insert(receipt,at:0)
             let moved=result.records.map(\.original)
-            items.removeAll{file in moved.contains{SafetyPolicy.within(file.url,$0)}};selected=selected.intersection(Set(items.map(\.id)))
+            func wasMoved(_ item: ScanItem) -> Bool { moved.contains { SafetyPolicy.within(item.url, $0) } }
+            let removed = selectedItems.filter(wasMoved).map(\.id)
+            items.removeAll(where: wasMoved)
+            updateScopedCleanupItems { $0.removeAll(where: wasMoved) }
+            selected.subtract(removed)
             workbench.managedSelected=[];workbench.managedReview=[];workbench.inspection=nil;workbench.managedRetryItems=nil;workbench.leftovers.removeAll{FileStamp.read($0.url)==nil};workbench.applications.removeAll{FileStamp.read(URL(fileURLWithPath:$0.path))==nil}
             let error=saveHistory();mutating=false;canCancelCleanup=false;cleanupCancellation=nil;saveReport();refreshStorageIndex(paths:moved);refresh()
             operationOutcome=OperationOutcome(title:token.isCancelled ? "已停止清理":"清理结果",completed:result.records.count,bytes:receipt.movedBytes,errors:result.errors,receipt:receipt,saveFailure:error)

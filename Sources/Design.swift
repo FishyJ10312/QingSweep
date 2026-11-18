@@ -83,9 +83,6 @@ extension CleanupScope {
         case .protected: return "素材和项目默认不选，手动选择后需二次确认"
         }
     }
-    static func forAssessment(_ assessment: FileAssessment) -> CleanupScope {
-        assessment.canBatchSelect ? (assessment.disposition == .priority ? .recommended : .optional) : .protected
-    }
 }
 
 struct CleanupScopeCard: View {

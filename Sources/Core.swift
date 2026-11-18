@@ -24,8 +24,15 @@ struct FileStamp: Equatable, Codable {
     var isSymlink: Bool { mode & UInt16(S_IFMT) == UInt16(S_IFLNK) }
     var isDataless: Bool { flags & 0x40000000 != 0 }
     static func read(_ url: URL) -> FileStamp? {
+        try? readChecked(url)
+    }
+    static func readChecked(_ url: URL) throws -> FileStamp {
         var value = stat()
-        guard url.withUnsafeFileSystemRepresentation({ lstat($0, &value) }) == 0 else { return nil }
+        let status = url.withUnsafeFileSystemRepresentation { path in
+            guard let path else { return EINVAL }
+            return lstat(path, &value) == 0 ? 0 : errno
+        }
+        guard status == 0 else { throw NSError(domain: NSPOSIXErrorDomain, code: Int(status)) }
         return FileStamp(device: value.st_dev, inode: value.st_ino, size: value.st_size,
                          allocated: Int64(value.st_blocks) * 512,
                          modifiedSeconds: Int64(value.st_mtimespec.tv_sec), modifiedNanos: Int64(value.st_mtimespec.tv_nsec),
@@ -136,13 +143,15 @@ struct StorageAccessIssue: Identifiable, Codable {
     let detail: String
     static func make(url: URL, root: URL, error: Error? = nil, detail: String = "", incomplete: Bool = false) -> StorageAccessIssue {
         let e = error as NSError?
-        let missing = FileStamp.read(url) == nil
-        let statError = errno
+        let statError: Int
+        do { _ = try FileStamp.readChecked(url); statError = 0 }
+        catch { statError = (error as NSError).code }
+        let missing = statError != 0
         let volume = url.pathComponents.count > 2 && url.pathComponents[1] == "Volumes" ? URL(fileURLWithPath: "/Volumes/" + url.pathComponents[2]) : nil
         let kind: StorageAccessKind
         if incomplete { kind = .incomplete }
         else if let volume, FileStamp.read(volume) == nil { kind = .disconnected }
-        else if missing && [EACCES, EPERM].contains(statError) { kind = .permission }
+        else if [Int(EACCES), Int(EPERM)].contains(statError) { kind = .permission }
         else if e?.domain == NSPOSIXErrorDomain && [Int(EACCES), Int(EPERM)].contains(e!.code) || e?.domain == NSCocoaErrorDomain && e?.code == NSFileReadNoPermissionError { kind = .permission }
         else if missing { kind = .missing }
         else { kind = .unavailable }
@@ -159,6 +168,7 @@ struct ScanResult: Codable {
     var limited = false
     var elapsed: TimeInterval = 0
     var accessIssues: [StorageAccessIssue]? = nil
+    var isPartial: Bool { cancelled || limited || !issues.isEmpty }
 }
 
 struct DiskScanner {
@@ -167,6 +177,34 @@ struct DiskScanner {
     // Explicit caps remain injectable for bounded fixtures; the user list has no item truncation.
     var limit = Int.max
     var excludedRoots: [URL] = []
+    var includeSmallKnownCaches = false
+
+    func isIgnored(_ url: URL) -> Bool {
+        excludedRoots.contains { SafetyPolicy.within(url, $0) }
+    }
+
+    func assessFile(_ url: URL, root: URL, stamp: FileStamp, classifier: FileClassifier) -> ScanItem? {
+        guard stamp.isRegular, stamp.links == 1 else { return nil }
+        let maintenance = policy.maintenanceRoots.contains { SafetyPolicy.within(url, $0) }
+        if maintenance && classifier.context.now.timeIntervalSince1970 - Double(stamp.modifiedSeconds) < 7 * 86_400 { return nil }
+        let isSmall = stamp.allocated < minimumBytes
+        if isSmall && (!includeSmallKnownCaches || !maintenance || stamp.allocated == 0) { return nil }
+        let assessment = classifier.assess(url, stamp: stamp)
+        if isSmall && (assessment.category != .cache || !assessment.canBatchSelect) { return nil }
+        return ScanItem(url: url, root: root, stamp: stamp, assessment: assessment)
+    }
+
+    func inspectIndexedFile(_ url: URL, root: URL, classifier: FileClassifier) throws -> ScanItem? {
+        guard policy.permits(root), policy.permits(url), SafetyPolicy.within(url, root), !isIgnored(url) else { return nil }
+        let stamp = try FileStamp.readChecked(url)
+        guard !stamp.isDataless, policy.hasNoSymlinkComponents(url) else { return nil }
+        guard let item = assessFile(url, root: root, stamp: stamp, classifier: classifier) else { return nil }
+        try policy.validate(item)
+        let values = try url.resourceValues(forKeys: [.isPackageKey])
+        if values.isPackage == true { return nil }
+        return item
+    }
+
     func scan(roots: [URL], cancellation: ScanCancellation, progress: @escaping (ScanProgress) -> Void) -> ScanResult {
         let started = Date()
         var result = ScanResult()
@@ -215,12 +253,9 @@ struct DiskScanner {
                         if stamp.isDirectory { enumerator.skipDescendants() }
                         result.skipped += 1; return
                     }
-                    guard stamp.isRegular, stamp.links == 1, stamp.allocated >= minimumBytes else { return }
-                    if policy.maintenanceRoots.contains(where: { SafetyPolicy.within(url, $0) }) {
-                        guard Date().timeIntervalSince1970 - Double(stamp.modifiedSeconds) >= 7 * 86_400 else { return }
-                    }
+                    guard let item = assessFile(url, root: root, stamp: stamp, classifier: classifier) else { return }
                     guard ids.insert(url.path).inserted else { return }
-                    result.items.append(ScanItem(url: url, root: root, stamp: stamp, assessment: classifier.assess(url, stamp: stamp)))
+                    result.items.append(item)
                     bytes += stamp.allocated
                 }
                 if Date().timeIntervalSince(lastUpdate) > 0.18 {

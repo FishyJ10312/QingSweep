@@ -11,16 +11,19 @@ struct StorageView: View {
                     if let info = model.storageInfo {
                         Text(L(info.scannedAt.formatted(Date.FormatStyle(date: .abbreviated, time: .shortened).locale(InterfaceLanguage.current.locale)) + (info.partial ? " · 部分结果" : "")))
                             .font(.system(size: 12)).foregroundStyle(SweepStyle.secondary)
+                        if model.storageScanScope != .allLocations {
+                            Text(info.roots.count == 1 ? info.roots[0].title : L("已保存范围 · \(info.roots.count) 处"))
+                                .font(.system(size: 12)).foregroundStyle(color).lineLimit(1)
+                        }
                     }
                 }
                 Spacer()
                 if model.analyzing { Button(L("停止分析"), action: model.cancelStorageAnalysis).buttonStyle(SweepOutlineButton()) }
                 else {
-                    if !model.storagePendingRoots.isEmpty && model.storageHasPersonalCoverage {
-                        Button(L("重新分析")) { model.runStorageAnalysis() }.buttonStyle(SweepOutlineButton()).disabled(model.busy)
+                    if !model.storagePendingRoots.isEmpty {
                         Button(L("继续分析")) { model.continueStorageAnalysis() }.buttonStyle(SweepPrimaryButton(color: color)).disabled(model.busy).help(L("继续扫描 \(model.storagePendingRoots.count) 个尚未开始的位置，保留已有结果"))
-                    } else { Button(L(model.storageInfo == nil || !model.storageHasPersonalCoverage ? "分析全部位置" : "更新变化")) {
-                        if model.storageInfo == nil || !model.storageHasPersonalCoverage { model.analyzeAllStorageLocations() }
+                    } else { Button(L(model.storageInfo == nil ? "分析全部位置" : "更新此范围")) {
+                        if model.storageInfo == nil { model.analyzeAllStorageLocations() }
                         else { model.runStorageAnalysis() }
                     }.buttonStyle(SweepPrimaryButton(color: color)).disabled(model.busy) }
                 }
@@ -61,10 +64,15 @@ struct StorageView: View {
                     }
                     Divider()
                     HStack {
-                        Text(L(model.analyzing ? "已检查 \(model.storageProgress.visited) 项" : "只读分析")).foregroundStyle(SweepStyle.secondary)
+                        if model.analyzing { Text(L("已检查 \(model.storageProgress.visited) 项")).foregroundStyle(SweepStyle.secondary) }
                         Spacer()
-                        Button(L("选择文件夹"), action: model.chooseStorageFolder).buttonStyle(.plain).disabled(model.busy)
+                        Button(L("选择分析文件夹"), action: model.chooseStorageFolder).buttonStyle(SweepOutlineButton()).disabled(model.busy)
                         if !model.storageAccessIssues.isEmpty { Button(L("访问助手 · \(model.storageAccessIssues.count)")) { model.showingStorageIssues = true }.buttonStyle(SweepOutlineButton()) }
+                        let selectedCount = model.selectedItems.count
+                        if selectedCount > 0 {
+                            Button(L("复核全部 \(selectedCount) 项"), action: model.prepareReview)
+                                .buttonStyle(SweepPrimaryButton(color: color)).disabled(model.busy)
+                        }
                     }.font(.system(size: 12)).padding(12)
                 }.background(SweepStyle.surface, in: RoundedRectangle(cornerRadius: 14))
                     .clipShape(RoundedRectangle(cornerRadius: 14))
@@ -75,11 +83,13 @@ struct StorageView: View {
     private var coverage: some View {
         VStack(alignment: .leading, spacing: 12) {
             ModuleStat(title: "磁盘已用", value: formatBytes(max(0, model.snapshot.diskTotal - model.snapshot.diskFree)), color: SweepStyle.ink)
-            ModuleStat(title: "本卷已统计", value: model.storageInfo == nil ? "待分析" : formatBytes(model.storageCountedBytes), color: color)
+            ModuleStat(title: showsDiskCoverage ? "本卷已统计" : "本次统计", value: coverageBytes, color: color)
             ModuleStat(title: "系统与辅助卷", value: model.storageVolumes.isEmpty ? "正在核对" : formatBytes(model.storageSystemBytes), color: CleanupScope.protected.color)
                 .help(L(model.storageVolumes.map { $0.title + " " + formatBytes($0.bytes) }.joined(separator: "、")))
-            ModuleStat(title: "待核对差额", value: model.storageInfo == nil ? "待分析" : formatBytes(model.storageRemainingBytes), color: SweepStyle.secondary)
-                .help(L("已扣除系统与辅助卷。剩余差额涉及下方未完成、权限受限位置与 APFS 分配口径；容量无法在授权前准确确定。"))
+            if showsDiskCoverage {
+                ModuleStat(title: "待核对差额", value: model.storageInfo == nil ? "待分析" : formatBytes(model.storageRemainingBytes), color: SweepStyle.secondary)
+                    .help(L("已扣除系统与辅助卷。剩余差额涉及下方未完成、权限受限位置与 APFS 分配口径；容量无法在授权前准确确定。"))
+            }
             if !model.storagePendingRoots.isEmpty { Text(L(model.analyzing ? "正在自动续扫" : "还有位置可继续扫描")).font(.system(size: 12, weight: .medium)).foregroundStyle(color) }
             if model.storagePermissionCount > 0 {
                 Button(L("授权访问 · \(model.storagePermissionCount) 处")) { model.showingStorageIssues = true }.buttonStyle(SweepPrimaryButton(color: color))
@@ -89,7 +99,7 @@ struct StorageView: View {
             Text(L("达芬奇文件")).font(.system(size: 15, weight: .semibold))
             Button(L("检查代理文件")) { model.inspectCleanupFolder(model.policy.home.appendingPathComponent("Movies/ProxyMedia")) }.buttonStyle(SweepOutlineButton()).disabled(model.busy)
             Button(L("检查渲染缓存")) { model.inspectCleanupFolder(model.policy.home.appendingPathComponent("Movies/CacheClip")) }.buttonStyle(SweepOutlineButton()).disabled(model.busy)
-            if model.storageInfo != nil && !model.storageHasPersonalCoverage {
+            if model.storageInfo != nil && model.storageScanScope == .allLocations && !model.storageHasPersonalCoverage {
                 Label(L("当前范围不完整"), systemImage: "info.circle").font(.system(size: 12, weight: .medium)).foregroundStyle(CleanupScope.protected.color)
                     .help(L("当前范围未包含文稿、图片或影片等位置；选择“分析全部位置”补齐。"))
             }
@@ -104,6 +114,14 @@ struct StorageView: View {
             }
             Spacer(minLength: 0)
         }
+    }
+    private var showsDiskCoverage: Bool {
+        model.storageScanScope == .allLocations || (model.storageScanScope == .savedRoots && model.storageHasPersonalCoverage)
+    }
+    private var coverageBytes: String {
+        guard model.storageInfo != nil else { return "待分析" }
+        let bytes = showsDiskCoverage ? model.storageCountedBytes : model.appSummaries.reduce(0) { $0 + $1.bytes }
+        return formatBytes(bytes)
     }
     private var browserBar: some View {
         VStack(spacing: 12) {
@@ -164,7 +182,8 @@ struct AppStorageRow: View {
                 else { component("程序", app.programBytes); component("数据", app.dataBytes); component("缓存", app.cacheBytes); component("日志", app.logBytes) }
                 Spacer(minLength: 0)
                 Button(L("查看文件")) { model.browseStorage(nil, owner: app) }.buttonStyle(SweepOutlineButton())
-                if !personal { Button(L(app.candidateBytes > 0 ? "清理项" : "检查清理项")) { model.showAppCleanup(app) }.buttonStyle(SweepPrimaryButton(color: color)).disabled(model.busy) }
+                Button(L("检查清理项")) { model.showAppCleanup(app) }
+                    .buttonStyle(SweepPrimaryButton(color: color)).disabled(model.busy || model.storageIndexUnavailable)
             }
         }.padding(14).background(SweepStyle.surface, in: RoundedRectangle(cornerRadius: 10))
             .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(SweepStyle.line))
@@ -196,7 +215,9 @@ struct IndexedStorageRow: View {
             }.buttonStyle(.plain).help(item.url.path)
             Text(L(item.state == 0 ? "尚未读取" : formatBytes(item.bytes))).font(.system(size: 17, weight: .medium, design: .monospaced)).frame(minWidth: 80, alignment: .trailing)
             Menu {
-                if item.isDirectory { Button(L("检查此文件夹")) { model.inspectCleanupFolder(item.url) }.disabled(model.busy || !model.policy.permits(item.url)) }
+                if item.isDirectory {
+                    Button(L("检查此文件夹"), action: inspectFolder).disabled(model.busy || !model.policy.permits(item.url) || model.storageIndexUnavailable)
+                }
                 else { Button(L("预览")) { model.preview(item.url) } }
                 Button(L("查看详情")) { model.storageItemDetail = item }
                 Button(L("在访达中查看")) { model.reveal(item.url) }
@@ -205,6 +226,12 @@ struct IndexedStorageRow: View {
                 if item.partial { Button(L("访问助手")) { model.showingStorageIssues = true } }
             } label: { Image(systemName: "ellipsis") }.menuStyle(.borderlessButton).frame(width: 24)
         }.padding(12).sweepCard()
+    }
+    private func inspectFolder() {
+        guard let ownerID = model.storageOwnerFilter else { model.inspectCleanupFolder(item.url); return }
+        let owner = model.appSummaries.first { $0.id == ownerID } ?? AppStorageSummary(id: ownerID, title: item.ownerTitle)
+        let configuration = ScanConfiguration(roots: [item.url], label: item.title, minimumBytes: 0)
+        model.beginStorageCleanup(StorageCleanup(configuration: configuration, owner: owner, folder: item.url))
     }
 }
 struct IndexedStorageDetailView: View {
@@ -219,7 +246,18 @@ struct IndexedStorageDetailView: View {
             LabeledContent(L("用途"), value: L(item.component.title))
             LabeledContent(L("文件"), value: L("\(item.fileCount) 个"))
             if item.partial { Text(L("当前容量仅包含已读取内容")).foregroundStyle(SweepStyle.warning) }
-            HStack { if !item.isDirectory { Button(L("预览")) { model.preview(item.url) } }; Button(L("在访达中查看")) { model.reveal(item.url) }; Button(L("复制完整路径")) { model.copyPath(item.url) }; Spacer(); Button(L("完成")) { model.storageItemDetail = nil }.keyboardShortcut(.defaultAction) }
+            HStack {
+                if !item.isDirectory { Button(L("预览")) { model.preview(item.url) } }
+                Button(L("在访达中查看")) { model.reveal(item.url) }
+                Button(L("复制完整路径")) { model.copyPath(item.url) }
+                Spacer()
+                Button(L("完成")) { model.storageItemDetail = nil }.keyboardShortcut(.cancelAction)
+                if model.canAddIndexedFile(item) {
+                    Button(L(model.addingIndexedFile ? "正在核对" : "加入待复核")) {
+                        model.addIndexedFileForReview(item)
+                    }.buttonStyle(SweepPrimaryButton(color: CleanupScope.optional.color)).disabled(model.busy)
+                }
+            }
         }.font(.system(size: 13)).padding(28).frame(width: 640)
     }
 }

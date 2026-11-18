@@ -1,0 +1,44 @@
+{
+  "tag": "v1.8.5-beta",
+  "version": "1.8.5",
+  "build": 20,
+  "architecture": "arm64",
+  "minimum_macos": "14.0",
+  "tested_macos": "27.2",
+  "developer_id_signed": false,
+  "apple_notarized": false,
+  "automated_validation": {
+    "automated_checks_passed": 840,
+    "test_groups": 22,
+    "scope_and_review_checks_passed": 34,
+    "crash_recovery_checks_passed": 126,
+    "localization_checks_passed": 27,
+    "translation_entries_checked": 830,
+    "separate_complete_list_fixture_files": 30017
+  },
+  "native_validation": {
+    "languages": [
+      "zh-Hans",
+      "en"
+    ],
+    "data": "Generated files in an isolated app profile",
+    "flows": [
+      "Folder scope persists across relaunch and navigation returns to the source",
+      "Global and current-scope review include the intended checked items",
+      "An explicitly added project requires a second confirmation",
+      "Trash access denial is shown separately from a missing file",
+      "A disposable file was rechecked and restored byte-for-byte"
+    ],
+    "fixture_contents_verified": 8,
+    "disconnected_drive_case": "Simulated",
+    "unverified": [
+      "Default security settings on another Mac",
+      "macOS 14 on hardware",
+      "Physical external drive disconnection"
+    ]
+  },
+  "media_and_projects_preselected": false,
+  "manual_media_project_second_confirmation": true,
+  "app_zip_sha256": "1d2b982684d7f3140c145bbd6ed958ee1b2f031265d73181f1c7cf3bfc11e880",
+  "executable_sha256": "2a9c7da5e1ebf6f8e2b067e08088fe0b938a7816f1d3aeb8a395b665a6999138"
+}

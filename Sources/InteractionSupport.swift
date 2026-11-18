@@ -1,4 +1,5 @@
 import Foundation
+import Darwin
 
 struct CleanupPreferences: Codable, Equatable {
     private(set) var ignoredPaths: [String]
@@ -66,7 +67,7 @@ enum ScanReportLoader {
 }
 
 enum RestoreAvailability: String, Codable {
-    case available, missing, changed, occupied, blocked
+    case available, missing, changed, occupied, blocked, permission, disconnected, unverified
 
     var displayName: String {
         switch self {
@@ -75,23 +76,37 @@ enum RestoreAvailability: String, Codable {
         case .changed: return "文件已变化"
         case .occupied: return "原位置已有文件"
         case .blocked: return "原位置不可用"
+        case .permission: return "暂时无法读取废纸篓"
+        case .disconnected: return "废纸篓所在磁盘未连接"
+        case .unverified: return "暂时无法核实"
         }
     }
 
     static func check(record: TrashRecord, policy: SafetyPolicy) -> RestoreAvailability {
+        guard record.original.isFileURL, record.trashed.isFileURL,
+              ManagedLocations.inTrash(record.trashed, home: policy.home) else { return .blocked }
+        if FileStamp.read(record.original) != nil { return .occupied }
+        let current: FileStamp
+        do { current = try FileStamp.readChecked(record.trashed) }
+        catch {
+            let parts = record.trashed.pathComponents
+            if parts.count > 2, parts[1] == "Volumes",
+               let mounted = FileManager.default.mountedVolumeURLs(includingResourceValuesForKeys: nil, options: []),
+               !mounted.contains(where: { $0.standardizedFileURL.path == "/Volumes/" + parts[2] }) {
+                return .disconnected
+            }
+            switch Int32((error as NSError).code) {
+            case EACCES, EPERM: return .permission
+            case ENOENT where LocalFiles.noLinks(record.trashed.deletingLastPathComponent()): return .missing
+            default: return .unverified
+            }
+        }
         if record.managedBundleID != nil {
-            if FileStamp.read(record.original) != nil {return .occupied}
-            if FileStamp.read(record.trashed)==nil{return .missing}
-            guard let id=record.managedBundleID,ManagedLocations.permits(record.original,id:id,home:policy.home),ManagedLocations.inTrash(record.trashed,home:policy.home),LocalFiles.noLinks(record.original.deletingLastPathComponent()),LocalFiles.noLinks(record.trashed),let current=FileStamp.read(record.trashed),let expected=record.stamp,current==expected || (expected.isDirectory && current.sameContentIdentity(expected)) || (record.contentSHA256 != nil && current.sameContentIdentity(expected)) else{return .changed}
+            guard let id=record.managedBundleID,ManagedLocations.permits(record.original,id:id,home:policy.home),LocalFiles.noLinks(record.original.deletingLastPathComponent()),LocalFiles.noLinks(record.trashed),let expected=record.stamp,current==expected || (expected.isDirectory && current.sameContentIdentity(expected)) || (record.contentSHA256 != nil && current.sameContentIdentity(expected)) else{return .changed}
             return .available // Full recursive identity check is performed when restoring.
         }
-        guard record.original.isFileURL, record.trashed.isFileURL,
-              policy.permits(record.original),
-              policy.hasNoSymlinkComponents(record.original.deletingLastPathComponent()),
-              record.trashed.pathComponents.contains(".Trash") || record.trashed.pathComponents.contains(".Trashes") else { return .blocked }
-        // lstat also detects a dangling symlink at the original path; restoration must never replace it.
-        if FileStamp.read(record.original) != nil { return .occupied }
-        guard let current = FileStamp.read(record.trashed) else { return .missing }
+        guard policy.permits(record.original), policy.hasNoSymlinkComponents(record.original.deletingLastPathComponent()),
+              policy.hasNoSymlinkComponents(record.trashed) else { return .blocked }
         guard let expected = record.stamp, current.isRegular, current == expected || (record.contentSHA256 != nil && current.sameContentIdentity(expected)) else { return .changed }
         return .available
     }

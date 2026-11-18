@@ -10,22 +10,28 @@ struct ResultsView: View {
     var body: some View {
         VStack(spacing: 12) {
             header
-            if let issues = model.result?.accessIssues, !issues.isEmpty, !model.scanning {
+            if let stopped = model.stoppedCleanupScan, !model.scanning {
+                let time = stopped.date.formatted(Date.FormatStyle(date: .omitted, time: .shortened).locale(InterfaceLanguage.current.locale))
+                Label(L("扫描已停止 · \(time) · 本轮检查 \(stopped.visited) 项"), systemImage: "pause.circle")
+                    .font(.system(size: 13)).foregroundStyle(SweepStyle.warning)
+                    .frame(maxWidth: .infinity, alignment: .leading).padding(12).sweepCard()
+            }
+            if let issues = model.cleanupResult?.accessIssues, !issues.isEmpty, !model.scanning {
                 HStack(spacing: 12) {
                     Label(L("\(issues.count) 处尚未读取"), systemImage: "folder.badge.questionmark")
                     Spacer()
                     Button(L("处理访问问题")) { model.showingIssues = true }.buttonStyle(SweepOutlineButton()).disabled(model.busy)
                 }.font(.system(size: 13)).foregroundStyle(SweepStyle.warning).padding(12).sweepCard()
             }
-            if model.scanLabel == "ProxyMedia" { Text(L("代理文件：确认原始素材仍可用后再删除；需要时可重新生成代理。")).font(.system(size: 12)).foregroundStyle(CleanupScope.protected.color).frame(maxWidth: .infinity, alignment: .leading) }
-            if model.scanLabel == "CacheClip" { Text(L("渲染缓存：删除后需要重新计算，首次播放可能变慢；请先确认原始素材可用。")).font(.system(size: 12)).foregroundStyle(CleanupScope.protected.color).frame(maxWidth: .infinity, alignment: .leading) }
+            if model.cleanupLabel == "ProxyMedia" { Text(L("代理文件：确认原始素材仍可用后再删除；需要时可重新生成代理。")).font(.system(size: 12)).foregroundStyle(CleanupScope.protected.color).frame(maxWidth: .infinity, alignment: .leading) }
+            if model.cleanupLabel == "CacheClip" { Text(L("渲染缓存：删除后需要重新计算，首次播放可能变慢；请先确认原始素材可用。")).font(.system(size: 12)).foregroundStyle(CleanupScope.protected.color).frame(maxWidth: .infinity, alignment: .leading) }
             HStack(alignment: .top, spacing: 16) {
                 VStack(alignment: .leading, spacing: 12) {
                     ForEach(CleanupScope.allCases) { value in
                         let values = model.scopeItems(value)
                         ScopeSidebarCard(scope: value,
-                            capacity: model.loadingReport ? "读取中" : model.scannedAt == nil ? "待扫描" : formatBytes(values.reduce(0) { $0 + $1.bytes }),
-                            count: model.scannedAt == nil ? nil : values.count, selected: model.cleanupScope == value) {
+                            capacity: model.loadingReport ? "读取中" : model.cleanupScannedAt == nil ? "待扫描" : formatBytes(values.reduce(0) { $0 + $1.bytes }),
+                            count: model.cleanupScannedAt == nil ? nil : values.count, selected: model.cleanupScope == value) {
                             model.selectCleanupScope(value)
                         }.disabled(model.scanning || model.loadingReport)
                     }
@@ -39,7 +45,7 @@ struct ResultsView: View {
                         Text(L("已检查 \(model.progress.visited) 项")).font(.system(size: 13)).foregroundStyle(SweepStyle.secondary)
                         if model.scanning { Button(L("停止扫描"), action: model.cancelScan).buttonStyle(SweepOutlineButton()) }
                     }.frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else if model.items.isEmpty && model.scannedAt == nil {
+                } else if model.cleanupScannedAt == nil && model.storageCleanup == nil {
                     VStack(spacing: 20) {
                         ContentUnavailableView(L("从常用位置开始"), systemImage: "tray")
                         Button(L("扫描常用位置"), action: model.quickScan).buttonStyle(SweepPrimaryButton()).disabled(model.busy)
@@ -74,16 +80,17 @@ struct ResultsView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(L("清理")).font(.system(size: 24, weight: .semibold))
                 HStack(spacing: 8) {
-                    Text(L(model.cleanupOwnerTitle ?? "全部应用"))
-                    Text(L("/"))
-                    Text(L(model.scanLabel))
-                    if model.cleanupIsPartial { Text(L("· 部分结果")).foregroundStyle(SweepStyle.warning) }
+                    if let owner = model.cleanupOwnerTitle, owner != model.cleanupLabel { Text(L(owner)); Text(L("/")) }
+                    Text(L(model.cleanupLabel))
+                    if model.cleanupIsPartial || model.storageCleanup?.owner?.partial == true {
+                        Text(L("· 部分结果")).foregroundStyle(SweepStyle.warning)
+                    }
                 }.font(.system(size: 12)).foregroundStyle(SweepStyle.secondary)
             }
             Spacer()
             VStack(alignment: .trailing, spacing: 4) {
-                if let date = model.scannedAt { Text(L(date.formatted(Date.FormatStyle(date: .abbreviated, time: .shortened).locale(InterfaceLanguage.current.locale)))).font(.system(size: 12)) }
-                Button(L("扫描详情")) { model.showingIssues = true }.buttonStyle(.plain).font(.system(size: 12)).disabled(model.result == nil)
+                if let date = model.cleanupScannedAt { Text(L(date.formatted(Date.FormatStyle(date: .abbreviated, time: .shortened).locale(InterfaceLanguage.current.locale)))).font(.system(size: 12)) }
+                Button(L("扫描详情")) { model.showingIssues = true }.buttonStyle(.plain).font(.system(size: 12)).disabled(model.cleanupResult == nil)
             }.foregroundStyle(SweepStyle.secondary)
             Menu {
                 Button(L("重新扫描当前范围"), action: model.rescan)
@@ -97,12 +104,16 @@ struct ResultsView: View {
     private var browserBar: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 12) {
-                Button(action: model.returnCleanup) { Image(systemName: "arrow.left").frame(width: 16) }
-                    .buttonStyle(SweepOutlineButton()).disabled(!model.canReturnCleanup).keyboardShortcut("[", modifiers: .command).accessibilityLabel(L("返回上一级"))
+                if model.cleanupTrail.isEmpty && model.storageCleanup != nil {
+                    Button(action: model.returnCleanup) { Label(L("返回空间分析"), systemImage: "arrow.left") }
+                        .buttonStyle(SweepOutlineButton()).disabled(model.busy).keyboardShortcut("[", modifiers: .command)
+                } else {
+                    Button(action: model.returnCleanup) { Image(systemName: "arrow.left").frame(width: 16) }
+                        .buttonStyle(SweepOutlineButton()).disabled(!model.canReturnCleanup || model.busy).keyboardShortcut("[", modifiers: .command).accessibilityLabel(L("返回上一级"))
+                }
                 VStack(alignment: .leading, spacing: 4) {
                     HStack(spacing: 8) {
-                        if model.cleanupOwnerFilter != nil { Button(L("全部应用"), action: model.clearCleanupOwner).buttonStyle(.plain); Text(L("/")).foregroundStyle(SweepStyle.secondary) }
-                        Button(L(model.cleanupOwnerTitle ?? scope.rawValue)) { model.selectCleanupScope(scope) }.buttonStyle(.plain).foregroundStyle(scope.color)
+                        Button(L(scope.rawValue)) { model.selectCleanupScope(scope) }.buttonStyle(.plain).foregroundStyle(scope.color)
                         if let group = model.cleanupGroupTitle { Text(L("/")).foregroundStyle(SweepStyle.secondary); Text(L(group)).lineLimit(1).help(L(group)) }
                     }.font(.system(size: 15, weight: .semibold))
                     
@@ -135,7 +146,9 @@ struct ResultsView: View {
     private var listHeading: some View {
         HStack(spacing: 10) {
             Text(L("\(model.filtered.count) 项")).font(.system(size: 13, weight: .medium)).foregroundStyle(SweepStyle.secondary)
-            if let config = model.currentScanConfiguration { Text(L("· " + formatBytes(config.minimumBytes) + " 以上")).font(.system(size: 12)).foregroundStyle(SweepStyle.secondary) }
+            if let config = model.cleanupConfiguration, config.minimumBytes > 1_000_000 {
+                Text(L("· " + formatBytes(config.minimumBytes) + " 以上")).font(.system(size: 12)).foregroundStyle(SweepStyle.secondary)
+            }
             Spacer(minLength: 4)
             if hasFilters { Button(L("清除筛选"), action: model.clearCleanupFilters).buttonStyle(.plain).font(.system(size: 12)) }
             if model.cleanupScope == .recommended {
@@ -151,28 +164,47 @@ struct ResultsView: View {
     }
     private var emptyResult: some View {
         VStack(spacing: 16) {
-            ContentUnavailableView(L(model.result?.accessIssues?.isEmpty == false ? "部分位置尚未读取" : model.cleanupScope == .recommended && !hasFilters ? "此范围没有推荐项" : "没有匹配的文件"), systemImage: "tray")
+            ContentUnavailableView(L(emptyTitle), systemImage: "tray")
             if hasFilters { Button(L("清除筛选"), action: model.clearCleanupFilters).buttonStyle(SweepOutlineButton()) }
             if model.cleanupScope == .recommended && !model.scopeItems(.optional).isEmpty { Button(L("查看可自行选择")) { model.selectCleanupScope(.optional) }.buttonStyle(SweepOutlineButton()) }
-            Button(L("扫描常用位置"), action: model.quickScan).buttonStyle(.plain).disabled(model.busy)
+            if model.storageCleanup != nil {
+                Button(L("查看完整清单"), action: model.clearCleanupOwner).buttonStyle(SweepOutlineButton()).disabled(model.busy)
+            } else {
+                Button(L("扫描常用位置"), action: model.quickScan).buttonStyle(.plain).disabled(model.busy)
+            }
         }.frame(maxWidth: .infinity).padding(.vertical, 40)
     }
+    private var emptyTitle: String {
+        if model.cleanupResult?.accessIssues?.isEmpty == false || model.storageCleanup?.owner?.partial == true {
+            return "部分位置尚未读取"
+        }
+        if model.cleanupResult != nil && model.cleanupItems.isEmpty { return "此范围没有清理项" }
+        if model.cleanupScope == .recommended && !hasFilters { return "此范围没有推荐项" }
+        return "没有匹配的文件"
+    }
     private var footer: some View {
-        HStack(spacing: 12) {
+        let selected = model.selectedItems
+        let localCount = model.currentSelection.count
+        return HStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 6) {
-                    Text(L(model.currentSelection.isEmpty ? "未选择" : formatBytes(model.currentSelectionBytes))).font(.system(size: 18, weight: .semibold, design: .monospaced))
-                    if !model.currentSelection.isEmpty { Text(L("/ \(model.currentSelection.count) 项")).font(.system(size: 12)).foregroundStyle(SweepStyle.secondary) }
+                    Text(L(selected.isEmpty ? "未选择" : formatBytes(selected.reduce(0) { $0 + $1.bytes }))).font(.system(size: 18, weight: .semibold, design: .monospaced))
+                    if !selected.isEmpty { Text(L("/ \(selected.count) 项")).font(.system(size: 12)).foregroundStyle(SweepStyle.secondary) }
                 }
-                if model.otherSelectionCount > 0 {
-                    Button(L("其他范围 \(model.otherSelectionCount) 项")) { model.prepareReview() }.buttonStyle(.plain).font(.system(size: 12)).foregroundStyle(scope.color)
-                } else if model.cleanupScope == .protected {
+                if model.cleanupScope == .protected {
                     Text(L("素材默认不选 · 清理前二次确认")).font(.system(size: 11)).foregroundStyle(SweepStyle.secondary)
                 }
             }
             Spacer(minLength: 0)
-            if !model.currentSelection.isEmpty { Button(L("清空"), action: model.clearCurrentSelection).buttonStyle(.plain).font(.system(size: 12)) }
-            Button(L("复核所选"), action: model.prepareCurrentReview).buttonStyle(SweepPrimaryButton(color: scope.color)).disabled(model.currentSelection.isEmpty || model.busy)
+            if localCount > 0 {
+                Button(L("清空当前"), action: model.clearCurrentSelection).buttonStyle(.plain).disabled(model.busy)
+            }
+            if localCount > 0 && localCount < selected.count {
+                Button(L("仅复核当前范围 \(localCount) 项"), action: model.prepareCurrentReview)
+                    .buttonStyle(SweepOutlineButton()).disabled(model.busy)
+            }
+            Button(L(selected.isEmpty ? "复核所选" : "复核全部 \(selected.count) 项"), action: model.prepareReview)
+                .buttonStyle(SweepPrimaryButton(color: scope.color)).disabled(selected.isEmpty || model.busy)
         }.padding(12).background(scope.color.opacity(0.025))
     }
 
@@ -202,7 +234,7 @@ struct ClassificationGroupView: View {
     let group: AssessmentGroup
     private var assessment: FileAssessment { group.assessment }
     private var scope: CleanupScope { .forAssessment(assessment) }
-    private var selectedCount: Int { group.items.filter { model.selected.contains($0.id) }.count }
+    private var selectedCount: Int { group.items.filter(model.isSelectedForReview).count }
     var body: some View {
         HStack(alignment: .center, spacing: 16) {
             Toggle(L("选择 " + assessment.group), isOn: Binding(get: { selectedCount == group.items.count }, set: { _ in model.toggleGroup(group) }))
@@ -235,7 +267,7 @@ struct FileRow: View {
     let item: ScanItem
     var body: some View {
         HStack(alignment: .top, spacing: 16) {
-            Toggle(L("选择 ") + item.url.lastPathComponent, isOn: Binding(get: { model.selected.contains(item.id) }, set: { model.toggle(item, on: $0) })).labelsHidden().toggleStyle(.checkbox).disabled(model.busy)
+            Toggle(L("选择 ") + item.url.lastPathComponent, isOn: Binding(get: { model.isSelectedForReview(item) }, set: { model.toggle(item, on: $0) })).labelsHidden().toggleStyle(.checkbox).disabled(model.busy)
             VStack(alignment: .leading, spacing: 8) {
                 Text(item.url.lastPathComponent).font(.system(size: 14, weight: .medium)).fixedSize(horizontal: false, vertical: true).textSelection(.enabled)
                 Text(L(item.assessment.owner)).font(.system(size: 12)).foregroundStyle(SweepStyle.secondary).fixedSize(horizontal: false, vertical: true)
@@ -255,7 +287,7 @@ struct FileRow: View {
                 Button(L("忽略所在文件夹")) { model.ignore(item.url.deletingLastPathComponent()) }.disabled(model.busy)
             } label: { Image(systemName: "ellipsis") }.menuStyle(.borderlessButton).frame(width: 26)
         }.padding(.horizontal, 12).padding(.vertical, 16)
-            .background(model.selected.contains(item.id) ? CleanupScope.forAssessment(item.assessment).color.opacity(0.05) : .clear, in: RoundedRectangle(cornerRadius: 8))
+            .background(model.isSelectedForReview(item) ? CleanupScope.forAssessment(item.assessment).color.opacity(0.05) : .clear, in: RoundedRectangle(cornerRadius: 8))
             .contentShape(Rectangle()).onTapGesture(count: 2) { model.inspecting = item }
     }
 }
